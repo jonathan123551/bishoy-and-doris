@@ -169,6 +169,62 @@ img {
   transform: scale(0.97);
 }
 
+.venue-destination {
+  position: relative;
+  width: min(100%, 330px);
+  padding: 0.78rem 1rem 0.84rem;
+  background: linear-gradient(90deg, transparent, rgba(255, 251, 244, 0.28), transparent);
+  border-top: 1px solid rgba(183, 135, 114, 0.2);
+  border-bottom: 1px solid rgba(183, 135, 114, 0.2);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.42);
+}
+
+.venue-destination::before,
+.venue-destination::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  border: 1px solid rgba(183, 135, 114, 0.42);
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+
+.venue-destination::before { left: -3px; }
+.venue-destination::after { right: -3px; }
+
+.venue-map {
+  flex-direction: row;
+  gap: 0.62rem;
+  min-height: 50px;
+  padding: 0.92rem 1.3rem;
+  border-color: rgba(166, 101, 70, 0.36);
+  background: rgba(255, 252, 245, 0.72);
+  box-shadow: 0 14px 28px rgba(92, 55, 43, 0.12), inset 0 1px rgba(255, 255, 255, 0.8);
+}
+
+.venue-map-mark {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  color: var(--color-rose-gold);
+}
+
+.venue-map-mark::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  width: 2px;
+  height: 5px;
+  background: currentColor;
+  transform: rotate(35deg);
+  transform-origin: bottom center;
+}
+
 @media (hover: hover) {
   .cta-link:hover {
     border-color: rgba(183, 135, 114, 0.4);
@@ -387,6 +443,18 @@ img {
     inset 0 20px 34px rgba(255, 255, 255, 0.32);
 }
 
+.fi-card--hero {
+  background:
+    linear-gradient(118deg, rgba(255,255,255,0.7) 0%, transparent 25%, rgba(219,195,166,0.1) 54%, transparent 78%),
+    linear-gradient(180deg, #fffdf8 0%, #f5ebdf 100%);
+  box-shadow:
+    0 46px 74px rgba(73, 42, 33, 0.26),
+    0 18px 26px rgba(73, 42, 33, 0.14),
+    0 3px 4px rgba(255, 255, 255, 0.72) inset,
+    0 0 0 7px rgba(255, 251, 244, 0.64) inset,
+    0 0 0 8px rgba(143, 88, 62, 0.17) inset;
+}
+
 .fi-card::before {
   opacity: 0.42;
   background:
@@ -396,8 +464,9 @@ img {
 }
 
 .fi-card::after {
-  inset: 10px;
-  border-color: rgba(143, 88, 62, 0.22);
+  inset: 11px;
+  border-color: rgba(143, 88, 62, 0.28);
+  box-shadow: inset 0 0 0 3px rgba(255, 252, 245, 0.72);
 }
 
 .fi-cast-shadow {
@@ -421,6 +490,84 @@ img {
 
 .fi-deckle--top { top: 6.1%; }
 .fi-deckle--bottom { bottom: 6.1%; }
+
+.fi-emboss {
+  position: absolute;
+  z-index: 0;
+  top: 17%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1em;
+  width: 92px;
+  height: 92px;
+  border: 1px solid rgba(150, 104, 77, 0.14);
+  border-radius: 50%;
+  color: rgba(146, 97, 70, 0.14);
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  letter-spacing: 0.04em;
+  transform: translateX(-50%);
+  text-shadow: 1px 1px rgba(255, 255, 255, 0.66), -1px -1px rgba(128, 78, 56, 0.05);
+  box-shadow: inset 1px 1px rgba(255, 255, 255, 0.62), inset -1px -1px rgba(128, 78, 56, 0.04);
+}
+
+.fi-emboss i {
+  font-family: var(--font-serif);
+  font-size: 0.7em;
+  font-style: italic;
+}
+
+.rec-garden {
+  position: absolute;
+  z-index: 0;
+  inset: 42% -4% -8%;
+  overflow: hidden;
+  border-top: 1px solid rgba(255, 229, 185, 0.14);
+  background:
+    linear-gradient(180deg, transparent 0%, rgba(91, 43, 34, 0.08) 32%, rgba(72, 34, 29, 0.28) 100%),
+    radial-gradient(ellipse at 50% 100%, rgba(255, 199, 123, 0.22), transparent 64%);
+  transform-origin: 50% 100%;
+  pointer-events: none;
+}
+
+.rec-garden span {
+  position: absolute;
+  bottom: -18%;
+  width: 30%;
+  aspect-ratio: 0.55;
+  border: 1px solid rgba(255, 223, 174, 0.18);
+  border-radius: 50% 50% 42% 42% / 62% 62% 34% 34%;
+  background: linear-gradient(145deg, rgba(255, 212, 149, 0.2), rgba(88, 40, 32, 0.2));
+  box-shadow: inset 0 1px rgba(255, 239, 207, 0.14);
+  transform-origin: 50% 100%;
+}
+
+.rec-garden span:nth-child(1) { left: -5%; transform: rotate(-29deg); }
+.rec-garden span:nth-child(2) { left: 15%; bottom: -28%; transform: rotate(-12deg); }
+.rec-garden span:nth-child(3) { left: 39%; bottom: -24%; transform: rotate(5deg); }
+.rec-garden span:nth-child(4) { right: 15%; bottom: -29%; transform: rotate(16deg); }
+.rec-garden span:nth-child(5) { right: -6%; transform: rotate(32deg); }
+
+.venue-destination--reception {
+  border-color: rgba(255, 230, 191, 0.28);
+  background: linear-gradient(90deg, transparent, rgba(255, 238, 210, 0.12), transparent);
+  box-shadow: inset 0 1px rgba(255, 248, 228, 0.16);
+}
+
+.venue-destination--reception::before,
+.venue-destination--reception::after {
+  border-color: rgba(255, 231, 194, 0.5);
+}
+
+.venue-map--reception {
+  background: rgba(77, 33, 28, 0.34) !important;
+  border-color: rgba(255, 235, 198, 0.64) !important;
+  box-shadow: 0 15px 28px rgba(68, 28, 24, 0.24), inset 0 1px rgba(255, 242, 215, 0.18);
+}
+
+.venue-map--reception .venue-map-mark { color: #fff0d7; }
 
 /* The first scroll scene is a camera entering a paper-made sunrise. */
 .os-scene {
@@ -733,4 +880,9 @@ img {
 .ff-scene { isolation: isolate; background: linear-gradient(160deg, #321d1e 0%, #5c2c2d 55%, #a85c48 100%); }
 .ff-horizon { position: absolute; z-index: 0; left: -10%; right: -10%; bottom: -16%; height: 50%; border-radius: 50% 50% 0 0; background: radial-gradient(ellipse at center top, rgba(255,218,164,0.65) 0%, rgba(232,136,89,0.25) 35%, transparent 70%); border-top: 1px solid rgba(255,224,180,0.4); }
 .ff-orbit { position: absolute; z-index: 0; top: 11%; width: min(56vw, 260px); aspect-ratio: 1; border-radius: 50%; border: 1px solid rgba(255,226,183,0.32); box-shadow: inset 0 0 0 12px rgba(255,226,183,0.05); }
-.ff-scene .ff-text { color: #ffe6bd !important; }.ff-scene .ff-line { background: linear-gradient(180deg, #ffd49a, transparent) !important; }
+.ff-scene .ff-text {
+  color: #fff1d1 !important;
+  text-shadow: 0 2px 14px rgba(48, 21, 21, 0.38);
+}
+
+.ff-scene .ff-line { background: linear-gradient(180deg, #ffe0a8, transparent) !important; }

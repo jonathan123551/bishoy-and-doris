@@ -322,12 +322,14 @@ export default function CeremonyScene() {
             </div>
 
             <div
+              className="venue-destination venue-destination--church"
               style={{
                 display: 'grid',
                 gap: '0.2rem',
               }}
             >
               <p
+                className="venue-label"
                 style={{
                   fontFamily: 'var(--font-sans)',
                   fontSize: '0.58rem',
@@ -340,6 +342,7 @@ export default function CeremonyScene() {
                 Location
               </p>
               <p
+                className="venue-place"
                 style={{
                   fontFamily: 'var(--font-display)',
                   fontSize: 'clamp(1rem, 4.1vw, 1.28rem)',
@@ -359,9 +362,10 @@ export default function CeremonyScene() {
               href={eventConfig.church.mapUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="cta-link"
+              className="cta-link venue-map venue-map--church"
               style={{ marginTop: '0.35rem' }}
             >
+              <span className="venue-map-mark" aria-hidden="true" />
               <span
                 style={{
                   fontFamily: 'var(--font-sans)',

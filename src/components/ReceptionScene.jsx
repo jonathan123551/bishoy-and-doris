@@ -36,21 +36,27 @@ export default function ReceptionScene() {
 
       tl.fromTo(
         '.rec-panel',
-        { autoAlpha: 0.72, scale: 0.985, yPercent: 3 },
+        { autoAlpha: 0.9, scale: 0.99, yPercent: 1 },
         { autoAlpha: 1, scale: 1, yPercent: 0, ease: 'none' },
         0
       );
       tl.fromTo(
         '.rec-copy > *',
-        { autoAlpha: 0.45, y: 10 },
+        { autoAlpha: 0.76, y: 4 },
         { autoAlpha: 1, y: 0, stagger: 0.05, ease: 'none' },
         0.06
       );
       tl.fromTo(
         '.rec-lantern',
-        { autoAlpha: 0.42, scale: 0.94 },
+        { autoAlpha: 0.72, scale: 0.98 },
         { autoAlpha: 1, scale: 1, ease: 'none' },
         0.1
+      );
+      tl.fromTo(
+        '.rec-garden',
+        { autoAlpha: 0.22, yPercent: 8, scale: 0.88 },
+        { autoAlpha: 0.86, yPercent: 0, scale: 1, ease: 'none' },
+        0.02
       );
     }, sectionRef);
 
@@ -150,6 +156,14 @@ export default function ReceptionScene() {
           }}
         />
 
+        <div className="rec-garden" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
+        </div>
+
         <div
           style={{
             position: 'absolute',
@@ -215,6 +229,7 @@ export default function ReceptionScene() {
           </h2>
 
           <div
+            className="venue-destination venue-destination--reception"
             style={{
               display: 'grid',
               gap: '0.18rem',
@@ -222,6 +237,7 @@ export default function ReceptionScene() {
             }}
           >
             <p
+              className="venue-place"
               style={{
                 fontFamily: 'var(--font-display)',
                 fontSize: 'clamp(1.02rem, 4.2vw, 1.25rem)',
@@ -250,13 +266,14 @@ export default function ReceptionScene() {
             href={eventConfig.reception.mapUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="cta-link"
+            className="cta-link venue-map venue-map--reception"
             style={{
               marginTop: '0.35rem',
               background: 'rgba(81, 35, 29, 0.18)',
               borderColor: 'rgba(255, 229, 185, 0.4)',
             }}
           >
+            <span className="venue-map-mark" aria-hidden="true" />
             <span
               style={{
                 fontFamily: 'var(--font-sans)',

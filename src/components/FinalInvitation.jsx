@@ -118,7 +118,7 @@ export default function FinalInvitation() {
       />
 
       <div
-        className="fi-card lux-paper"
+        className="fi-card fi-card--hero lux-paper"
         style={{
           width: 'min(92vw, 440px)',
           padding: 'clamp(2rem, 6vw, 3rem) clamp(1.4rem, 5vw, 2.4rem)',
@@ -130,6 +130,11 @@ export default function FinalInvitation() {
         }}
       >
         <div className="fi-cast-shadow" />
+        <div className="fi-emboss" aria-hidden="true">
+          <span>B</span>
+          <i>&amp;</i>
+          <span>D</span>
+        </div>
         <div className="photo-frame-line" style={{ inset: '3.5%', borderColor: 'rgba(143, 88, 62, 0.34)' }} />
         <div className="fi-deckle fi-deckle--top" />
         <div className="fi-deckle fi-deckle--bottom" />
@@ -302,7 +307,7 @@ export default function FinalInvitation() {
                   color: 'var(--color-cocoa)',
                 }}
               >
-                {eventConfig.church.area} · {eventConfig.church.city}
+                {eventConfig.church.area} &middot; {eventConfig.church.city}
               </p>
             </div>
 

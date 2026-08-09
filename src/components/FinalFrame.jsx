@@ -17,7 +17,7 @@ export default function FinalFrame() {
       const line = sectionRef.current.querySelector('.ff-line');
 
       gsap.fromTo(texts,
-        { opacity: 0, y: 10 },
+        { opacity: 0.72, y: 5 },
         {
           opacity: 1,
           y: 0,
@@ -34,7 +34,7 @@ export default function FinalFrame() {
 
       if (line) {
         gsap.fromTo(line,
-          { scaleY: 0 },
+          { scaleY: 0.3 },
           {
             scaleY: 1,
             duration: 1.2,
@@ -59,7 +59,6 @@ export default function FinalFrame() {
       style={{
         position: 'relative',
         minHeight: '54vh',
-        background: 'none',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -93,7 +92,7 @@ export default function FinalFrame() {
           color: '#4F3E39', // Dark luxury text
           lineHeight: 1.08,
           letterSpacing: '0.04em',
-          opacity: 0,
+          opacity: 1,
           position: 'relative',
           zIndex: 2,
         }}
@@ -110,12 +109,12 @@ export default function FinalFrame() {
           letterSpacing: '0.26em',
           color: '#8F7D78',
           marginTop: '1rem',
-          opacity: 0,
+          opacity: 1,
           position: 'relative',
           zIndex: 2,
         }}
       >
-        14 — 11 — 2026
+        14 &mdash; 11 &mdash; 2026
       </p>
 
       <div
@@ -126,7 +125,7 @@ export default function FinalFrame() {
           background: 'linear-gradient(180deg, #C79A8B, transparent)',
           margin: '1.8rem auto',
           transformOrigin: 'top center',
-          transform: 'scaleY(0)',
+          transform: 'scaleY(1)',
           position: 'relative',
           zIndex: 2,
         }}
@@ -140,7 +139,7 @@ export default function FinalFrame() {
           fontWeight: 400,
           fontSize: '0.96rem',
           color: '#8F7D78',
-          opacity: 0,
+          opacity: 1,
           position: 'relative',
           zIndex: 2,
         }}

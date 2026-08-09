@@ -4,8 +4,6 @@ import EnvelopeIntro from './components/EnvelopeIntro';
 import OpeningScene from './components/OpeningScene';
 import NamesScene from './components/NamesScene';
 import CeremonyScene from './components/CeremonyScene';
-import ChurchEntrance from './components/ChurchEntrance';
-import CelebrationTransition from './components/CelebrationTransition';
 import ReceptionScene from './components/ReceptionScene';
 import DateSequence from './components/DateSequence';
 import Countdown from './components/Countdown';
@@ -49,8 +47,6 @@ export default function App() {
         <OpeningScene isActive={introComplete} />
         <NamesScene />
         <CeremonyScene />
-        <ChurchEntrance />
-        <CelebrationTransition />
         <ReceptionScene />
         <DateSequence />
         <Countdown />
