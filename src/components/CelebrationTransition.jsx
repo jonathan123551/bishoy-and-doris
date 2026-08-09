@@ -55,7 +55,7 @@ export default function CelebrationTransition() {
       className="scene-stage scene-stage--transition"
       style={{
         position: 'relative',
-        minHeight: '108svh',
+        minHeight: '84svh',
         overflow: 'hidden',
       }}
     >
@@ -63,7 +63,7 @@ export default function CelebrationTransition() {
         className="ct-inner"
         style={{
           position: 'relative',
-          minHeight: '100dvh',
+          minHeight: '84dvh',
           display: 'grid',
           placeItems: 'center',
           overflow: 'hidden',

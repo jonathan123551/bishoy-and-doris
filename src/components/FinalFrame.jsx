@@ -17,7 +17,7 @@ export default function FinalFrame() {
       const line = sectionRef.current.querySelector('.ff-line');
 
       gsap.fromTo(texts,
-        { opacity: 0, y: 10 },
+        { opacity: 0.64, y: 6 },
         {
           opacity: 1,
           y: 0,
@@ -34,7 +34,7 @@ export default function FinalFrame() {
 
       if (line) {
         gsap.fromTo(line,
-          { scaleY: 0 },
+          { scaleY: 0.35 },
           {
             scaleY: 1,
             duration: 1.2,
