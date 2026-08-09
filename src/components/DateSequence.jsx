@@ -25,14 +25,16 @@ export default function DateSequence() {
 
       tl.to('.ds-orbit', { rotate: 76, ease: 'none' }, 0);
       tl.to('.ds-needle', { rotate: 134, ease: 'none' }, 0);
-      dateGlyphs.forEach((_, index) => {
-        const start = index * 0.18;
-        tl.fromTo(`.ds-glyph--${index}`, { autoAlpha: 0, yPercent: 62, scale: 0.86 }, { autoAlpha: 1, yPercent: 0, scale: 1, ease: 'none' }, start);
-        tl.to(`.ds-glyph--${index}`, { autoAlpha: 0, yPercent: -38, scale: 1.08, ease: 'none' }, start + 0.2);
-      });
-      tl.fromTo('.ds-assembled', { autoAlpha: 0, scale: 0.7, y: 18 }, { autoAlpha: 1, scale: 1, y: 0, ease: 'none' }, 0.56);
-      tl.fromTo('.ds-details', { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, ease: 'none' }, 0.68);
-      tl.to('.ds-disc', { scale: 1.13, autoAlpha: 0.5, ease: 'none' }, 0.72);
+      tl.to('.ds-kicker', { autoAlpha: 0, scale: 0.94, ease: 'none' }, 0.1);
+      tl.fromTo('.ds-glyph--0', { autoAlpha: 0, yPercent: 36, scale: 0.9 }, { autoAlpha: 1, yPercent: 0, scale: 1, duration: 0.2, ease: 'none' }, 0.16);
+      tl.to('.ds-glyph--0', { scale: 1.04, duration: 0.1, ease: 'none' }, 0.34);
+      tl.to('.ds-glyph--0', { scale: 1, duration: 0.1, ease: 'none' }, 0.44);
+      tl.fromTo('.ds-glyph--1', { autoAlpha: 0, yPercent: 36, scale: 0.9 }, { autoAlpha: 1, yPercent: 0, scale: 1, duration: 0.2, ease: 'none' }, 0.52);
+      tl.to('.ds-glyph--1', { scale: 1.04, duration: 0.1, ease: 'none' }, 0.7);
+      tl.to('.ds-glyph--1', { scale: 1, duration: 0.1, ease: 'none' }, 0.8);
+      tl.fromTo('.ds-glyph--2', { autoAlpha: 0, yPercent: 36, scale: 0.9 }, { autoAlpha: 1, yPercent: 0, scale: 1, duration: 0.22, ease: 'none' }, 0.88);
+      tl.to('.ds-disc', { scale: 1.1, autoAlpha: 0.54, ease: 'none' }, 0.88);
+      tl.fromTo('.ds-details', { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, ease: 'none' }, 1.1);
     }, sectionRef);
 
     return () => ctx.revert();

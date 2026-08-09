@@ -675,10 +675,11 @@ img {
 .ds-core { position: absolute; top: 50%; left: 50%; width: 14px; height: 14px; transform: translate(-50%, -50%); border-radius: 50%; background: #f8c77f; box-shadow: 0 0 0 5px rgba(255,220,161,0.12); }
 .ds-star { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #ffe6bb; box-shadow: 0 0 14px rgba(255,224,168,0.76); }
 .ds-star--one { top: 16%; left: 15%; }.ds-star--two { top: 27%; right: 16%; width: 6px; height: 6px; }.ds-star--three { bottom: 20%; left: 22%; width: 3px; height: 3px; }
-.ds-kicker { position: absolute; top: 18%; z-index: 2; font-family: var(--font-sans); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.44em; text-transform: uppercase; color: rgba(255,225,182,0.76); }
-.ds-glyphs { position: absolute; z-index: 2; display: grid; place-items: center; width: 100%; height: 38%; overflow: hidden; }
-.ds-glyph { position: absolute; font-family: var(--font-display); font-size: clamp(8rem, 36vw, 17rem); font-weight: 500; line-height: 0.72; letter-spacing: 0.02em; color: #ffe5bd; text-shadow: 0 9px 30px rgba(37,16,15,0.44); opacity: 0; }
-.ds-glyph--2 { font-size: clamp(5.8rem, 26vw, 12rem); }
+.ds-kicker { position: absolute; top: 50%; left: 50%; z-index: 4; transform: translate(-50%, -50%); font-family: var(--font-sans); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.44em; text-transform: uppercase; color: rgba(255,225,182,0.84); white-space: nowrap; }
+.ds-glyphs { position: relative; z-index: 3; display: flex; align-items: baseline; justify-content: center; gap: clamp(1.15rem, 5.6vw, 3.4rem); width: min(92vw, 760px); padding: 0 0.7rem; }
+.ds-glyph { position: relative; flex: 0 0 auto; font-family: var(--font-display); font-size: clamp(4.8rem, 19vw, 11rem); font-weight: 500; line-height: 0.78; letter-spacing: 0.02em; color: #ffe5bd; text-shadow: 0 9px 30px rgba(37,16,15,0.44); opacity: 0; }
+.ds-glyph--2 { font-size: clamp(3.4rem, 13vw, 7.4rem); }
+.ds-assembled { display: none; }
 .ds-assembled { position: relative; z-index: 3; display: flex; align-items: center; gap: 0.15em; font-family: var(--font-display); font-size: clamp(2.25rem, 10.2vw, 4.6rem); font-weight: 500; letter-spacing: 0.06em; color: #ffe6bf; opacity: 0; }
 .ds-assembled i { font-family: var(--font-serif); font-style: italic; font-size: 0.7em; color: #f0aa66; }
 .ds-details { position: absolute; z-index: 3; bottom: 21%; display: grid; gap: 0.46rem; justify-items: center; opacity: 0; }
