@@ -35,11 +35,10 @@ export default function Countdown() {
     const ctx = gsap.context(() => {
       const items = sectionRef.current.querySelectorAll('.cd-item');
       gsap.fromTo(items,
-        { opacity: 0, y: 25, filter: 'blur(4px)' },
+        { opacity: 0, y: 25 },
         {
           opacity: 1,
           y: 0,
-          filter: 'blur(0px)',
           stagger: 0.08,
           duration: 0.8,
           ease: 'power3.out',

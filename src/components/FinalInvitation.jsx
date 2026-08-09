@@ -36,11 +36,10 @@ export default function FinalInvitation() {
 
       gsap.fromTo(
         els,
-        { autoAlpha: 0, y: 12, filter: 'blur(4px)' },
+        { autoAlpha: 0, y: 12 },
         {
           autoAlpha: 1,
           y: 0,
-          filter: 'blur(0px)',
           stagger: 0.045,
           duration: 0.85,
           ease: 'power2.out',
@@ -92,6 +91,7 @@ export default function FinalInvitation() {
   return (
     <section
       ref={sectionRef}
+      className="scene-stage scene-stage--paper"
       style={{
         position: 'relative',
         minHeight: '100vh',
@@ -112,8 +112,7 @@ export default function FinalInvitation() {
           maxHeight: '480px',
           borderRadius: '50%',
           background:
-            'radial-gradient(circle, rgba(232, 200, 200, 0.26) 0%, rgba(214,181,122,0.12) 34%, transparent 70%)',
-          filter: 'blur(10px)',
+            'radial-gradient(circle, rgba(255, 247, 232, 0.8) 0%, rgba(210,146,100,0.24) 34%, transparent 70%)',
           pointerEvents: 'none',
         }}
       />
@@ -130,6 +129,10 @@ export default function FinalInvitation() {
           zIndex: 2,
         }}
       >
+        <div className="fi-cast-shadow" />
+        <div className="photo-frame-line" style={{ inset: '3.5%', borderColor: 'rgba(143, 88, 62, 0.34)' }} />
+        <div className="fi-deckle fi-deckle--top" />
+        <div className="fi-deckle fi-deckle--bottom" />
         <div
           style={{
             position: 'absolute',
@@ -176,7 +179,7 @@ export default function FinalInvitation() {
                 color: 'var(--color-text-dark)',
               }}
             >
-              {eventConfig.brideName}
+              {eventConfig.groomName}
             </h3>
             <span
               style={{
@@ -199,7 +202,7 @@ export default function FinalInvitation() {
                 color: 'var(--color-text-dark)',
               }}
             >
-              {eventConfig.groomName}
+              {eventConfig.brideName}
             </h3>
           </div>
 

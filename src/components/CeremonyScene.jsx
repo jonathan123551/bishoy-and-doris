@@ -48,11 +48,10 @@ export default function CeremonyScene() {
       );
       tl.fromTo(
         '.cer-copy > *',
-        { autoAlpha: 0, y: 20, filter: 'blur(6px)' },
+        { autoAlpha: 0, y: 20 },
         {
           autoAlpha: 1,
           y: 0,
-          filter: 'blur(0px)',
           stagger: 0.06,
           ease: 'none',
         },
@@ -69,6 +68,7 @@ export default function CeremonyScene() {
   return (
     <section
       ref={sectionRef}
+      className="scene-stage scene-stage--church"
       style={{
         position: 'relative',
         minHeight: '138svh',
@@ -85,6 +85,8 @@ export default function CeremonyScene() {
           padding: 'max(1.4rem, env(safe-area-inset-top)) 1.2rem max(1.6rem, env(safe-area-inset-bottom))',
         }}
       >
+        <div className="scene-column scene-column--left" />
+        <div className="scene-column scene-column--right" />
         <div
           className="cer-shell"
           style={{
@@ -109,7 +111,7 @@ export default function CeremonyScene() {
                 inset: '2% 0 auto',
                 height: '52%',
                 background:
-                  'radial-gradient(circle at 50% 0%, rgba(255, 251, 245, 0.95) 0%, rgba(255, 246, 236, 0.44) 32%, transparent 72%)',
+                  'linear-gradient(109deg, transparent 0 39%, rgba(255,252,239,0.46) 40% 42%, transparent 43% 100%), linear-gradient(71deg, transparent 0 54%, rgba(255,252,239,0.32) 55% 57%, transparent 58% 100%)',
                 opacity: 0.18,
               }}
             />
@@ -125,7 +127,6 @@ export default function CeremonyScene() {
                 transform: 'translateX(-50%)',
                 background:
                   'radial-gradient(ellipse at center, rgba(210, 180, 138, 0.18) 0%, rgba(216, 183, 171, 0.1) 40%, transparent 74%)',
-                filter: 'blur(10px)',
                 opacity: 0.08,
               }}
             />
@@ -186,6 +187,18 @@ export default function CeremonyScene() {
                     'linear-gradient(180deg, rgba(137,108,95,0.02) 0%, rgba(137,108,95,0.1) 52%, transparent 100%)',
                 }}
               />
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '9%',
+                  left: '50%',
+                  width: 3,
+                  height: '17%',
+                  transform: 'translateX(-50%)',
+                  background: 'linear-gradient(180deg, rgba(123,86,66,0.56), rgba(255,250,238,0.8))',
+                  boxShadow: '0 0 12px rgba(255,238,202,0.5)',
+                }}
+              />
             </div>
           </div>
 
@@ -193,7 +206,7 @@ export default function CeremonyScene() {
             className="cer-copy"
             style={{
               position: 'relative',
-              zIndex: 2,
+              zIndex: 3,
               width: 'min(100%, 430px)',
               display: 'grid',
               justifyItems: 'center',

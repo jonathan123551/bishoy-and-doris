@@ -17,11 +17,10 @@ export default function FinalFrame() {
       const line = sectionRef.current.querySelector('.ff-line');
 
       gsap.fromTo(texts,
-        { opacity: 0, y: 10, filter: 'blur(3px)' },
+        { opacity: 0, y: 10 },
         {
           opacity: 1,
           y: 0,
-          filter: 'blur(0px)',
           stagger: 0.1,
           duration: 0.9,
           ease: 'power2.out',

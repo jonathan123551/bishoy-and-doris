@@ -52,6 +52,7 @@ export default function CelebrationTransition() {
   return (
     <section
       ref={sectionRef}
+      className="scene-stage scene-stage--transition"
       style={{
         position: 'relative',
         minHeight: '108svh',
@@ -66,8 +67,7 @@ export default function CelebrationTransition() {
           display: 'grid',
           placeItems: 'center',
           overflow: 'hidden',
-          background:
-            'linear-gradient(180deg, rgba(247,241,234,0.82) 0%, rgba(246,233,216,0.94) 48%, rgba(244,226,203,0.98) 100%)',
+          background: 'transparent',
         }}
       >
         <div
@@ -89,11 +89,16 @@ export default function CelebrationTransition() {
               borderRadius: '50%',
               background:
                 'radial-gradient(circle, rgba(255,255,255,0.88) 0%, rgba(255,245,230,0.46) 36%, rgba(219,186,149,0.18) 58%, transparent 76%)',
-              filter: 'blur(8px)',
               opacity: 0.5,
               transform: 'scale(0.92)',
             }}
           />
+
+        <div className="petal-field ct-petals">
+          {[['8%','14%',-24], ['75%','8%',18], ['20%','62%',28], ['72%','70%',-18], ['44%','2%',36], ['-4%','42%',12], ['90%','48%',-36]].map(([left, top, rotation], index) => (
+            <span key={index} style={{ left, top, transform: `rotate(${rotation}deg) scale(${index % 2 ? 0.72 : 1})` }} />
+          ))}
+        </div>
 
         <div
             className="ct-ribbon"

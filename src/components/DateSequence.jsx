@@ -44,32 +44,32 @@ export default function DateSequence() {
 
         // 14 enters
         tl.fromTo(num14,
-          { y: '60%', opacity: 0, filter: 'blur(8px)' },
-          { y: '0%', opacity: 1, filter: 'blur(0px)', ease: 'power2.out' },
+          { y: '60%', opacity: 0 },
+          { y: '0%', opacity: 1, ease: 'power2.out' },
           b[0]
         );
 
         // 14 exits, 11 enters
-        tl.to(num14, { y: '-30%', opacity: 0, scale: 0.9, filter: 'blur(4px)' }, b[1]);
+        tl.to(num14, { y: '-30%', opacity: 0, scale: 0.9 }, b[1]);
         tl.fromTo(num11,
-          { y: '60%', opacity: 0, filter: 'blur(8px)' },
-          { y: '0%', opacity: 1, filter: 'blur(0px)', ease: 'power2.out' },
+          { y: '60%', opacity: 0 },
+          { y: '0%', opacity: 1, ease: 'power2.out' },
           b[1]
         );
 
         // 11 exits, 2026 enters
-        tl.to(num11, { y: '-30%', opacity: 0, scale: 0.9, filter: 'blur(4px)' }, b[2]);
+        tl.to(num11, { y: '-30%', opacity: 0, scale: 0.9 }, b[2]);
         tl.fromTo(num2026,
-          { y: '60%', opacity: 0, filter: 'blur(8px)' },
-          { y: '0%', opacity: 1, filter: 'blur(0px)', ease: 'power2.out' },
+          { y: '60%', opacity: 0 },
+          { y: '0%', opacity: 1, ease: 'power2.out' },
           b[2]
         );
 
         // 2026 exits, assembled date appears
-        tl.to(num2026, { y: '-30%', opacity: 0, scale: 0.9, filter: 'blur(4px)' }, b[3]);
+        tl.to(num2026, { y: '-30%', opacity: 0, scale: 0.9 }, b[3]);
         tl.fromTo(assembled,
-          { scale: 1.2, opacity: 0, filter: 'blur(6px)' },
-          { scale: 1, opacity: 1, filter: 'blur(0px)', ease: 'power2.out' },
+          { scale: 1.2, opacity: 0 },
+          { scale: 1, opacity: 1, ease: 'power2.out' },
           b[3]
         );
 

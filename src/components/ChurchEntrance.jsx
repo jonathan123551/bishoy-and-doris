@@ -64,6 +64,7 @@ export default function ChurchEntrance() {
   return (
     <section
       ref={sectionRef}
+      className="scene-stage scene-stage--church"
       style={{
         position: 'relative',
         minHeight: '120svh',
@@ -81,6 +82,8 @@ export default function ChurchEntrance() {
           padding: '1.4rem',
         }}
       >
+        <div className="scene-column scene-column--left" />
+        <div className="scene-column scene-column--right" />
         <div
           className="ent-frame"
           style={{
@@ -96,11 +99,10 @@ export default function ChurchEntrance() {
             style={{
               position: 'absolute',
               inset: '-8%',
-              opacity: 0.34,
               transform: 'scale(1)',
               background:
                 'radial-gradient(circle at 50% 22%, rgba(255, 248, 235, 0.94) 0%, rgba(255, 241, 223, 0.38) 25%, transparent 62%), linear-gradient(180deg, rgba(255,248,235,0.28) 0%, rgba(255,248,235,0) 36%), linear-gradient(160deg, transparent 0%, rgba(255,255,255,0.44) 46%, transparent 54%), linear-gradient(20deg, transparent 0%, rgba(255,255,255,0.32) 46%, transparent 54%)',
-              filter: 'blur(6px)',
+              opacity: 0.46,
             }}
           />
 
@@ -121,7 +123,11 @@ export default function ChurchEntrance() {
               overflow: 'hidden',
               opacity: 0.88,
             }}
-          >
+            >
+            <div
+              className="sun-orb"
+              style={{ width: '62%', aspectRatio: '1', top: '10%', left: '19%', opacity: 0.7 }}
+            />
             <div
               className="ent-aisle"
               style={{
@@ -135,7 +141,7 @@ export default function ChurchEntrance() {
                 background:
                   'linear-gradient(180deg, rgba(255,251,244,0.95) 0%, rgba(255,241,220,0.58) 35%, rgba(233,209,183,0.18) 100%)',
                 clipPath: 'polygon(46% 0, 54% 0, 100% 100%, 0 100%)',
-                opacity: 0.44,
+              opacity: 0.68,
               }}
             />
           </div>

@@ -15,15 +15,15 @@ export default function OpeningScene({ isActive }) {
       const introTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
       introTl.fromTo(
-        '.os-kicker, .os-title-line, .os-subcopy, .os-crest',
-        { autoAlpha: 0, y: 24, filter: 'blur(6px)' },
+        '.os-kicker, .os-title-line, .os-subcopy, .os-crest, .os-orbit',
+        { autoAlpha: 0, y: 20, filter: 'blur(6px)' },
         {
           autoAlpha: 1,
           y: 0,
           filter: 'blur(0px)',
-          duration: 1.2,
-          stagger: 0.12,
-          delay: 0.38,
+          duration: 1.05,
+          stagger: 0.1,
+          delay: 0.16,
         }
       );
 
@@ -37,8 +37,8 @@ export default function OpeningScene({ isActive }) {
       });
 
       tl.to('.os-panel', {
-        yPercent: -8,
-        scale: 0.97,
+        yPercent: -7,
+        scale: 0.975,
         ease: 'none',
       });
       tl.to(
@@ -84,7 +84,7 @@ export default function OpeningScene({ isActive }) {
       ref={sectionRef}
       style={{
         position: 'relative',
-        minHeight: '132svh',
+        minHeight: '120svh',
       }}
     >
       <div
@@ -121,6 +121,23 @@ export default function OpeningScene({ isActive }) {
           }}
         >
           <div
+            className="os-orbit"
+            style={{
+              position: 'absolute',
+              inset: '18% auto auto 50%',
+              width: '76vw',
+              height: '76vw',
+              maxWidth: '520px',
+              maxHeight: '520px',
+              transform: 'translateX(-50%)',
+              borderRadius: '50%',
+              background:
+                'radial-gradient(circle, rgba(255,255,255,0.44) 0%, rgba(244,231,219,0.18) 32%, transparent 68%)',
+              filter: 'blur(10px)',
+            }}
+          />
+
+          <div
             className="os-crest"
             style={{
               width: 'min(30vw, 124px)',
@@ -156,8 +173,8 @@ export default function OpeningScene({ isActive }) {
               textTransform: 'uppercase',
               color: 'var(--color-text-muted)',
             }}
-          >
-            A sacred celebration
+            >
+            The day begins
           </p>
 
           <div
@@ -166,7 +183,7 @@ export default function OpeningScene({ isActive }) {
               gap: '0.15rem',
             }}
           >
-            {['Some moments', 'arrive softly', 'and change everything.'].map((line) => (
+            {['Some moments', 'arrive softly', 'and become a vow.'].map((line) => (
               <span
                 key={line}
                 className="os-title-line"
@@ -188,17 +205,17 @@ export default function OpeningScene({ isActive }) {
           <p
             className="os-subcopy"
             style={{
-              width: 'min(82vw, 420px)',
-              marginTop: '0.45rem',
+              width: 'min(80vw, 390px)',
+              marginTop: '0.35rem',
               fontFamily: 'var(--font-serif)',
               fontStyle: 'italic',
-              fontSize: 'clamp(1.05rem, 4vw, 1.35rem)',
-              lineHeight: 1.45,
+              fontSize: 'clamp(1rem, 3.8vw, 1.24rem)',
+              lineHeight: 1.4,
               color: 'var(--color-cocoa)',
               letterSpacing: '0.03em',
             }}
           >
-            Join us as paper, light, and memory open into the first page of our wedding day.
+            Follow the light into a day of prayer, celebration, and memory.
           </p>
         </div>
 

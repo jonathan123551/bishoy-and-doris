@@ -64,8 +64,8 @@ export default function PhotoStory() {
       if (photos[0]) {
         tl.fromTo(
           photos[0],
-          { autoAlpha: 0.3, scale: 1.06, yPercent: 5, filter: 'blur(6px)' },
-          { autoAlpha: 1, scale: 1, yPercent: 0, filter: 'blur(0px)', ease: 'none' },
+          { autoAlpha: 0.3, scale: 1.06, yPercent: 5 },
+          { autoAlpha: 1, scale: 1, yPercent: 0, ease: 'none' },
           0
         );
         tl.to(
@@ -78,8 +78,8 @@ export default function PhotoStory() {
       if (photos[1]) {
         tl.fromTo(
           photos[1],
-          { autoAlpha: 0, xPercent: -8, yPercent: 8, rotate: -3, filter: 'blur(5px)' },
-          { autoAlpha: 1, xPercent: 0, yPercent: 0, rotate: 0, filter: 'blur(0px)', ease: 'none' },
+          { autoAlpha: 0, xPercent: -8, yPercent: 8, rotate: -3 },
+          { autoAlpha: 1, xPercent: 0, yPercent: 0, rotate: 0, ease: 'none' },
           0.12
         );
         tl.to(
@@ -92,8 +92,8 @@ export default function PhotoStory() {
       if (caption) {
         tl.fromTo(
           caption.children,
-          { autoAlpha: 0, y: 16, filter: 'blur(4px)' },
-          { autoAlpha: 1, y: 0, filter: 'blur(0px)', stagger: 0.06, ease: 'none' },
+          { autoAlpha: 0, y: 16 },
+          { autoAlpha: 1, y: 0, stagger: 0.06, ease: 'none' },
           0.16
         );
         tl.to(
@@ -122,6 +122,7 @@ export default function PhotoStory() {
   return (
     <section
       ref={sectionRef}
+      className="scene-stage scene-stage--photo"
       style={{
         position: 'relative',
         minHeight: isDual ? '136svh' : '122svh',
@@ -150,8 +151,7 @@ export default function PhotoStory() {
             transform: 'translateX(-50%)',
             borderRadius: '50%',
             background:
-              'radial-gradient(circle, rgba(255, 248, 236, 0.72) 0%, rgba(216, 183, 171, 0.14) 34%, transparent 74%)',
-            filter: 'blur(12px)',
+              'radial-gradient(circle, rgba(248, 205, 154, 0.62) 0%, rgba(180, 93, 66, 0.2) 34%, transparent 74%)',
             pointerEvents: 'none',
           }}
         />
@@ -171,13 +171,13 @@ export default function PhotoStory() {
               className="ps-photo"
               style={{
                 position: 'absolute',
-                width: 'min(82vw, 440px)',
-                height: 'min(72vh, 620px)',
-                right: 'max(4%, 1rem)',
-                top: '8%',
+                width: 'min(88vw, 470px)',
+                height: 'min(76vh, 660px)',
+                right: 'max(-4%, 0rem)',
+                top: '6%',
                 zIndex: 2,
-                borderRadius: '18px',
-                boxShadow: '0 32px 70px rgba(79, 62, 57, 0.18)',
+                borderRadius: '0',
+                boxShadow: '0 32px 70px rgba(18, 8, 7, 0.34)',
               }}
             />
 
@@ -186,13 +186,14 @@ export default function PhotoStory() {
               className="ps-photo"
               style={{
                 position: 'absolute',
-                width: 'min(44vw, 188px)',
-                height: 'min(29vh, 240px)',
-                left: 'max(4%, 0.8rem)',
-                bottom: '15%',
+                width: 'min(39vw, 170px)',
+                height: 'min(25vh, 220px)',
+                left: 'max(2%, 0.4rem)',
+                bottom: '13%',
                 zIndex: 3,
-                borderRadius: '14px',
-                boxShadow: '0 22px 44px rgba(79, 62, 57, 0.14)',
+                borderRadius: '0',
+                border: '7px solid #f2dfcb',
+                boxShadow: '0 22px 44px rgba(18, 8, 7, 0.4)',
               }}
             />
           </div>
@@ -230,7 +231,7 @@ export default function PhotoStory() {
               fontWeight: 500,
               letterSpacing: '0.34em',
               textTransform: 'uppercase',
-              color: 'rgba(133, 112, 105, 0.88)',
+            color: 'rgba(255, 228, 195, 0.82)',
               opacity: 0,
             }}
           >
@@ -243,7 +244,7 @@ export default function PhotoStory() {
               fontStyle: 'italic',
               fontSize: 'clamp(1.25rem, 5vw, 1.65rem)',
               lineHeight: 1.28,
-              color: 'var(--color-text-dark)',
+              color: '#fff3df',
               opacity: 0,
             }}
           >
@@ -258,7 +259,7 @@ export default function PhotoStory() {
             inset: 0,
             opacity: 0,
             background:
-              'linear-gradient(180deg, rgba(247,241,234,0) 0%, rgba(247,241,234,0.12) 52%, rgba(247,241,234,0.88) 100%)',
+              'linear-gradient(180deg, rgba(79,55,51,0) 0%, rgba(79,55,51,0.08) 52%, rgba(79,55,51,0.94) 100%)',
             pointerEvents: 'none',
           }}
         />

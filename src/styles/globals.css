@@ -232,3 +232,192 @@ img {
   filter: blur(18px);
   pointer-events: none;
 }
+
+/* Scene language: physical depth, not a collection of floating cards. */
+.scene-stage {
+  isolation: isolate;
+  background: #f6eee5;
+}
+
+.scene-stage::before,
+.scene-stage::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.scene-stage--church {
+  background:
+    linear-gradient(112deg, rgba(102, 72, 57, 0.13) 0 1px, transparent 1px 34%),
+    linear-gradient(68deg, rgba(102, 72, 57, 0.09) 0 1px, transparent 1px 67%),
+    linear-gradient(180deg, #e9ddd0 0%, #f9f2e9 48%, #d9c2af 100%);
+}
+
+.scene-stage--church::before {
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(84, 59, 49, 0.17) 0 8%, transparent 8% 92%, rgba(84, 59, 49, 0.17) 92% 100%),
+    radial-gradient(ellipse at 50% 10%, rgba(255, 252, 244, 0.96) 0 12%, rgba(255, 242, 218, 0.56) 31%, transparent 64%);
+}
+
+.scene-stage--church::after {
+  inset: auto -10% 0;
+  height: 42%;
+  background: repeating-linear-gradient(90deg, rgba(102, 72, 57, 0.11) 0 1px, transparent 1px 17%);
+  transform: perspective(420px) rotateX(57deg);
+  transform-origin: bottom;
+}
+
+.scene-stage--transition {
+  background:
+    radial-gradient(circle at 18% 24%, rgba(255, 234, 206, 0.9) 0 5%, transparent 19%),
+    radial-gradient(circle at 84% 15%, rgba(213, 157, 121, 0.38) 0 4%, transparent 23%),
+    linear-gradient(145deg, #f4dfcf 0%, #e6bb91 55%, #d48a62 100%);
+}
+
+.scene-stage--transition::before {
+  inset: 0;
+  opacity: 0.7;
+  background-image: linear-gradient(115deg, transparent 0 42%, rgba(255, 247, 233, 0.48) 43% 46%, transparent 47% 100%);
+}
+
+.scene-stage--reception {
+  background:
+    linear-gradient(125deg, rgba(96, 55, 44, 0.28) 0 1px, transparent 1px 24%),
+    radial-gradient(circle at 50% 8%, #fff2d2 0 3%, rgba(249, 193, 111, 0.42) 18%, transparent 42%),
+    linear-gradient(180deg, #5a3029 0%, #9d5941 48%, #dd9b68 100%);
+}
+
+.scene-stage--reception::before {
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(64, 31, 29, 0.48) 0 7%, transparent 7% 93%, rgba(64, 31, 29, 0.48) 93% 100%),
+    repeating-linear-gradient(90deg, transparent 0 10%, rgba(255, 219, 164, 0.24) 10.2% 10.7%, transparent 11% 20%);
+  mix-blend-mode: screen;
+}
+
+.scene-stage--photo {
+  background: #4f3733;
+}
+
+.scene-stage--photo::before {
+  inset: 0;
+  background:
+    linear-gradient(100deg, rgba(242, 201, 154, 0.34), transparent 28% 70%, rgba(242, 201, 154, 0.18)),
+    repeating-linear-gradient(90deg, rgba(255, 245, 230, 0.04) 0 1px, transparent 1px 18%);
+}
+
+.scene-stage--paper {
+  background:
+    radial-gradient(circle at 16% 20%, rgba(214, 163, 128, 0.28) 0 2%, transparent 16%),
+    linear-gradient(130deg, #d8bba6 0%, #f5e9dc 35%, #ead5bf 100%);
+}
+
+.scene-column {
+  position: absolute;
+  top: -8%;
+  bottom: -8%;
+  width: clamp(24px, 8vw, 62px);
+  background: linear-gradient(90deg, rgba(74, 48, 40, 0.28), rgba(255,255,255,0.22) 45%, rgba(99, 63, 48, 0.2));
+  box-shadow: inset 1px 0 rgba(255,255,255,0.33), 8px 0 20px rgba(73, 47, 39, 0.1);
+  z-index: 1;
+}
+
+.scene-column::after {
+  content: '';
+  position: absolute;
+  left: -35%;
+  right: -35%;
+  top: 19%;
+  height: 12px;
+  background: linear-gradient(180deg, rgba(118, 78, 59, 0.32), rgba(255,255,255,0.35), rgba(118, 78, 59, 0.22));
+}
+
+.scene-column--left { left: 6%; }
+.scene-column--right { right: 6%; }
+
+.sun-orb {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 35%, #fffdf4 0 8%, #f9dba8 35%, #d69b6d 70%, rgba(214,155,109,0) 71%);
+  box-shadow: 0 0 0 1px rgba(255,250,234,0.35), 0 0 45px rgba(246, 198, 131, 0.24);
+}
+
+.petal-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.petal-field span {
+  position: absolute;
+  width: 28px;
+  height: 44px;
+  border-radius: 90% 10% 90% 10%;
+  background: linear-gradient(135deg, rgba(255,237,220,0.9), rgba(168,77,58,0.58));
+  box-shadow: inset 2px 2px 4px rgba(255,255,255,0.3);
+}
+
+.rec-string-lights {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 9% 14%, #fff4ca 0 4px, transparent 5px), radial-gradient(circle at 24% 10%, #fff4ca 0 3px, transparent 4px),
+    radial-gradient(circle at 40% 15%, #fff4ca 0 4px, transparent 5px), radial-gradient(circle at 58% 8%, #fff4ca 0 3px, transparent 4px),
+    radial-gradient(circle at 76% 15%, #fff4ca 0 4px, transparent 5px), radial-gradient(circle at 91% 10%, #fff4ca 0 3px, transparent 4px),
+    linear-gradient(169deg, transparent 0 9%, rgba(255,224,159,0.64) 9.1% 9.3%, transparent 9.5% 100%);
+  opacity: 0.9;
+}
+
+.photo-frame-line {
+  position: absolute;
+  border: 1px solid rgba(255, 235, 209, 0.66);
+  pointer-events: none;
+}
+
+.fi-card {
+  box-shadow:
+    0 38px 58px rgba(86, 50, 37, 0.24),
+    0 10px 18px rgba(86, 50, 37, 0.13),
+    inset 0 0 0 7px rgba(255, 251, 244, 0.36),
+    inset 0 0 0 8px rgba(157, 99, 71, 0.14),
+    inset 0 20px 34px rgba(255, 255, 255, 0.32);
+}
+
+.fi-card::before {
+  opacity: 0.42;
+  background:
+    linear-gradient(104deg, rgba(255,255,255,0.58), transparent 28%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 190 190' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.045' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)' opacity='.5'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+.fi-card::after {
+  inset: 10px;
+  border-color: rgba(143, 88, 62, 0.22);
+}
+
+.fi-cast-shadow {
+  position: absolute;
+  inset: 13px -8px -16px 12px;
+  z-index: -1;
+  border-radius: inherit;
+  background: rgba(91, 49, 35, 0.25);
+  transform: rotate(-1.1deg);
+  box-shadow: 0 20px 36px rgba(91, 49, 35, 0.16);
+}
+
+.fi-deckle {
+  position: absolute;
+  left: 16%;
+  right: 16%;
+  height: 1px;
+  background: repeating-linear-gradient(90deg, transparent 0 5px, rgba(142,88,64,0.25) 5px 6px, transparent 6px 10px);
+  opacity: 0.56;
+}
+
+.fi-deckle--top { top: 6.1%; }
+.fi-deckle--bottom { bottom: 6.1%; }

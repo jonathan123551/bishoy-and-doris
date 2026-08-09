@@ -22,11 +22,10 @@ export default function InvitationMessage() {
       const divider = sectionRef.current.querySelector('.msg-divider');
 
       gsap.fromTo(els,
-        { opacity: 0, y: 15, filter: 'blur(3px)' },
+        { opacity: 0, y: 15 },
         {
           opacity: 1,
           y: 0,
-          filter: 'blur(0px)',
           stagger: 0.1,
           ease: 'power2.out',
           scrollTrigger: {

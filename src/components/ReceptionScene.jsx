@@ -42,8 +42,8 @@ export default function ReceptionScene() {
       );
       tl.fromTo(
         '.rec-copy > *',
-        { autoAlpha: 0.45, y: 10, filter: 'blur(2px)' },
-        { autoAlpha: 1, y: 0, filter: 'blur(0px)', stagger: 0.05, ease: 'none' },
+        { autoAlpha: 0.45, y: 10 },
+        { autoAlpha: 1, y: 0, stagger: 0.05, ease: 'none' },
         0.06
       );
       tl.fromTo(
@@ -60,6 +60,7 @@ export default function ReceptionScene() {
   return (
     <section
       ref={sectionRef}
+      className="scene-stage scene-stage--reception"
       style={{
         position: 'relative',
         minHeight: '104svh',
@@ -69,6 +70,7 @@ export default function ReceptionScene() {
         overflow: 'hidden',
       }}
     >
+      <div className="rec-string-lights" />
       <div
         className="rec-orb"
         style={{
@@ -81,7 +83,6 @@ export default function ReceptionScene() {
           borderRadius: '50%',
           background:
             'radial-gradient(circle, rgba(244, 200, 141, 0.28) 0%, rgba(232, 183, 122, 0.12) 32%, transparent 70%)',
-          filter: 'blur(30px)',
           pointerEvents: 'none',
         }}
       />
@@ -97,7 +98,6 @@ export default function ReceptionScene() {
           borderRadius: '50%',
           background:
             'radial-gradient(circle, rgba(234, 190, 146, 0.22) 0%, rgba(183, 135, 114, 0.12) 42%, transparent 76%)',
-          filter: 'blur(34px)',
           pointerEvents: 'none',
         }}
       />
@@ -113,7 +113,6 @@ export default function ReceptionScene() {
           borderRadius: '50%',
           background:
             'radial-gradient(circle, rgba(255, 248, 233, 0.5) 0%, rgba(255, 241, 220, 0.14) 48%, transparent 72%)',
-          filter: 'blur(20px)',
           pointerEvents: 'none',
         }}
       />
@@ -125,11 +124,11 @@ export default function ReceptionScene() {
           zIndex: 2,
           width: 'min(100%, 780px)',
           minHeight: '74vh',
-          borderRadius: '32px',
+          borderRadius: '40% 40% 26px 26px / 9% 9% 26px 26px',
           overflow: 'hidden',
           background:
-            'linear-gradient(180deg, rgba(252, 243, 230, 0.92) 0%, rgba(244, 226, 203, 0.96) 58%, rgba(235, 209, 176, 0.96) 100%)',
-          boxShadow: '0 28px 60px rgba(111, 77, 57, 0.12), inset 0 1px 0 rgba(255,255,255,0.72)',
+            'linear-gradient(180deg, rgba(118,60,44,0.9) 0%, rgba(169,91,59,0.94) 50%, rgba(236,170,104,0.95) 100%)',
+          boxShadow: '0 28px 60px rgba(62, 29, 25, 0.34), inset 0 1px 0 rgba(255,235,201,0.42)',
           display: 'grid',
           placeItems: 'center',
           padding: 'clamp(1.5rem, 6vw, 3rem)',
@@ -141,14 +140,13 @@ export default function ReceptionScene() {
             position: 'absolute',
             top: '7%',
             left: '50%',
-            width: 'min(42vw, 190px)',
-            height: 'min(42vw, 190px)',
+            width: 'min(56vw, 250px)',
+            height: 'min(56vw, 250px)',
             transform: 'translateX(-50%)',
             borderRadius: '50%',
             background:
-              'radial-gradient(circle, rgba(255, 252, 244, 0.96) 0%, rgba(255, 238, 209, 0.48) 38%, transparent 74%)',
-            filter: 'blur(8px)',
-            opacity: 0.4,
+              'radial-gradient(circle, rgba(255, 252, 219, 0.96) 0 8%, rgba(255, 215, 145, 0.72) 24%, rgba(255, 191, 111, 0.18) 58%, transparent 59%)',
+            opacity: 0.86,
           }}
         />
 
@@ -159,7 +157,7 @@ export default function ReceptionScene() {
             display: 'grid',
             gridTemplateColumns: '1fr 1fr 1fr',
             gap: '6%',
-            opacity: 0.34,
+            opacity: 0.64,
           }}
         >
           {[0, 1, 2].map((index) => (
@@ -193,7 +191,7 @@ export default function ReceptionScene() {
               fontWeight: 500,
               letterSpacing: '0.42em',
               textTransform: 'uppercase',
-              color: 'rgba(111, 85, 70, 0.72)',
+              color: 'rgba(255, 235, 202, 0.76)',
             }}
           >
             Reception
@@ -209,7 +207,8 @@ export default function ReceptionScene() {
               lineHeight: 0.9,
               letterSpacing: '0.07em',
               textTransform: 'uppercase',
-              color: '#5d4439',
+              color: '#fff0d7',
+              textShadow: '0 4px 18px rgba(81,35,29,0.3)',
             }}
           >
             {eventConfig.reception.name}
@@ -229,7 +228,7 @@ export default function ReceptionScene() {
                 lineHeight: 1.25,
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
-                color: '#7a5c4f',
+                color: 'rgba(255, 232, 198, 0.9)',
               }}
             >
               {eventConfig.reception.area}
@@ -240,7 +239,7 @@ export default function ReceptionScene() {
                 fontStyle: 'italic',
                 fontSize: 'clamp(1.04rem, 4.3vw, 1.25rem)',
                 lineHeight: 1.45,
-                color: 'rgba(111, 85, 70, 0.8)',
+                color: 'rgba(255, 239, 215, 0.88)',
               }}
             >
               {eventConfig.reception.note}
@@ -254,8 +253,8 @@ export default function ReceptionScene() {
             className="cta-link"
             style={{
               marginTop: '0.35rem',
-              background: 'rgba(255,255,255,0.36)',
-              borderColor: 'rgba(165, 118, 90, 0.22)',
+              background: 'rgba(81, 35, 29, 0.18)',
+              borderColor: 'rgba(255, 229, 185, 0.4)',
             }}
           >
             <span
@@ -265,7 +264,7 @@ export default function ReceptionScene() {
                 fontWeight: 600,
                 letterSpacing: '0.24em',
                 textTransform: 'uppercase',
-                color: '#7a5c4f',
+                color: '#fff0d7',
               }}
             >
               {eventConfig.reception.mapLabel}

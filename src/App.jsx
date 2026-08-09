@@ -17,32 +17,36 @@ import AtmosphericParticles from './components/GoldenParticles';
 import MusicPlayer from './components/MusicPlayer';
 
 export default function App() {
-  const [envelopeOpened, setEnvelopeOpened] = useState(false);
+  const [experienceVisible, setExperienceVisible] = useState(false);
+  const [introComplete, setIntroComplete] = useState(false);
   useLenis();
 
   return (
     <>
       <MusicPlayer />
 
-      {/* Envelope intro — blocks scroll until opened */}
-      {!envelopeOpened && (
-        <EnvelopeIntro 
-          onOpen={() => setEnvelopeOpened(true)} 
+      {!introComplete && (
+        <EnvelopeIntro
+          onReveal={() => setExperienceVisible(true)}
+          onComplete={() => {
+            setExperienceVisible(true);
+            setIntroComplete(true);
+          }}
         />
       )}
 
-      {/* Global visual layers — only after envelope */}
-      {envelopeOpened && <AtmosphericParticles />}
+      {experienceVisible && <AtmosphericParticles />}
       <div className="film-grain" />
       <div className="vignette" />
 
       <main
         style={{
-          opacity: envelopeOpened ? 1 : 0,
-          transition: 'opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1)',
+          opacity: experienceVisible ? 1 : 0,
+          transform: experienceVisible ? 'none' : 'scale(1.01)',
+          transition: 'opacity 1.4s cubic-bezier(0.22, 1, 0.36, 1), transform 1.4s cubic-bezier(0.22, 1, 0.36, 1)',
         }}
       >
-        <OpeningScene isActive={envelopeOpened} />
+        <OpeningScene isActive={introComplete} />
         <NamesScene />
         <CeremonyScene />
         <ChurchEntrance />
