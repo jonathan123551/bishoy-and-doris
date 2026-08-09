@@ -18,7 +18,7 @@ export default function FinalInvitation() {
 
       gsap.fromTo(
         card,
-        { autoAlpha: 0.78, y: 24, scale: 0.99, rotateX: 2 },
+        { autoAlpha: 0, y: 44, scale: 0.97, rotateX: 4 },
         {
           autoAlpha: 1,
           y: 0,
@@ -36,7 +36,7 @@ export default function FinalInvitation() {
 
       gsap.fromTo(
         els,
-        { autoAlpha: 0.58, y: 8 },
+        { autoAlpha: 0, y: 12 },
         {
           autoAlpha: 1,
           y: 0,

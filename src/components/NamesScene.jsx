@@ -22,10 +22,10 @@ export default function NamesScene() {
         },
       });
 
-      tl.fromTo('.ns-card', { autoAlpha: 0.72, yPercent: 7, rotate: 1.2, scale: 0.96 }, { autoAlpha: 1, yPercent: 0, rotate: -1.2, scale: 1, ease: 'none' }, 0);
-      tl.fromTo('.ns-copy > *', { autoAlpha: 0.56, y: 10 }, { autoAlpha: 1, y: 0, stagger: 0.04, ease: 'none' }, 0.06);
-      tl.fromTo('.ns-name-a', { scale: 0.96 }, { scale: 1, ease: 'none' }, 0.12);
-      tl.fromTo('.ns-name-b', { scale: 0.96 }, { scale: 1, ease: 'none' }, 0.16);
+      tl.fromTo('.ns-card', { autoAlpha: 0.2, yPercent: 16, rotate: 3, scale: 0.88 }, { autoAlpha: 1, yPercent: 0, rotate: -1.2, scale: 1, ease: 'none' }, 0);
+      tl.fromTo('.ns-copy > *', { autoAlpha: 0, y: 22 }, { autoAlpha: 1, y: 0, stagger: 0.06, ease: 'none' }, 0.1);
+      tl.fromTo('.ns-name-a', { xPercent: -30 }, { xPercent: 0, ease: 'none' }, 0.12);
+      tl.fromTo('.ns-name-b', { xPercent: 30 }, { xPercent: 0, ease: 'none' }, 0.18);
       tl.fromTo('.ns-ribbon', { scaleX: 0.18, autoAlpha: 0 }, { scaleX: 1, autoAlpha: 1, ease: 'none' }, 0.25);
       tl.to('.ns-card', { yPercent: -7, rotate: 1.5, scale: 0.98, ease: 'none' }, 0.58);
       tl.to('.ns-copy', { yPercent: -13, autoAlpha: 0, ease: 'none' }, 0.68);

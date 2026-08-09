@@ -840,8 +840,7 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
               fontStyle: 'italic',
               fontSize: 'clamp(1rem, 4.2vw, 1.34rem)',
               lineHeight: 1.42,
-              color: '#5a3730',
-              fontWeight: 500,
+              color: 'var(--color-cocoa)',
               letterSpacing: '0.04em',
             }}
           >

@@ -24,13 +24,13 @@ export default function CeremonyScene() {
 
       tl.fromTo(
         '.cer-shell',
-        { autoAlpha: 0.82, scale: 0.98, yPercent: 3 },
+        { autoAlpha: 0.35, scale: 0.96, yPercent: 5 },
         { autoAlpha: 1, scale: 1, yPercent: 0, ease: 'none' },
         0
       );
       tl.fromTo(
         '.cer-arch',
-        { scaleY: 0.96, autoAlpha: 0.58 },
+        { scaleY: 0.92, autoAlpha: 0.3 },
         { scaleY: 1, autoAlpha: 0.8, ease: 'none' },
         0
       );
@@ -48,7 +48,7 @@ export default function CeremonyScene() {
       );
       tl.fromTo(
         '.cer-copy > *',
-        { autoAlpha: 0.5, y: 10 },
+        { autoAlpha: 0, y: 20 },
         {
           autoAlpha: 1,
           y: 0,
@@ -59,7 +59,7 @@ export default function CeremonyScene() {
       );
       tl.to('.cer-copy', { yPercent: -7, ease: 'none' }, 0.52);
       tl.to('.cer-architecture', { scale: 1.04, yPercent: -3, ease: 'none' }, 0.46);
-      tl.to('.cer-shell', { autoAlpha: 0.72, scale: 1.03, ease: 'none' }, 0.72);
+      tl.to('.cer-shell', { autoAlpha: 0, scale: 1.03, ease: 'none' }, 0.72);
     }, sectionRef);
 
     return () => ctx.revert();
