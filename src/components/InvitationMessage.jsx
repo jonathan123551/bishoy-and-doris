@@ -59,10 +59,11 @@ export default function InvitationMessage() {
   return (
     <section
       ref={sectionRef}
+      className="msg-scene"
       style={{
         position: 'relative',
         minHeight: '54vh',
-        background: 'transparent',
+        background: 'none',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -71,6 +72,9 @@ export default function InvitationMessage() {
         overflow: 'hidden',
       }}
     >
+      <div className="msg-arch msg-arch--left" />
+      <div className="msg-arch msg-arch--right" />
+      <span className="msg-whisper">WITH US</span>
       {/* Soft Blush glow */}
       <div style={{
         position: 'absolute',

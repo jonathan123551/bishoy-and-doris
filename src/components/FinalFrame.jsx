@@ -55,10 +55,11 @@ export default function FinalFrame() {
   return (
     <section
       ref={sectionRef}
+      className="ff-scene"
       style={{
         position: 'relative',
         minHeight: '54vh',
-        background: 'transparent',
+        background: 'none',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -68,6 +69,8 @@ export default function FinalFrame() {
         overflow: 'hidden',
       }}
     >
+      <div className="ff-horizon" />
+      <div className="ff-orbit" />
       {/* Rose Gold glow */}
       <div style={{
         position: 'absolute',

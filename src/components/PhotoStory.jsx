@@ -122,7 +122,7 @@ export default function PhotoStory() {
   return (
     <section
       ref={sectionRef}
-      className="scene-stage scene-stage--photo"
+      className="ps-scene scene-stage scene-stage--photo"
       style={{
         position: 'relative',
         minHeight: isDual ? '136svh' : '122svh',
@@ -140,6 +140,8 @@ export default function PhotoStory() {
           padding: 'max(1.5rem, env(safe-area-inset-top)) 1.2rem max(1.8rem, env(safe-area-inset-bottom))',
         }}
       >
+        <div className="ps-side-type">A LOVE STORY<br />IN TWO FRAMES</div>
+        <div className="ps-matte" />
         <div
           style={{
             position: 'absolute',
@@ -168,13 +170,13 @@ export default function PhotoStory() {
           >
             <PhotoImage
               photo={couplePhotos[0]}
-              className="ps-photo"
+              className="ps-photo ps-photo--primary"
               style={{
                 position: 'absolute',
-                width: 'min(88vw, 470px)',
-                height: 'min(76vh, 660px)',
-                right: 'max(-4%, 0rem)',
-                top: '6%',
+                width: 'min(90vw, 500px)',
+                height: 'min(79vh, 700px)',
+                right: 'max(-7%, 0rem)',
+                top: '4%',
                 zIndex: 2,
                 borderRadius: '0',
                 boxShadow: '0 32px 70px rgba(18, 8, 7, 0.34)',
@@ -183,13 +185,13 @@ export default function PhotoStory() {
 
             <PhotoImage
               photo={couplePhotos[1]}
-              className="ps-photo"
+              className="ps-photo ps-photo--secondary"
               style={{
                 position: 'absolute',
                 width: 'min(39vw, 170px)',
                 height: 'min(25vh, 220px)',
-                left: 'max(2%, 0.4rem)',
-                bottom: '13%',
+                left: 'max(1%, 0.2rem)',
+                bottom: '12%',
                 zIndex: 3,
                 borderRadius: '0',
                 border: '7px solid #f2dfcb',
@@ -200,7 +202,7 @@ export default function PhotoStory() {
         ) : (
           <PhotoImage
             photo={couplePhotos[0]}
-            className="ps-photo"
+          className="ps-photo ps-photo--primary"
             style={{
               width: 'min(86vw, 460px)',
               height: 'min(74vh, 640px)',
