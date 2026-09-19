@@ -1,11 +1,13 @@
 import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { eventConfig } from '../config/eventConfig';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function OpeningScene({ isActive }) {
   const sectionRef = useRef(null);
+  const heroPhoto = eventConfig.couplePhotos[0];
 
   useLayoutEffect(() => {
     if (!isActive || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
@@ -13,8 +15,8 @@ export default function OpeningScene({ isActive }) {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         '.os-intro-item',
-        { autoAlpha: 0, y: 28 },
-        { autoAlpha: 1, y: 0, stagger: 0.1, duration: 1.1, ease: 'power3.out', delay: 0.12 }
+        { autoAlpha: 0, y: 20 },
+        { autoAlpha: 1, y: 0, stagger: 0.1, duration: 0.9, ease: 'power3.out', delay: 0.08 }
       );
 
       const tl = gsap.timeline({
@@ -26,43 +28,32 @@ export default function OpeningScene({ isActive }) {
         },
       });
 
-      tl.to('.os-sun', { yPercent: -17, scale: 1.42, ease: 'none' }, 0);
-      tl.to('.os-rings', { scale: 1.16, rotate: -6, ease: 'none' }, 0);
-      tl.to('.os-rays', { scale: 1.2, autoAlpha: 0.38, ease: 'none' }, 0.04);
-      tl.to('.os-copy', { yPercent: -21, autoAlpha: 0, ease: 'none' }, 0.3);
-      tl.to('.os-floor', { yPercent: 18, scaleY: 1.3, autoAlpha: 1, ease: 'none' }, 0.28);
-      tl.to('.os-portal', { yPercent: -8, scale: 1.08, ease: 'none' }, 0.42);
-      tl.to('.os-shutter--left', { xPercent: -30, ease: 'none' }, 0.54);
-      tl.to('.os-shutter--right', { xPercent: 30, ease: 'none' }, 0.54);
+      tl.to('.os-couple-photo', { scale: 1.07, yPercent: -3, ease: 'none' }, 0);
+      tl.to('.os-photo-wash', { autoAlpha: 0.92, ease: 'none' }, 0.28);
+      tl.to('.os-copy', { yPercent: -8, autoAlpha: 0, ease: 'none' }, 0.48);
     }, sectionRef);
 
     return () => ctx.revert();
   }, [isActive]);
 
   return (
-    <section ref={sectionRef} className="os-scene" style={{ position: 'relative', minHeight: '124svh' }}>
+    <section ref={sectionRef} className="os-scene" style={{ position: 'relative', minHeight: '112svh' }}>
       <div className="os-panel">
-        <div className="os-shutter os-shutter--left" />
-        <div className="os-shutter os-shutter--right" />
-        <div className="os-rays" />
-        <div className="os-portal">
-          <div className="os-rings">
-            <div className="os-ring os-ring--outer" />
-            <div className="os-ring os-ring--inner" />
-          </div>
-          <div className="os-sun" />
-        </div>
-        <div className="os-floor" />
+        <img
+          className="os-couple-photo"
+          src={heroPhoto.src}
+          alt="Bishoy and Doris together"
+        />
+        <div className="os-photo-wash" aria-hidden="true" />
 
         <div className="os-copy">
-          <p className="os-intro-item os-kicker">The day begins</p>
+          <p className="os-intro-item os-kicker">A wedding invitation</p>
           <div className="os-title">
-            {['A promise', 'takes shape', 'in light.'].map((line) => (
-              <span key={line} className="os-intro-item">{line}</span>
-            ))}
+            <span className="os-intro-item">Bishoy &amp;</span>
+            <span className="os-intro-item">Doris</span>
           </div>
           <p className="os-intro-item os-subcopy">
-            Follow the light into a day of prayer, celebration, and memory.
+            Invite you to celebrate the beginning of their forever.
           </p>
         </div>
       </div>

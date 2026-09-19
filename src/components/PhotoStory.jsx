@@ -15,7 +15,7 @@ function PhotoImage({ photo, className, style }) {
           style={{
             width: '100%',
             height: '100%',
-            background: 'linear-gradient(135deg, #f3ece3 0%, #e8c8c8 100%)',
+            background: 'linear-gradient(135deg, #091a3a 0%, #183766 100%)',
           }}
         />
       ) : (
@@ -46,7 +46,6 @@ export default function PhotoStory() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
 
     const ctx = gsap.context(() => {
-      const inner = sectionRef.current.querySelector('.ps-inner');
       const photos = sectionRef.current.querySelectorAll('.ps-photo');
       const caption = sectionRef.current.querySelector('.ps-caption');
       const veil = sectionRef.current.querySelector('.ps-veil');
@@ -57,14 +56,13 @@ export default function PhotoStory() {
           start: 'top top',
           end: 'bottom top',
           scrub: true,
-          pin: inner,
         },
       });
 
       if (photos[0]) {
         tl.fromTo(
           photos[0],
-          { autoAlpha: 0.3, scale: 1.06, yPercent: 5 },
+          { autoAlpha: 0.84, scale: 1.06, yPercent: 2 },
           { autoAlpha: 1, scale: 1, yPercent: 0, ease: 'none' },
           0
         );
@@ -78,8 +76,8 @@ export default function PhotoStory() {
       if (photos[1]) {
         tl.fromTo(
           photos[1],
-          { autoAlpha: 0, xPercent: -8, yPercent: 8, rotate: -3 },
-          { autoAlpha: 1, xPercent: 0, yPercent: 0, rotate: 0, ease: 'none' },
+          { autoAlpha: 0.58, xPercent: -6, yPercent: 6, rotate: -1.8 },
+          { autoAlpha: 1, xPercent: 0, yPercent: 0, rotate: -0.4, ease: 'none' },
           0.12
         );
         tl.to(
@@ -125,7 +123,7 @@ export default function PhotoStory() {
       className="ps-scene scene-stage scene-stage--photo"
       style={{
         position: 'relative',
-        minHeight: isDual ? '136svh' : '122svh',
+        minHeight: isDual ? '118svh' : '110svh',
       }}
     >
       <div
@@ -140,7 +138,7 @@ export default function PhotoStory() {
           padding: 'max(1.5rem, env(safe-area-inset-top)) 1.2rem max(1.8rem, env(safe-area-inset-bottom))',
         }}
       >
-        <div className="ps-side-type">A LOVE STORY<br />IN TWO FRAMES</div>
+        <div className="ps-side-type">BISHOY<br />&amp;<br />DORIS</div>
         <div className="ps-matte" />
         <div
           style={{
@@ -173,13 +171,12 @@ export default function PhotoStory() {
               className="ps-photo ps-photo--primary"
               style={{
                 position: 'absolute',
-                width: 'min(90vw, 500px)',
-                height: 'min(79vh, 700px)',
-                right: 'max(-7%, 0rem)',
-                top: '4%',
+                inset: '0',
+                width: '100%',
+                height: '100%',
                 zIndex: 2,
                 borderRadius: '0',
-                boxShadow: '0 32px 70px rgba(18, 8, 7, 0.34)',
+                boxShadow: 'none',
               }}
             />
 
@@ -188,14 +185,14 @@ export default function PhotoStory() {
               className="ps-photo ps-photo--secondary"
               style={{
                 position: 'absolute',
-                width: 'min(39vw, 170px)',
-                height: 'min(25vh, 220px)',
-                left: 'max(1%, 0.2rem)',
-                bottom: '12%',
+                width: 'min(48vw, 210px)',
+                height: 'min(33vh, 280px)',
+                left: 'max(4%, 0.9rem)',
+                bottom: '10%',
                 zIndex: 3,
                 borderRadius: '0',
-                border: '7px solid #f2dfcb',
-                boxShadow: '0 22px 44px rgba(18, 8, 7, 0.4)',
+                border: '1px solid rgba(239, 209, 121, 0.72)',
+                boxShadow: '0 24px 50px rgba(0, 4, 18, 0.5)',
               }}
             />
           </div>
@@ -217,9 +214,9 @@ export default function PhotoStory() {
           className="ps-caption"
           style={{
             position: 'absolute',
-            left: '1.25rem',
-            right: '1.25rem',
-            bottom: '5.5%',
+            left: '42%',
+            right: '1.05rem',
+            bottom: '8.5%',
             zIndex: 4,
             display: 'grid',
             gap: '0.45rem',
@@ -250,7 +247,7 @@ export default function PhotoStory() {
               opacity: 0,
             }}
           >
-            The heart of the day is simply the two of us, held in light.
+            The invitation belongs first to the two people inside it.
           </p>
         </div>
 

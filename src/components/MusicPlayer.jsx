@@ -21,15 +21,16 @@ export default function MusicPlayer() {
   return (
     <>
       <button
+        className="music-control"
         onClick={toggleMusic}
         aria-label={isPlaying ? 'Pause music' : 'Play music'}
         style={{
           position: 'fixed',
-          right: '1.1rem',
-          bottom: 'calc(1.1rem + env(safe-area-inset-bottom, 0px))',
+          right: '0.9rem',
+          bottom: 'calc(0.9rem + env(safe-area-inset-bottom, 0px))',
           zIndex: 70,
-          width: 52,
-          height: 52,
+          width: 48,
+          height: 48,
           borderRadius: '50%',
           display: 'grid',
           placeItems: 'center',
@@ -53,7 +54,11 @@ export default function MusicPlayer() {
                 borderRadius: 999,
                 background:
                   'linear-gradient(180deg, var(--color-brown-warm) 0%, var(--color-rose-gold) 100%)',
-                animation: isPlaying ? `musicBar${index + 1} 0.95s infinite alternate ease-in-out` : 'none',
+                animationName: isPlaying ? `musicBar${index + 1}` : 'none',
+                animationDuration: '0.95s',
+                animationIterationCount: 'infinite',
+                animationDirection: 'alternate',
+                animationTimingFunction: 'ease-in-out',
                 animationDelay: `${index * 0.16}s`,
               }}
             />
@@ -74,6 +79,7 @@ export default function MusicPlayer() {
       {playFailed &&
         createPortal(
           <div
+            className="music-retry"
             style={{
               position: 'fixed',
               left: '50%',

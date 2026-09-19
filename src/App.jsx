@@ -6,12 +6,9 @@ import NamesScene from './components/NamesScene';
 import CeremonyScene from './components/CeremonyScene';
 import ReceptionScene from './components/ReceptionScene';
 import DateSequence from './components/DateSequence';
-import Countdown from './components/Countdown';
 import PhotoStory from './components/PhotoStory';
-import InvitationMessage from './components/InvitationMessage';
 import FinalInvitation from './components/FinalInvitation';
 import FinalFrame from './components/FinalFrame';
-import AtmosphericParticles from './components/GoldenParticles';
 import MusicPlayer from './components/MusicPlayer';
 
 export default function App() {
@@ -33,11 +30,11 @@ export default function App() {
         />
       )}
 
-      {experienceVisible && <AtmosphericParticles />}
       <div className="film-grain" />
       <div className="vignette" />
 
       <main
+        className="wedding-film"
         style={{
           opacity: experienceVisible ? 1 : 0,
           transform: experienceVisible ? 'none' : 'scale(1.01)',
@@ -49,9 +46,7 @@ export default function App() {
         <CeremonyScene />
         <ReceptionScene />
         <DateSequence />
-        <Countdown />
         <PhotoStory />
-        <InvitationMessage />
         <FinalInvitation />
         <FinalFrame />
       </main>

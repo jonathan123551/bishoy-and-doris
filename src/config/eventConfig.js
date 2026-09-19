@@ -39,6 +39,9 @@ export const eventConfig = {
     mapUrl: 'https://maps.app.goo.gl/SMVCau5jSZhje6fh7?g_st=ic',
   },
 
+  // Add an authentic Bishoy and Doris video here when it is available.
+  introVideo: null,
+
   // Couple Photos
   couplePhotos: [
     {

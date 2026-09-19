@@ -68,20 +68,7 @@ export default function FinalFrame() {
         overflow: 'hidden',
       }}
     >
-      <div className="ff-horizon" />
-      <div className="ff-orbit" />
-      {/* Rose Gold glow */}
-      <div style={{
-        position: 'absolute',
-        width: '40vw',
-        height: '40vw',
-        maxWidth: '250px',
-        maxHeight: '250px',
-        borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(199, 154, 139, 0.2) 0%, transparent 70%)',
-        pointerEvents: 'none',
-      }} />
-
+      <div className="ff-paper-edge" />
       <h2
         className="ff-text"
         style={{

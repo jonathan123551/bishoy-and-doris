@@ -23,7 +23,7 @@ export default function DateSequence() {
         },
       });
 
-      tl.to('.ds-orbit', { rotate: 76, ease: 'none' }, 0);
+      tl.to('.ds-time-ring', { rotate: 76, ease: 'none' }, 0);
       tl.to('.ds-needle', { rotate: 134, ease: 'none' }, 0);
       tl.to('.ds-kicker', { autoAlpha: 0, scale: 0.94, ease: 'none' }, 0.1);
       tl.fromTo('.ds-glyph--0', { autoAlpha: 0, yPercent: 36, scale: 0.9 }, { autoAlpha: 1, yPercent: 0, scale: 1, duration: 0.2, ease: 'none' }, 0.16);
@@ -43,11 +43,8 @@ export default function DateSequence() {
   return (
     <section ref={sectionRef} className="ds-scene" style={{ position: 'relative', height: '116svh' }}>
       <div className="ds-inner">
-        <div className="ds-star ds-star--one" />
-        <div className="ds-star ds-star--two" />
-        <div className="ds-star ds-star--three" />
         <div className="ds-disc">
-          <div className="ds-orbit" />
+          <div className="ds-time-ring" />
           <div className="ds-needle" />
           <div className="ds-core" />
         </div>
@@ -56,7 +53,7 @@ export default function DateSequence() {
           {dateGlyphs.map((glyph, index) => <span key={glyph} className={`ds-glyph ds-glyph--${index}`}>{glyph}</span>)}
         </div>
         <div className="ds-assembled">
-          <span>14</span><i>·</i><span>11</span><i>·</i><span>2026</span>
+          <span>14</span><i>&middot;</i><span>11</span><i>&middot;</i><span>2026</span>
         </div>
         <div className="ds-details">
           <p>Saturday</p>

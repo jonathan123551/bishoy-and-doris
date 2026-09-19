@@ -63,7 +63,6 @@ export default function InvitationMessage() {
       style={{
         position: 'relative',
         minHeight: '54vh',
-        background: 'none',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',

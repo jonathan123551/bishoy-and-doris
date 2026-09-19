@@ -18,13 +18,13 @@ export default function FinalInvitation() {
 
       gsap.fromTo(
         card,
-        { autoAlpha: 0, y: 44, scale: 0.97, rotateX: 4 },
+        { autoAlpha: 0.72, y: 28, scale: 0.985, rotateX: 2 },
         {
           autoAlpha: 1,
           y: 0,
           scale: 1,
           rotateX: 0,
-          duration: 1.15,
+          duration: 0.72,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: sectionRef.current,
@@ -36,14 +36,14 @@ export default function FinalInvitation() {
 
       gsap.fromTo(
         els,
-        { autoAlpha: 0, y: 12 },
+        { autoAlpha: 0.72, y: 8 },
         {
           autoAlpha: 1,
           y: 0,
           stagger: 0.045,
-          duration: 0.85,
+          duration: 0.48,
           ease: 'power2.out',
-          delay: 0.18,
+          delay: 0.06,
           scrollTrigger: {
             trigger: sectionRef.current,
             start: 'top 82%',
@@ -62,7 +62,7 @@ export default function FinalInvitation() {
     fontWeight: 600,
     letterSpacing: '0.22em',
     textTransform: 'uppercase',
-    color: 'var(--color-brown-warm)',
+    color: '#fff9ed',
     background: 'rgba(255,255,255,0.34)',
     border: '1px solid rgba(183, 135, 114, 0.18)',
     borderRadius: '999px',
@@ -95,7 +95,6 @@ export default function FinalInvitation() {
       style={{
         position: 'relative',
         minHeight: '100vh',
-        background: 'transparent',
         display: 'grid',
         placeItems: 'center',
         padding: 'max(2rem, env(safe-area-inset-top)) 1.2rem max(2rem, env(safe-area-inset-bottom))',
@@ -104,6 +103,7 @@ export default function FinalInvitation() {
       }}
     >
       <div
+        className="fi-paper-glow"
         style={{
           position: 'absolute',
           width: '84vw',
@@ -130,6 +130,7 @@ export default function FinalInvitation() {
         }}
       >
         <div className="fi-cast-shadow" />
+        <div className="fi-wax-seal" aria-hidden="true">B D</div>
         <div className="fi-emboss" aria-hidden="true">
           <span>B</span>
           <i>&amp;</i>
@@ -164,7 +165,7 @@ export default function FinalInvitation() {
               fontWeight: 500,
               letterSpacing: '0.38em',
               textTransform: 'uppercase',
-              color: 'var(--color-text-muted)',
+              color: 'rgba(239, 207, 124, 0.86)',
             }}
           >
             The invitation
@@ -181,7 +182,7 @@ export default function FinalInvitation() {
                 lineHeight: 0.92,
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
-                color: 'var(--color-text-dark)',
+                color: '#f8fbff',
               }}
             >
               {eventConfig.groomName}
@@ -191,7 +192,7 @@ export default function FinalInvitation() {
                 fontFamily: 'var(--font-serif)',
                 fontStyle: 'italic',
                 fontSize: '1.35rem',
-                color: 'var(--color-rose-gold)',
+                color: '#edd17c',
               }}
             >
               &
@@ -204,7 +205,7 @@ export default function FinalInvitation() {
                 lineHeight: 0.92,
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
-                color: 'var(--color-text-dark)',
+                color: '#f8fbff',
               }}
             >
               {eventConfig.brideName}
@@ -220,7 +221,7 @@ export default function FinalInvitation() {
               fontStyle: 'italic',
               fontSize: 'clamp(1.04rem, 4.2vw, 1.25rem)',
               lineHeight: 1.5,
-              color: 'var(--color-cocoa)',
+              color: 'rgba(238, 244, 255, 0.86)',
             }}
           >
             Request the honor of your presence as vows, celebration, and memory become one day.
@@ -236,7 +237,7 @@ export default function FinalInvitation() {
                 fontWeight: 500,
                 letterSpacing: '0.34em',
                 textTransform: 'uppercase',
-                color: 'var(--color-text-muted)',
+                color: 'rgba(239, 207, 124, 0.82)',
               }}
             >
               Date & time
@@ -248,7 +249,7 @@ export default function FinalInvitation() {
                 lineHeight: 1.3,
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
-                color: 'var(--color-text-dark)',
+                color: '#f8fbff',
               }}
             >
               {eventConfig.displayDay}
@@ -260,7 +261,7 @@ export default function FinalInvitation() {
                 fontFamily: 'var(--font-serif)',
                 fontStyle: 'italic',
                 fontSize: '1.08rem',
-                color: 'var(--color-cocoa)',
+                color: 'rgba(238, 244, 255, 0.86)',
               }}
             >
               {eventConfig.displayTime}
@@ -283,7 +284,7 @@ export default function FinalInvitation() {
                   fontWeight: 500,
                   letterSpacing: '0.34em',
                   textTransform: 'uppercase',
-                  color: 'var(--color-text-muted)',
+                  color: 'rgba(239, 207, 124, 0.82)',
                 }}
               >
                 Ceremony
@@ -293,7 +294,7 @@ export default function FinalInvitation() {
                   fontFamily: 'var(--font-serif)',
                   fontStyle: 'italic',
                   fontSize: '1.08rem',
-                  color: 'var(--color-text-dark)',
+                  color: '#f8fbff',
                 }}
               >
                 {eventConfig.church.name}
@@ -304,7 +305,7 @@ export default function FinalInvitation() {
                   fontSize: '0.68rem',
                   letterSpacing: '0.18em',
                   textTransform: 'uppercase',
-                  color: 'var(--color-cocoa)',
+                  color: 'rgba(238, 244, 255, 0.78)',
                 }}
               >
                 {eventConfig.church.area} &middot; {eventConfig.church.city}
@@ -319,7 +320,7 @@ export default function FinalInvitation() {
                   fontWeight: 500,
                   letterSpacing: '0.34em',
                   textTransform: 'uppercase',
-                  color: 'var(--color-text-muted)',
+                  color: 'rgba(239, 207, 124, 0.82)',
                 }}
               >
                 Reception
@@ -329,7 +330,7 @@ export default function FinalInvitation() {
                   fontFamily: 'var(--font-serif)',
                   fontStyle: 'italic',
                   fontSize: '1.08rem',
-                  color: 'var(--color-text-dark)',
+                  color: '#f8fbff',
                 }}
               >
                 {eventConfig.reception.name}
@@ -340,7 +341,7 @@ export default function FinalInvitation() {
                   fontSize: '0.68rem',
                   letterSpacing: '0.18em',
                   textTransform: 'uppercase',
-                  color: 'var(--color-cocoa)',
+                  color: 'rgba(238, 244, 255, 0.78)',
                 }}
               >
                 {eventConfig.reception.area}
@@ -358,13 +359,13 @@ export default function FinalInvitation() {
               marginTop: '0.1rem',
             }}
           >
-            <a href={eventConfig.church.mapUrl} target="_blank" rel="noopener noreferrer" style={actionStyle}>
+            <a className="fi-action" href={eventConfig.church.mapUrl} target="_blank" rel="noopener noreferrer" style={actionStyle}>
               Ceremony map
             </a>
-            <a href={eventConfig.reception.mapUrl} target="_blank" rel="noopener noreferrer" style={actionStyle}>
+            <a className="fi-action" href={eventConfig.reception.mapUrl} target="_blank" rel="noopener noreferrer" style={actionStyle}>
               Reception map
             </a>
-            <button onClick={() => generateICS(eventConfig)} style={actionStyle}>
+            <button className="fi-action" onClick={() => generateICS(eventConfig)} style={actionStyle}>
               Add to calendar
             </button>
           </div>

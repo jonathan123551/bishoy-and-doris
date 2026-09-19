@@ -18,19 +18,18 @@ export default function CeremonyScene() {
           start: 'top top',
           end: 'bottom top',
           scrub: true,
-          pin: '.cer-inner',
         },
       });
 
       tl.fromTo(
         '.cer-shell',
-        { autoAlpha: 0.35, scale: 0.96, yPercent: 5 },
+        { autoAlpha: 0.96, scale: 0.98, yPercent: 3 },
         { autoAlpha: 1, scale: 1, yPercent: 0, ease: 'none' },
         0
       );
       tl.fromTo(
         '.cer-arch',
-        { scaleY: 0.92, autoAlpha: 0.3 },
+        { scaleY: 0.94, autoAlpha: 0.48 },
         { scaleY: 1, autoAlpha: 0.8, ease: 'none' },
         0
       );
@@ -48,7 +47,7 @@ export default function CeremonyScene() {
       );
       tl.fromTo(
         '.cer-copy > *',
-        { autoAlpha: 0, y: 20 },
+        { autoAlpha: 0.74, y: 10 },
         {
           autoAlpha: 1,
           y: 0,
@@ -57,9 +56,10 @@ export default function CeremonyScene() {
         },
         0.12
       );
-      tl.to('.cer-copy', { yPercent: -7, ease: 'none' }, 0.52);
+      // Ceremony details remain readable through the handoff to reception.
+      tl.to('.cer-copy', { yPercent: -3, ease: 'none' }, 0.52);
       tl.to('.cer-architecture', { scale: 1.04, yPercent: -3, ease: 'none' }, 0.46);
-      tl.to('.cer-shell', { autoAlpha: 0, scale: 1.03, ease: 'none' }, 0.72);
+      tl.to('.cer-shell', { autoAlpha: 1, scale: 1.02, ease: 'none' }, 0.72);
     }, sectionRef);
 
     return () => ctx.revert();
@@ -71,7 +71,7 @@ export default function CeremonyScene() {
       className="scene-stage scene-stage--church"
       style={{
         position: 'relative',
-        minHeight: '138svh',
+        minHeight: '118svh',
       }}
     >
       <div

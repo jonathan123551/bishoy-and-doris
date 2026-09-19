@@ -12,13 +12,12 @@ export default function ReceptionScene() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
 
     const ctx = gsap.context(() => {
-      const orbs = sectionRef.current.querySelectorAll('.rec-orb');
+      const lights = sectionRef.current.querySelectorAll('.rec-light-strand');
 
-      orbs.forEach((orb, index) => {
-        gsap.to(orb, {
-          xPercent: index % 2 === 0 ? 8 : -8,
-          yPercent: index === 1 ? -10 : 8,
-          duration: 10 + index * 1.8,
+      lights.forEach((light, index) => {
+        gsap.to(light, {
+          yPercent: index % 2 === 0 ? 2 : -2,
+          duration: 7 + index,
           repeat: -1,
           yoyo: true,
           ease: 'sine.inOut',
@@ -35,8 +34,8 @@ export default function ReceptionScene() {
       });
 
       tl.fromTo(
-        '.rec-panel',
-        { autoAlpha: 0.9, scale: 0.99, yPercent: 1 },
+        '.rec-venue',
+        { autoAlpha: 0.92, scale: 0.985, yPercent: 2 },
         { autoAlpha: 1, scale: 1, yPercent: 0, ease: 'none' },
         0
       );
@@ -51,6 +50,12 @@ export default function ReceptionScene() {
         { autoAlpha: 0.72, scale: 0.98 },
         { autoAlpha: 1, scale: 1, ease: 'none' },
         0.1
+      );
+      tl.fromTo(
+        '.rec-light-strand',
+        { autoAlpha: 0.45, yPercent: -4 },
+        { autoAlpha: 1, yPercent: 0, stagger: 0.04, ease: 'none' },
+        0
       );
       tl.fromTo(
         '.rec-garden',
@@ -77,69 +82,29 @@ export default function ReceptionScene() {
       }}
     >
       <div className="rec-string-lights" />
-      <div
-        className="rec-orb"
-        style={{
-          position: 'absolute',
-          inset: '8% auto auto -18%',
-          width: '64vw',
-          height: '64vw',
-          maxWidth: 320,
-          maxHeight: 320,
-          borderRadius: '50%',
-          background:
-            'radial-gradient(circle, rgba(244, 200, 141, 0.28) 0%, rgba(232, 183, 122, 0.12) 32%, transparent 70%)',
-          pointerEvents: 'none',
-        }}
-      />
-      <div
-        className="rec-orb"
-        style={{
-          position: 'absolute',
-          inset: 'auto -10% 16% auto',
-          width: '56vw',
-          height: '56vw',
-          maxWidth: 280,
-          maxHeight: 280,
-          borderRadius: '50%',
-          background:
-            'radial-gradient(circle, rgba(234, 190, 146, 0.22) 0%, rgba(183, 135, 114, 0.12) 42%, transparent 76%)',
-          pointerEvents: 'none',
-        }}
-      />
-      <div
-        className="rec-orb"
-        style={{
-          position: 'absolute',
-          inset: '38% auto auto 24%',
-          width: '32vw',
-          height: '32vw',
-          maxWidth: 160,
-          maxHeight: 160,
-          borderRadius: '50%',
-          background:
-            'radial-gradient(circle, rgba(255, 248, 233, 0.5) 0%, rgba(255, 241, 220, 0.14) 48%, transparent 72%)',
-          pointerEvents: 'none',
-        }}
-      />
+      <div className="rec-light-strands" aria-hidden="true">
+        {[0, 1, 2, 3, 4].map((index) => (
+          <span className="rec-light-strand" key={index} />
+        ))}
+      </div>
 
       <div
-        className="rec-panel"
+        className="rec-venue"
         style={{
           position: 'relative',
           zIndex: 2,
           width: 'min(100%, 780px)',
           minHeight: '74vh',
           borderRadius: '40% 40% 26px 26px / 9% 9% 26px 26px',
-          overflow: 'hidden',
-          background:
-            'linear-gradient(180deg, rgba(118,60,44,0.9) 0%, rgba(169,91,59,0.94) 50%, rgba(236,170,104,0.95) 100%)',
-          boxShadow: '0 28px 60px rgba(62, 29, 25, 0.34), inset 0 1px 0 rgba(255,235,201,0.42)',
+          overflow: 'visible',
+          background: 'transparent',
+          boxShadow: 'none',
           display: 'grid',
           placeItems: 'center',
           padding: 'clamp(1.5rem, 6vw, 3rem)',
         }}
       >
+        <div className="rec-venue-portal" aria-hidden="true" />
         <div
           className="rec-lantern"
           style={{
@@ -248,6 +213,19 @@ export default function ReceptionScene() {
               }}
             >
               {eventConfig.reception.area}
+            </p>
+            <p
+              className="venue-location"
+              style={{
+                fontFamily: 'var(--font-sans)',
+                fontSize: '0.64rem',
+                fontWeight: 600,
+                letterSpacing: '0.24em',
+                textTransform: 'uppercase',
+                color: 'rgba(255, 247, 231, 0.9)',
+              }}
+            >
+              Reception location
             </p>
             <p
               style={{

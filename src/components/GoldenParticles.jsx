@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 
-const PARTICLE_COUNT = 24;
+const PARTICLE_COUNT = 10;
 
 function createParticles() {
   const particles = [];
@@ -12,13 +12,10 @@ function createParticles() {
       left: Math.random() * 100,
       delay: Math.random() * 14,
       duration: 16 + Math.random() * 20, // Slower, more organic
-      // Mix of types: petals, dust, bokeh
-      isPetal: type < 0.35,
-      isBokeh: type >= 0.35 && type < 0.65,
-      isDust: type >= 0.65,
-      size: type < 0.35 ? (8 + Math.random() * 10) : (type < 0.65 ? (6 + Math.random() * 14) : (2 + Math.random() * 3)),
-      opacity: type < 0.35 ? (0.3 + Math.random() * 0.4) : (type < 0.65 ? (0.2 + Math.random() * 0.3) : (0.4 + Math.random() * 0.5)),
-      blur: type < 0.65 ? (0.5 + Math.random() * 2) : 0,
+      isLeaf: type < 0.25,
+      size: type < 0.25 ? (7 + Math.random() * 8) : (1 + Math.random() * 2),
+      opacity: type < 0.25 ? (0.12 + Math.random() * 0.12) : (0.16 + Math.random() * 0.18),
+      blur: type < 0.25 ? 0.3 + Math.random() * 0.7 : 0,
       rotation: Math.random() * 360,
     });
   }
@@ -40,7 +37,7 @@ export default function AtmosphericParticles() {
         const p = particleData[i];
         gsap.set(el, { y: '110vh', opacity: 0, rotation: p.rotation });
 
-        // Rise upward
+        // Only a few leaves and dust motes keep the night setting tangible.
         gsap.to(el, {
           y: '-10vh',
           opacity: p.opacity,
@@ -63,8 +60,7 @@ export default function AtmosphericParticles() {
           delay: p.delay,
         });
 
-        // Rotation for petals
-        if (p.isPetal) {
+        if (p.isLeaf) {
           gsap.to(el, {
             rotation: `+=${180 + Math.random() * 360}`,
             duration: p.duration * 1.2,
@@ -74,17 +70,6 @@ export default function AtmosphericParticles() {
           });
         }
 
-        // Scale pulse for bokeh
-        if (p.isBokeh) {
-          gsap.to(el, {
-            scale: 1.4,
-            duration: 4 + Math.random() * 4,
-            repeat: -1,
-            yoyo: true,
-            ease: 'sine.inOut',
-            delay: p.delay,
-          });
-        }
       });
     }, containerRef);
 
@@ -94,6 +79,7 @@ export default function AtmosphericParticles() {
   return (
     <div
       ref={containerRef}
+      className="night-atmosphere"
       style={{
         position: 'fixed',
         inset: 0,
@@ -103,8 +89,7 @@ export default function AtmosphericParticles() {
       }}
     >
       {particleData.map((p) => {
-        // Petal shape (Blush/Champagne tones)
-        if (p.isPetal) {
+        if (p.isLeaf) {
           return (
             <span
               key={p.id}
@@ -115,8 +100,8 @@ export default function AtmosphericParticles() {
                 bottom: '-20px',
                 width: `${p.size}px`,
                 height: `${p.size * 1.5}px`,
-                borderRadius: '50% 0 50% 0',
-                background: `linear-gradient(135deg, rgba(232, 200, 200, 0.6), rgba(214, 181, 122, 0.4))`,
+                borderRadius: '90% 10% 90% 10%',
+                background: 'linear-gradient(135deg, rgba(123, 147, 192, 0.34), rgba(18, 36, 73, 0.12))',
                 filter: `blur(${p.blur}px)`,
                 opacity: 0,
                 willChange: 'transform, opacity',
@@ -125,30 +110,6 @@ export default function AtmosphericParticles() {
           );
         }
 
-        // Bokeh circle
-        if (p.isBokeh) {
-          return (
-            <span
-              key={p.id}
-              className="ap"
-              style={{
-                position: 'absolute',
-                left: `${p.left}%`,
-                bottom: '-20px',
-                width: `${p.size}px`,
-                height: `${p.size}px`,
-                borderRadius: '50%',
-                background: 'transparent',
-                border: `1.5px solid rgba(199, 154, 139, 0.25)`,
-                filter: `blur(${p.blur}px)`,
-                opacity: 0,
-                willChange: 'transform, opacity',
-              }}
-            />
-          );
-        }
-
-        // Warm light dust
         return (
           <span
             key={p.id}
@@ -160,7 +121,7 @@ export default function AtmosphericParticles() {
               width: `${p.size}px`,
               height: `${p.size}px`,
               borderRadius: '50%',
-              background: `radial-gradient(circle, rgba(214, 181, 122, 0.9) 0%, rgba(232, 200, 200, 0.4) 60%, transparent 100%)`,
+              background: 'radial-gradient(circle, rgba(226, 235, 255, 0.76) 0%, rgba(153, 181, 229, 0.22) 60%, transparent 100%)',
               opacity: 0,
               willChange: 'transform, opacity',
             }}

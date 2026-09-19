@@ -12,6 +12,8 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
   const idleTweenRef = useRef([]);
   const openTimelineRef = useRef(null);
   const [hasStarted, setHasStarted] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+  const introPhoto = eventConfig.couplePhotos[1];
 
   useEffect(() => {
     document.body.classList.add('lock-scroll');
@@ -36,10 +38,29 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
         { autoAlpha: 1, duration: 0.9 }
       );
       introTl.fromTo(
+        '.env-prelude',
+        { autoAlpha: 0 },
+        { autoAlpha: 1, duration: 0.6 },
+        0.08
+      );
+      introTl.fromTo(
+        '.env-prelude-media, .env-prelude-scrim',
+        { autoAlpha: 0, scale: 0.92 },
+        { autoAlpha: 1, scale: 1, stagger: 0.08, duration: 1.3 },
+        0.18
+      );
+      introTl.fromTo(
+        '.env-prelude-copy > *',
+        { autoAlpha: 0, y: 18 },
+        { autoAlpha: 1, y: 0, stagger: 0.11, duration: 0.9 },
+        0.72
+      );
+      introTl.to('.env-prelude', { autoAlpha: 0, scale: 1.04, duration: 0.78 }, 2.58);
+      introTl.fromTo(
         '.env-stage',
         { autoAlpha: 0, y: 56, scale: 0.94 },
         { autoAlpha: 1, y: 0, scale: 1, duration: 1.55 },
-        0.18
+        2.46
       );
       introTl.fromTo(
         '.env-overline, .env-date, .env-cue > *',
@@ -51,8 +72,9 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
           stagger: 0.08,
           duration: 1.05,
         },
-        0.72
+        3.34
       );
+      introTl.call(() => setIsReady(true), null, 3.7);
 
       idleTweenRef.current = [
         gsap.to('.env-envelope', {
@@ -98,7 +120,7 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
   }, [hasStarted]);
 
   const handleOpen = () => {
-    if (hasStarted) return;
+    if (hasStarted || !isReady) return;
 
     setHasStarted(true);
     startIntroAmbient();
@@ -127,7 +149,7 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
         '.env-night',
         {
           background:
-            'radial-gradient(circle at 50% 44%, rgba(189, 150, 118, 0.16) 0%, rgba(16, 12, 11, 0.58) 22%, rgba(6, 5, 5, 0.96) 72%), linear-gradient(180deg, #050404 0%, #0b0908 48%, #15100f 100%)',
+            'linear-gradient(145deg, #03091b 0%, #102c5d 52%, #060f27 100%)',
           duration: 1.1,
         },
         0
@@ -227,7 +249,7 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
         1.82
       );
       tl.fromTo(
-        '.env-film-portal, .env-film-sun, .env-film-beams',
+        '.env-film-paper, .env-film-monogram, .env-film-fold',
         {
           autoAlpha: 0,
           scale: 0.82,
@@ -274,17 +296,17 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
         4.68
       );
       tl.to(
-        '.env-film-portal',
+        '.env-film-paper',
         { scale: 1.38, autoAlpha: 0.12, duration: 1.12, ease: 'power2.in' },
         4.62
       );
       tl.to(
-        '.env-film-sun',
-        { scale: 2.45, autoAlpha: 0.2, duration: 1.08, ease: 'power2.in' },
+        '.env-film-monogram',
+        { scale: 1.7, autoAlpha: 0.2, duration: 1.08, ease: 'power2.in' },
         4.72
       );
       tl.to(
-        '.env-film-beams',
+        '.env-film-fold',
         { scale: 1.42, autoAlpha: 0.18, duration: 0.98, ease: 'power2.in' },
         4.76
       );
@@ -332,7 +354,7 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
         inset: 0,
         zIndex: 9999,
         overflow: 'hidden',
-        cursor: hasStarted ? 'default' : 'pointer',
+        cursor: hasStarted || !isReady ? 'default' : 'pointer',
         background: '#060505',
       }}
     >
@@ -343,9 +365,31 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
           inset: 0,
           opacity: 0,
           background:
-            'radial-gradient(circle at 50% 42%, rgba(214, 184, 153, 0.16) 0%, rgba(15, 12, 11, 0.42) 26%, rgba(6, 5, 5, 0.96) 74%), linear-gradient(180deg, #050404 0%, #0a0807 48%, #151211 100%)',
+            'linear-gradient(145deg, #03091b 0%, #102c5d 52%, #060f27 100%)',
         }}
       />
+
+      <div className="env-prelude" aria-hidden="true">
+        {eventConfig.introVideo ? (
+          <video
+            className="env-prelude-media"
+            src={eventConfig.introVideo}
+            poster={introPhoto.src}
+            muted
+            playsInline
+            autoPlay
+            loop
+          />
+        ) : (
+          <img className="env-prelude-media" src={introPhoto.src} alt="" />
+        )}
+        <div className="env-prelude-scrim" />
+        <div className="env-prelude-copy">
+          <p>A wedding invitation</p>
+          <strong>Bishoy &amp; Doris</strong>
+          <span>14 November 2026</span>
+        </div>
+      </div>
 
       <div
         className="env-aura"
@@ -392,6 +436,8 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
           padding: 'max(1.75rem, env(safe-area-inset-top)) 1.25rem max(1.9rem, env(safe-area-inset-bottom))',
         }}
       >
+        <div className="env-table" aria-hidden="true" />
+        <div className="env-table-light" aria-hidden="true" />
         <div
           style={{
             width: 'min(100%, 470px)',
@@ -725,7 +771,7 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
         }}
       >
         <div
-          className="env-film-beams"
+          className="env-film-fold"
           style={{
             position: 'absolute',
             inset: '-10%',
@@ -735,7 +781,7 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
           }}
         />
         <div
-          className="env-film-portal"
+          className="env-film-paper"
           style={{
             position: 'absolute',
             left: '50%',
@@ -759,21 +805,22 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
           />
         </div>
         <div
-          className="env-film-sun"
+          className="env-film-monogram"
           style={{
             position: 'absolute',
             left: '50%',
             top: '24%',
-            width: 'min(48vw, 230px)',
-            aspectRatio: '1',
+            width: '58px',
+            height: '58px',
             transform: 'translateX(-50%)',
-            borderRadius: '50%',
+            borderRadius: '8px',
             opacity: 0,
-            background: 'radial-gradient(circle at 40% 38%, #fffdf2 0 9%, #ffe3ad 36%, rgba(245,177,109,0.72) 64%, rgba(245,177,109,0) 65%)',
-            boxShadow: '0 0 0 1px rgba(255,248,224,0.46), 0 0 34px rgba(250,193,121,0.26)',
+            background: 'linear-gradient(135deg, #f4d47d, #9f702f)',
+            boxShadow: '0 10px 24px rgba(0, 7, 24, 0.28), inset 0 1px rgba(255,248,224,0.46)',
           }}
         />
         <div
+          className="env-film-wash"
           style={{
             position: 'absolute',
             inset: 0,
@@ -805,7 +852,7 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
               color: 'var(--color-text-muted)',
             }}
           >
-            A promise in paper and light
+            An invitation unfolds
           </p>
 
           <div
@@ -815,7 +862,7 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
               gap: '0.1rem',
             }}
           >
-            {['The day begins', 'in light.'].map((line) => (
+            {['Their story', 'begins here.'].map((line) => (
               <span
                 key={line}
                 style={{
@@ -844,7 +891,7 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
               letterSpacing: '0.04em',
             }}
           >
-            {eventConfig.displayDay} · {eventConfig.displayDate}
+            {eventConfig.displayDay} &middot; {eventConfig.displayDate}
           </p>
         </div>
 
