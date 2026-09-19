@@ -17,9 +17,9 @@ export default function DateSequence() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: 'bottom top',
-          scrub: true,
-          pin: '.ds-inner',
+          end: '+=120%',
+          scrub: 0.8,
+          pin: true,
         },
       });
 

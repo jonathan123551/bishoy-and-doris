@@ -54,60 +54,41 @@ export default function PhotoStory() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: 'bottom top',
-          scrub: true,
+          end: '+=90%',
+          scrub: 0.6,
+          pin: true,
         },
       });
 
       if (photos[0]) {
         tl.fromTo(
           photos[0],
-          { autoAlpha: 0.84, scale: 1.06, yPercent: 2 },
-          { autoAlpha: 1, scale: 1, yPercent: 0, ease: 'none' },
+          { autoAlpha: 0.9, scale: 1.02 },
+          { autoAlpha: 1, scale: 1, duration: 0.3, ease: 'none' },
           0
-        );
-        tl.to(
-          photos[0],
-          { yPercent: -3.5, ease: 'none' },
-          0.34
         );
       }
 
       if (photos[1]) {
         tl.fromTo(
           photos[1],
-          { autoAlpha: 0.58, xPercent: -6, yPercent: 6, rotate: -1.8 },
-          { autoAlpha: 1, xPercent: 0, yPercent: 0, rotate: -0.4, ease: 'none' },
-          0.12
-        );
-        tl.to(
-          photos[1],
-          { yPercent: 4, ease: 'none' },
-          0.44
+          { autoAlpha: 0.7, yPercent: 4 },
+          { autoAlpha: 1, yPercent: 0, duration: 0.3, ease: 'power2.out' },
+          0.1
         );
       }
 
       if (caption) {
         tl.fromTo(
           caption.children,
-          { autoAlpha: 0, y: 16 },
-          { autoAlpha: 1, y: 0, stagger: 0.06, ease: 'none' },
-          0.16
-        );
-        tl.to(
-          caption,
-          { yPercent: -6, ease: 'none' },
-          0.52
+          { autoAlpha: 0, y: 10 },
+          { autoAlpha: 1, y: 0, stagger: 0.05, duration: 0.25, ease: 'power2.out' },
+          0.15
         );
       }
 
-      if (veil) {
-        tl.to(
-          veil,
-          { autoAlpha: 0.82, ease: 'none' },
-          0.62
-        );
-      }
+      // Rest period to appreciate the portraits before unpinning
+      tl.to({}, { duration: 0.45 });
     }, sectionRef);
 
     return () => ctx.revert();
