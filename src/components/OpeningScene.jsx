@@ -23,15 +23,14 @@ export default function OpeningScene({ isActive }) {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: '+=100%',
-          scrub: 0.8,
-          pin: true,
+          end: 'bottom top',
+          scrub: true,
         },
       });
 
-      tl.to('.os-couple-photo', { scale: 1.05, ease: 'none' }, 0);
-      tl.to('.os-photo-wash', { autoAlpha: 0.85, ease: 'none' }, 0.2);
-      tl.to('.os-copy', { yPercent: -12, autoAlpha: 0, ease: 'power1.in' }, 0.45);
+      tl.to('.os-couple-photo', { scale: 1.07, yPercent: -3, ease: 'none' }, 0);
+      tl.to('.os-photo-wash', { autoAlpha: 0.92, ease: 'none' }, 0.28);
+      tl.to('.os-copy', { yPercent: -8, autoAlpha: 0, ease: 'none' }, 0.48);
     }, sectionRef);
 
     return () => ctx.revert();

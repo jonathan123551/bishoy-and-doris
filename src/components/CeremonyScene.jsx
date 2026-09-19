@@ -16,44 +16,50 @@ export default function CeremonyScene() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: '+=150%',
-          scrub: 0.8,
-          pin: true,
+          end: 'bottom top',
+          scrub: true,
         },
       });
 
       tl.fromTo(
         '.cer-shell',
-        { autoAlpha: 0.85, scale: 0.98, yPercent: 4 },
-        { autoAlpha: 1, scale: 1, yPercent: 0, duration: 0.4, ease: 'power2.out' },
+        { autoAlpha: 0.96, scale: 0.98, yPercent: 3 },
+        { autoAlpha: 1, scale: 1, yPercent: 0, ease: 'none' },
         0
       );
       tl.fromTo(
         '.cer-arch',
-        { scaleY: 0.94, autoAlpha: 0.3 },
-        { scaleY: 1, autoAlpha: 0.85, duration: 0.45, ease: 'power2.out' },
-        0.05
+        { scaleY: 0.94, autoAlpha: 0.48 },
+        { scaleY: 1, autoAlpha: 0.8, ease: 'none' },
+        0
       );
       tl.fromTo(
         '.cer-light-top',
-        { autoAlpha: 0, yPercent: -6 },
-        { autoAlpha: 0.85, yPercent: 0, duration: 0.4, ease: 'power2.out' },
-        0.1
+        { autoAlpha: 0.18, yPercent: -8 },
+        { autoAlpha: 0.95, yPercent: 0, ease: 'none' },
+        0.05
+      );
+      tl.fromTo(
+        '.cer-light-floor',
+        { autoAlpha: 0.08, scale: 0.84 },
+        { autoAlpha: 0.85, scale: 1, ease: 'none' },
+        0.12
       );
       tl.fromTo(
         '.cer-copy > *',
-        { autoAlpha: 0, y: 12 },
+        { autoAlpha: 0.74, y: 10 },
         {
           autoAlpha: 1,
           y: 0,
-          stagger: 0.04,
-          duration: 0.4,
-          ease: 'power2.out',
+          stagger: 0.06,
+          ease: 'none',
         },
-        0.15
+        0.12
       );
-      // Generous reading buffer while pinned
-      tl.to({}, { duration: 0.6 });
+      // Ceremony details remain readable through the handoff to reception.
+      tl.to('.cer-copy', { yPercent: -3, ease: 'none' }, 0.52);
+      tl.to('.cer-architecture', { scale: 1.04, yPercent: -3, ease: 'none' }, 0.46);
+      tl.to('.cer-shell', { autoAlpha: 1, scale: 1.02, ease: 'none' }, 0.72);
     }, sectionRef);
 
     return () => ctx.revert();

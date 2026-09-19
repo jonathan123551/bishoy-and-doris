@@ -27,33 +27,42 @@ export default function ReceptionScene() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top top',
-          end: '+=140%',
-          scrub: 0.8,
-          pin: true,
+          start: 'top 94%',
+          end: 'bottom top',
+          scrub: true,
         },
       });
 
       tl.fromTo(
         '.rec-venue',
-        { autoAlpha: 0.85, scale: 0.98, yPercent: 4 },
-        { autoAlpha: 1, scale: 1, yPercent: 0, duration: 0.35, ease: 'power2.out' },
+        { autoAlpha: 0.92, scale: 0.985, yPercent: 2 },
+        { autoAlpha: 1, scale: 1, yPercent: 0, ease: 'none' },
         0
       );
       tl.fromTo(
-        '.rec-lantern',
-        { autoAlpha: 0.5, scale: 0.95 },
-        { autoAlpha: 1, scale: 1, duration: 0.4, ease: 'power2.out' },
-        0.05
+        '.rec-copy > *',
+        { autoAlpha: 0.76, y: 4 },
+        { autoAlpha: 1, y: 0, stagger: 0.05, ease: 'none' },
+        0.06
       );
       tl.fromTo(
-        '.rec-copy > *',
-        { autoAlpha: 0, y: 12 },
-        { autoAlpha: 1, y: 0, stagger: 0.04, duration: 0.35, ease: 'power2.out' },
+        '.rec-lantern',
+        { autoAlpha: 0.72, scale: 0.98 },
+        { autoAlpha: 1, scale: 1, ease: 'none' },
         0.1
       );
-      // Give guests ample time to read the venue name, note, and view map link
-      tl.to({}, { duration: 0.55 });
+      tl.fromTo(
+        '.rec-light-strand',
+        { autoAlpha: 0.45, yPercent: -4 },
+        { autoAlpha: 1, yPercent: 0, stagger: 0.04, ease: 'none' },
+        0
+      );
+      tl.fromTo(
+        '.rec-garden',
+        { autoAlpha: 0.22, yPercent: 8, scale: 0.88 },
+        { autoAlpha: 0.86, yPercent: 0, scale: 1, ease: 'none' },
+        0.02
+      );
     }, sectionRef);
 
     return () => ctx.revert();

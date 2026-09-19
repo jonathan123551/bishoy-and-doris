@@ -30,6 +30,8 @@ export default function App() {
         />
       )}
 
+      <div className="film-grain" />
+      <div className="vignette" />
 
       <main
         className="wedding-film"
