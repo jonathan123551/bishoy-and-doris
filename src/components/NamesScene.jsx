@@ -39,7 +39,11 @@ export default function NamesScene() {
           <div className="lux-rule" />
           <div className="ns-names">
             <h2 className="ns-name-a">{eventConfig.groomName}</h2>
-            <span className="ns-amp" style={{ opacity: 0 }}>&amp;</span>
+            <div className="ns-amp-wrapper">
+              <div className="ns-amp-line" />
+              <span className="ns-amp">&amp;</span>
+              <div className="ns-amp-line" />
+            </div>
             <h2 className="ns-name-b">{eventConfig.brideName}</h2>
           </div>
           <p className="ns-subline">Two stories, one vow, and a day we would be honored to share with you.</p>

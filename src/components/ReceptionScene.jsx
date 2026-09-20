@@ -29,12 +29,12 @@ export default function ReceptionScene() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="rec-scene canvas-ivory">
+    <section ref={sectionRef} className="rec-scene canvas-navy">
       <div className="rec-copy">
         <p className="rec-label">Reception</p>
-        <div className="lux-rule" />
+        <div className="lux-rule" style={{ margin: '0.5rem auto' }} />
         <h2 className="rec-venue-name">{reception.name}</h2>
-        <p className="rec-venue-sub">{reception.area}</p>
+        <p className="rec-venue-sub" style={{ color: 'var(--color-champagne)' }}>{reception.area}</p>
         
         <div className="venue-destination venue-destination--reception">
           <span>{reception.note}</span>

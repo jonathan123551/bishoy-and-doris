@@ -30,14 +30,13 @@ export default function CeremonyScene() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="cer-scene canvas-ivory">
+    <section ref={sectionRef} className="cer-scene canvas-navy">
       <div className="cer-copy">
         <p className="cer-label">Ceremony</p>
-        <div className="lux-rule" />
+        <div className="lux-rule" style={{ margin: '0.5rem auto' }} />
         <h2 className="cer-venue-name">{church.name}</h2>
-        <h2 className="cer-venue-name" dir="rtl">كنيسة رئيس الملائكة ميخائيل</h2>
-        <p className="venue-date">{eventConfig.displayDate}</p>
-        <p className="venue-time">{eventConfig.displayTime}</p>
+        <h2 className="cer-venue-name" dir="rtl" style={{ color: 'var(--color-champagne)' }}>كنيسة رئيس الملائكة ميخائيل</h2>
+        <p className="venue-date" style={{ color: 'var(--color-text-light)' }}>{eventConfig.displayDate} &middot; {eventConfig.displayTime}</p>
         
         <div className="venue-destination venue-destination--church">
           <span>{church.area}, {church.city}</span>

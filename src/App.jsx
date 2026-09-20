@@ -8,7 +8,6 @@ import ReceptionScene from './components/ReceptionScene';
 import DateSequence from './components/DateSequence';
 import PhotoStory from './components/PhotoStory';
 import FinalInvitation from './components/FinalInvitation';
-import FinalFrame from './components/FinalFrame';
 import MusicPlayer from './components/MusicPlayer';
 
 export default function App() {
@@ -39,14 +38,11 @@ export default function App() {
       >
         <OpeningScene isActive={introComplete} />
         <NamesScene />
-        <div className="gradient-navy-to-ivory" aria-hidden="true" />
         <CeremonyScene />
         <ReceptionScene />
-        <div className="gradient-ivory-to-navy" aria-hidden="true" />
         <DateSequence />
         <PhotoStory />
         <FinalInvitation />
-        <FinalFrame />
       </main>
     </>
   );
