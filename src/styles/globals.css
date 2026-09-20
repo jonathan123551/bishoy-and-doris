@@ -751,40 +751,50 @@ img {
 }
 
 /*
-  The mask IS the visible "pocket opening" window: it spans from the top of
-  the stage down to the envelope's pocket line, and its own box height is
-  set in JS (EnvelopeIntro measures the actual rendered envelope artwork so
-  this always lines up with the photo, at any viewport size). overflow:hidden
-  clips the letter on both edges as it moves through this window.
-  height:0 is the load-bearing default here -- if JS hasn't run yet for any
-  reason, the window has zero height and the letter is guaranteed invisible,
-  rather than defaulting open.
+  There is exactly one envelope surface in this component (.env-envelope-seq,
+  above). The letter is the only other layer, and it clips ITSELF against
+  the pocket line (computed in JS from that one image) via clip-path -- no
+  separate mask/window element exists to be mistaken for a second envelope
+  or pocket shape.
+  clip-path: inset(0 0 100% 0) is the load-bearing default here -- if JS
+  hasn't run yet for any reason, the letter has zero visible height, rather
+  than defaulting open.
+  Width is a standalone min() (not a % of a now-removed mask parent) sized
+  to match the envelope artwork's own min(88vw,400px) box, so it stays the
+  same size regardless of how wide its actual parent (.env-asset-wrapper,
+  full viewport) is.
 */
-.env-letter-mask {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(88vw, 400px);
-  height: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 2; /* Letter sits on top of the sequence (but is clipped to the pocket) */
-}
-
 .env-asset-letter {
   position: absolute;
   top: 0;
   left: 50%;
-  width: 78%; /* Relative to the mask container */
+  width: min(68.6vw, 312px); /* 78% of the envelope's min(88vw,400px) box */
   aspect-ratio: 0.82;
   background: linear-gradient(180deg, var(--color-paper) 0%, var(--color-paper-deep) 100%);
   border-radius: 4px;
-  box-shadow: 0 4px 30px rgba(0,0,0,0.6);
+  box-shadow: none;
+  transition: box-shadow 0.6s ease-out;
   display: grid; place-items: center; padding: 2rem 1.5rem;
   border: 1px solid rgba(197, 159, 81, 0.2);
   pointer-events: none;
-  will-change: transform;
+  will-change: transform, clip-path;
+  z-index: 2; /* above the single envelope image */
+  clip-path: inset(0 0 100% 0);
+}
+
+/* Only once the paper has fully cleared the pocket and become the hero does
+   it get a real drop shadow -- while it's still emerging it stays visually
+   flush/tucked-in rather than looking like a card pasted on top. */
+.env-asset-letter.is-hero {
+  box-shadow: 0 20px 60px rgba(0,0,0,0.55);
+}
+
+.env-letter-tuck-shadow {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 22%;
+  background: linear-gradient(to top, rgba(7,10,20,0.4), rgba(7,10,20,0));
+  border-radius: 0 0 4px 4px;
 }
 
 .env-letter-copy { text-align: center; width: 100%; color: var(--color-text-dark); }

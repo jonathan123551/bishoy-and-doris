@@ -21,12 +21,19 @@ import f14 from '../assets/envelope/frames/frame_14.jpg';
 const frames = [f00, f01, f02, f03, f04, f05, f06, f07, f08, f09, f10, f11, f12, f13, f14];
 
 // The envelope artwork is a square (1024x1024) photo. Measured directly on the
-// source images: the front pocket's top edge -- the horizontal fold where the
-// front panel meets the open flap -- sits at ~38.5% of the image height. Above
-// that line is "open air" (the flap interior / background); below it the paper
-// is physically behind the front panel and must never be visible.
+// source images (verified against every one of frame_07..frame_14, where the
+// front pocket panel is static and only the back flap swings away): the front
+// pocket's top edge sits at ~38.5% of the image height, dead flat edge to edge.
+// Above that line is open air (flap interior / background); below it the
+// paper is physically behind the front panel and must never be visible.
 const POCKET_LINE_FRACTION = 0.385;
 const HERO_SCALE = 1.15;
+
+// There is exactly ONE envelope surface in this component: the <img> below.
+// The letter is the only other visual layer, and it is occluded purely by
+// clipping ITSELF against the pocket line measured off that single image --
+// there is no second envelope graphic, mask box, or "pocket" shape drawn
+// anywhere. See handleOpen()'s emerge tween for how the clip is computed.
 
 const EnvDivider = () => (
   <div className="env-divider">
@@ -40,7 +47,6 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
   const containerRef = useRef(null);
   const wrapperRef = useRef(null);
   const envImgRef = useRef(null);
-  const maskRef = useRef(null);
   const letterRef = useRef(null);
   const openTimelineRef = useRef(null);
   const geometryRef = useRef({ pocketLineY: 0, hiddenY: 0, revealedY: 0, emergeScale: 0.35, wrapperHeight: 0, naturalHeight: 0 });
@@ -58,35 +64,25 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
     });
   }, []);
 
-  // Measure the envelope artwork and derive the pocket line + the letter's
-  // "hidden inside the envelope" / "just cleared the pocket" resting spots.
-  // This runs before paint (useLayoutEffect) so the letter is positioned
-  // correctly on the very first frame -- never relying on a GSAP tween's
-  // fromTo() to establish the rest state, which is what let the paper leak
-  // into view before the first tap.
+  // Measure the (single) envelope image and derive the pocket line, plus the
+  // letter's "hidden inside the envelope" / "just cleared the pocket" resting
+  // spots. Runs before paint (useLayoutEffect) so the letter is positioned
+  // and clipped correctly on the very first frame -- never relying on a GSAP
+  // tween's fromTo() to establish the rest state.
   const measureGeometry = useCallback(() => {
     const wrapper = wrapperRef.current;
     const envImg = envImgRef.current;
-    const mask = maskRef.current;
     const letter = letterRef.current;
-    if (!wrapper || !envImg || !mask || !letter) return;
+    if (!wrapper || !envImg || !letter) return;
 
     const wrapperRect = wrapper.getBoundingClientRect();
     const envRect = envImg.getBoundingClientRect();
     const pocketLineY = (envRect.top - wrapperRect.top) + envRect.height * POCKET_LINE_FRACTION;
 
-    // The mask's own box IS the visible window: 0 -> pocketLineY. Sizing it
-    // (rather than relying on a clip-path percentage) means "hidden" is the
-    // CSS default (height defaults to 0 in the stylesheet) even before this
-    // effect has run, and overflow:hidden clips both edges automatically as
-    // the letter moves, with zero risk of a fixed clip-path percentage
-    // drifting out of sync with the artwork.
-    mask.style.height = `${pocketLineY}px`;
-
-    const naturalHeight = letter.offsetHeight; // unaffected by transform, so safe to read regardless of current animation state
-    // Scale the letter down while it's still inside the pocket window so the
-    // whole visible sliver fits within that window with a little breathing
-    // room -- otherwise a tall card would clip at the top the instant it
+    const naturalHeight = letter.offsetHeight; // layout size, unaffected by transform -- safe to read at any point
+    // Scale the letter down while it's still emerging so the whole visible
+    // sliver fits within the pocket-to-viewport-top window with room to
+    // spare -- otherwise a tall card would clip at the top the instant it
     // clears the bottom edge.
     const emergeScale = Math.min(0.6, (pocketLineY * 0.92) / Math.max(naturalHeight, 1));
 
@@ -107,6 +103,7 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
         scale: emergeScale,
         transformOrigin: 'top center',
       });
+      letter.style.clipPath = 'inset(0 0 100% 0)';
     }
   }, []);
 
@@ -162,43 +159,57 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
       // 1. Text fades out
       tl.to('.env-top-text, .env-bottom-text', { autoAlpha: 0, duration: 0.3 }, 0);
 
-      // 2. PHASE 2 -- the flap physically lifts open (a real stepped frame
-      // sequence, never a two-image crossfade). The wax seal releases as
-      // part of this sequence.
+      // 2. PHASE 2 -- the flap physically lifts open on the ONE envelope
+      // image (a real stepped frame sequence, never a two-image crossfade).
+      // The wax seal releases as part of this sequence. Nothing else is
+      // drawn during this phase -- the letter stays fully clipped away.
       const frameObj = { frame: 0 };
       tl.to(frameObj, {
         frame: frames.length - 1,
         snap: 'frame',
-        duration: 0.8,
+        duration: 0.85,
         ease: 'power1.inOut',
         onUpdate: () => setCurrentFrame(frameObj.frame),
       }, 0.15);
 
       tl.call(() => playMusic(true), null, 0.4);
 
-      // 3. PHASE 3 -- only once the flap has cleared does the paper rise
-      // up out of the pocket. It starts pinned at the pocket line (zero
-      // visible height) and travels to "revealedY", the spot where it is
-      // fully clear of the pocket window -- the mask's overflow:hidden
-      // does the actual occlusion every frame, so this is correct at any
-      // scrub position, not just at the two ends.
+      // 3. PHASE 3 -- only once the flap sequence has FULLY finished (no
+      // overlap with phase 2) does the paper rise out of the pocket. It
+      // starts pinned exactly at the pocket line (zero visible height).
+      // Every frame, onUpdate reads the letter's OWN live y position (the
+      // only thing GSAP is animating) and derives a clip-path from it, so
+      // the visible sliver is always physically anchored to the pocket
+      // line on the single envelope image -- there's no separate mask
+      // shape, just this one element clipping itself.
       tl.to(letterRef.current, {
         y: () => geometryRef.current.revealedY,
         duration: 1.0,
         ease: 'power2.out',
-      }, 0.85);
+        onUpdate: () => {
+          const { pocketLineY, emergeScale, naturalHeight } = geometryRef.current;
+          const currentY = gsap.getProperty(letterRef.current, 'y');
+          const visibleLocal = Math.max(0, Math.min(naturalHeight, (pocketLineY - currentY) / emergeScale));
+          const hiddenBottomPct = 100 * (1 - visibleLocal / naturalHeight);
+          letterRef.current.style.clipPath = `inset(0 0 ${hiddenBottomPct}% 0)`;
+        },
+      }, 1.05);
 
-      // 4. PHASE 4 -- the envelope falls away and the paper becomes the
-      // hero: the mask is released (it has already done its job) and the
-      // letter scales/recenters into its final resting position.
-      tl.to('.env-envelope-seq', { y: 150, autoAlpha: 0, duration: 1.0, ease: 'power2.in' }, 1.85)
-        .set(maskRef.current, { overflow: 'visible' }, 1.85)
+      // 4. PHASE 4 -- the paper has fully cleared the pocket: drop the clip
+      // entirely (nothing left to occlude), let the hero shadow settle in,
+      // and only now does the envelope fall away while the letter scales
+      // and recenters into its final resting position.
+      tl.call(() => {
+        letterRef.current.style.clipPath = 'none';
+        letterRef.current.classList.add('is-hero');
+      }, null, 2.05)
+        .to('.env-envelope-seq', { y: 150, autoAlpha: 0, duration: 1.0, ease: 'power2.in' }, 2.05)
         .to(letterRef.current, {
           y: () => (geo.wrapperHeight - geo.naturalHeight * HERO_SCALE) / 2,
           scale: HERO_SCALE,
           duration: 1.2,
           ease: 'power2.inOut',
-        }, 1.85);
+        }, 2.05);
 
       // 5. Short pause to read
       tl.to({}, { duration: 2.0 });
@@ -220,25 +231,23 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
           <EnvDivider />
         </div>
 
+        {/* Exactly two visual layers live here: the envelope photo, and the
+            letter. Nothing else renders envelope-shaped pixels. */}
         <div className="env-asset-wrapper" ref={wrapperRef} onClick={handleOpen}>
 
-          {/* Animated 3D Flap Sequence */}
           <img ref={envImgRef} src={frames[currentFrame]} className="env-envelope-seq" alt="Envelope Animation" />
 
-          {/* Letter Extraction Window: the mask's own box height is set in JS
-              to match the pocket line measured on the envelope artwork, and
-              overflow:hidden does the clipping -- both edges, every frame --
-              so the letter can never render below the fold (still "inside"
-              the envelope) no matter where the timeline is scrubbed to. */}
-          <div className="env-letter-mask" ref={maskRef}>
-            <div className="env-asset-letter" ref={letterRef}>
-              <div className="env-letter-copy">
-                <p className="env-letter-title">BISHOY &amp; DORIS</p>
-                <p className="env-letter-subtitle">INVITATION</p>
-                <div className="lux-rule" style={{ margin: '1.2rem auto' }} />
-                <p className="env-letter-text">Two stories, one vow, and a day we would be honored to share with you.</p>
-              </div>
+          <div className="env-asset-letter" ref={letterRef}>
+            <div className="env-letter-copy">
+              <p className="env-letter-title">BISHOY &amp; DORIS</p>
+              <p className="env-letter-subtitle">INVITATION</p>
+              <div className="lux-rule" style={{ margin: '1.2rem auto' }} />
+              <p className="env-letter-text">Two stories, one vow, and a day we would be honored to share with you.</p>
             </div>
+            {/* Reads as the card receding into shadow right where it's still
+                tucked under the pocket fold -- reinforces "inserted", not
+                "pasted on top". Static, not animated. */}
+            <div className="env-letter-tuck-shadow" aria-hidden="true" />
           </div>
 
         </div>
