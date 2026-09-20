@@ -741,30 +741,36 @@ img {
   z-index: 5;
 }
 
-.env-asset-img {
+.env-envelope-seq {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  width: min(88vw, 400px);
+  height: min(88vw, 400px); /* the generated images are square */
   object-fit: contain;
   pointer-events: none;
+  z-index: 1; /* Envelope sequence is the base */
 }
 
-.env-asset-open-base { opacity: 0; }
-
-.env-asset-open-front {
-  opacity: 0;
-  /* Clip precisely below the middle fold line of the envelope */
-  clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+/* 
+  The mask ensures the letter does not exist outside the envelope pocket line.
+  We clip the bottom half of the mask off, exactly where the envelope opening is (approx 52%).
+*/
+.env-letter-mask {
+  position: absolute;
+  width: min(88vw, 400px);
+  height: min(88vw, 400px);
+  clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+  pointer-events: none;
+  z-index: 2; /* Letter sits on top of the sequence (but is clipped to the pocket) */
+  display: flex; align-items: center; justify-content: center;
 }
 
 .env-asset-letter {
   position: absolute;
-  width: min(72vw, 320px);
-  height: min(90vw, 420px);
-  background: #fdfaf6;
+  width: 78%; /* Relative to the mask container */
+  height: 95%;
+  background: var(--color-paper);
   border-radius: 4px;
   box-shadow: 0 4px 30px rgba(0,0,0,0.6);
-  z-index: 2; /* Sits between base and front */
   display: grid; place-items: center; padding: 2rem 1.5rem;
   border: 1px solid rgba(197, 159, 81, 0.2);
 }
