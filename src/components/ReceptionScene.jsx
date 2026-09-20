@@ -18,8 +18,8 @@ export default function ReceptionScene() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top top',
-          end: '+=100%',
+          start: 'center center',
+          end: '+=80%',
           scrub: true,
           pin: true,
         },
@@ -33,30 +33,26 @@ export default function ReceptionScene() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="scene-stage scene-stage--reception">
-      <div className="rec-inner">
-        <div className="rec-shell lux-paper">
-          <div className="rec-copy">
-            <p className="rec-label">Reception</p>
-            <div className="lux-rule" />
-            <h2 className="rec-venue-name">{reception.name}</h2>
-            <p className="rec-venue-sub">{reception.area}</p>
-            
-            <div className="venue-destination venue-destination--reception">
-              <span>{reception.note}</span>
-            </div>
-            
-            <a
-              className="cta-link venue-map venue-map--reception"
-              href={reception.mapUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span className="venue-map-mark" />
-              <span>View on Maps</span>
-            </a>
-          </div>
+    <section ref={sectionRef} className="rec-scene canvas-ivory">
+      <div className="rec-copy">
+        <p className="rec-label">Reception</p>
+        <div className="lux-rule" />
+        <h2 className="rec-venue-name">{reception.name}</h2>
+        <p className="rec-venue-sub">{reception.area}</p>
+        
+        <div className="venue-destination venue-destination--reception">
+          <span>{reception.note}</span>
         </div>
+        
+        <a
+          className="cta-link venue-map venue-map--reception"
+          href={reception.mapUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span className="venue-map-mark" />
+          <span>View on Maps</span>
+        </a>
       </div>
     </section>
   );

@@ -34,14 +34,15 @@ export default function App() {
         className="wedding-film"
         style={{
           opacity: experienceVisible ? 1 : 0,
-          transform: experienceVisible ? 'none' : 'scale(1.01)',
-          transition: 'opacity 1.4s cubic-bezier(0.22, 1, 0.36, 1), transform 1.4s cubic-bezier(0.22, 1, 0.36, 1)',
+          transition: 'opacity 1.4s cubic-bezier(0.22, 1, 0.36, 1)',
         }}
       >
         <OpeningScene isActive={introComplete} />
         <NamesScene />
+        <div className="gradient-navy-to-ivory" aria-hidden="true" />
         <CeremonyScene />
         <ReceptionScene />
+        <div className="gradient-ivory-to-navy" aria-hidden="true" />
         <DateSequence />
         <PhotoStory />
         <FinalInvitation />

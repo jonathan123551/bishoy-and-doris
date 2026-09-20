@@ -19,8 +19,8 @@ export default function CeremonyScene() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top top',
-          end: '+=100%',
+          start: 'center center',
+          end: '+=80%',
           scrub: true,
           pin: true,
         },
@@ -36,32 +36,28 @@ export default function CeremonyScene() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="scene-stage scene-stage--church">
-      <div className="cer-inner">
-        <div className="cer-shell lux-paper">
-          <div className="cer-copy">
-            <p className="cer-label">Ceremony</p>
-            <div className="lux-rule" />
-            <h2 className="cer-venue-name">{church.name}</h2>
-            <h2 className="cer-venue-name" dir="rtl">كنيسة رئيس الملائكة ميخائيل</h2>
-            <p className="venue-date">{eventConfig.displayDate}</p>
-            <p className="venue-time">{eventConfig.displayTime}</p>
-            
-            <div className="venue-destination venue-destination--church">
-              <span>{church.area}, {church.city}</span>
-            </div>
-            
-            <a
-              className="cta-link venue-map venue-map--church"
-              href={church.mapUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span className="venue-map-mark" />
-              <span>View on Maps</span>
-            </a>
-          </div>
+    <section ref={sectionRef} className="cer-scene canvas-ivory">
+      <div className="cer-copy">
+        <p className="cer-label">Ceremony</p>
+        <div className="lux-rule" />
+        <h2 className="cer-venue-name">{church.name}</h2>
+        <h2 className="cer-venue-name" dir="rtl">كنيسة رئيس الملائكة ميخائيل</h2>
+        <p className="venue-date">{eventConfig.displayDate}</p>
+        <p className="venue-time">{eventConfig.displayTime}</p>
+        
+        <div className="venue-destination venue-destination--church">
+          <span>{church.area}, {church.city}</span>
         </div>
+        
+        <a
+          className="cta-link venue-map venue-map--church"
+          href={church.mapUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span className="venue-map-mark" />
+          <span>View on Maps</span>
+        </a>
       </div>
     </section>
   );

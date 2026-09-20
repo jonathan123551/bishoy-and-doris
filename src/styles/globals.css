@@ -377,7 +377,21 @@ img {
 }
 
 /* ───────────────────────────────────────────────
-   Names Scene: ivory paper card on navy background
+   Continuous Canvas Gradients
+   ─────────────────────────────────────────────── */
+.gradient-navy-to-ivory {
+  width: 100%;
+  height: 20vh;
+  background: linear-gradient(180deg, var(--color-bg) 0%, var(--color-paper) 100%);
+}
+.gradient-ivory-to-navy {
+  width: 100%;
+  height: 25vh;
+  background: linear-gradient(180deg, var(--color-paper) 0%, var(--color-bg) 100%);
+}
+
+/* ───────────────────────────────────────────────
+   Names Scene: typographic moment on navy
    ─────────────────────────────────────────────── */
 
 .ns-scene { background: var(--color-bg); }
@@ -392,31 +406,8 @@ img {
   background: radial-gradient(circle at 50% 50%, var(--color-stage-light) 0%, var(--color-bg) 70%);
 }
 
-.ns-ribbon {
-  position: absolute;
-  left: -12%;
-  right: -12%;
-  top: 47%;
-  height: 13%;
-  z-index: 3;
-  transform-origin: center;
-  background: linear-gradient(100deg, rgba(3, 8, 22, 0.9), rgba(207, 173, 107, 0.7), rgba(3, 8, 22, 0.9));
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-}
-
-.ns-card {
-  position: relative;
-  z-index: 2;
-  width: min(88vw, 600px);
-  min-height: min(70svh, 610px);
-  display: grid;
-  place-items: center;
-  padding: clamp(1.7rem, 6vw, 3.4rem);
-  border-radius: 4px;
-}
-
 .ns-copy { position: relative; z-index: 1; display: grid; justify-items: center; gap: 1rem; text-align: center; }
-.ns-overline { font-family: var(--font-sans); font-size: 0.61rem; font-weight: 600; letter-spacing: 0.39em; text-transform: uppercase; color: var(--color-text-muted); }
+.ns-overline { font-family: var(--font-sans); font-size: 0.61rem; font-weight: 600; letter-spacing: 0.39em; text-transform: uppercase; color: var(--color-text-light-muted); }
 .ns-names { display: grid; gap: 0.28rem; width: 100%; }
 .ns-name-a, .ns-name-b {
   font-family: var(--font-display);
@@ -425,38 +416,26 @@ img {
   line-height: 0.82;
   letter-spacing: 0.075em;
   text-transform: uppercase;
-  color: var(--color-text-dark);
+  color: var(--color-text-light);
 }
 .ns-amp { font-family: var(--font-serif); font-style: italic; font-size: clamp(1.8rem, 7vw, 2.8rem); color: var(--color-champagne); }
-.ns-subline { width: min(72vw, 370px); font-family: var(--font-serif); font-style: italic; font-size: clamp(1.04rem, 4vw, 1.28rem); line-height: 1.42; color: var(--color-text-muted); }
-.ns-card-rule { position: absolute; left: 10%; right: 10%; height: 1px; background: linear-gradient(90deg, transparent, rgba(197, 159, 81, 0.36), transparent); }
-.ns-card-rule--top { top: 7%; }
-.ns-card-rule--bottom { bottom: 7%; }
+.ns-subline { width: min(72vw, 370px); font-family: var(--font-serif); font-style: italic; font-size: clamp(1.04rem, 4vw, 1.28rem); line-height: 1.42; color: var(--color-text-light-muted); }
 
 /* ───────────────────────────────────────────────
-   Ceremony & Reception: clean typography on ivory shells
+   Ceremony & Reception: clean typography on ivory canvas
    ─────────────────────────────────────────────── */
 
-.cer-inner, .rec-inner {
-  position: relative;
-  min-height: 100dvh;
+.cer-scene, .rec-scene {
+  background: var(--color-paper);
+  color: var(--color-text-dark);
+  padding: 15vh 1.5rem;
   display: grid;
   place-items: center;
-  overflow: hidden;
-  padding: 2rem 1rem;
-}
-
-.cer-shell, .rec-shell {
-  position: relative;
-  width: min(88vw, 520px);
-  display: grid;
-  justify-items: center;
-  padding: 3rem 1.5rem;
-  border-radius: 4px;
 }
 
 .cer-copy, .rec-copy {
   position: relative;
+  width: min(88vw, 520px);
   z-index: 1;
   display: grid;
   justify-items: center;
@@ -479,15 +458,17 @@ img {
   font-size: clamp(1.6rem, 6.5vw, 3rem);
   line-height: 1.1;
   letter-spacing: 0.03em;
-  color: var(--color-text-dark);
+  color: var(--color-bg);
 }
 
 .cer-copy h2[dir="rtl"] {
   font-family: var(--font-arabic);
   font-size: clamp(1.4rem, 5.5vw, 2.2rem);
-  color: var(--color-text-muted);
+  color: var(--color-champagne);
   letter-spacing: 0;
 }
+
+.venue-date, .venue-time { color: var(--color-text-muted); }
 
 .rec-venue-sub {
   font-family: var(--font-serif);
@@ -498,10 +479,20 @@ img {
 }
 
 .venue-destination--church, .venue-destination--reception {
-  border-color: rgba(197, 159, 81, 0.3);
-  background: linear-gradient(90deg, transparent, rgba(197, 159, 81, 0.08), transparent);
-  color: var(--color-text-dark);
+  border-color: rgba(197, 159, 81, 0.4);
+  background: rgba(197, 159, 81, 0.05);
+  color: var(--color-bg);
 }
+
+.venue-map--church, .venue-map--reception {
+  border-color: rgba(197, 159, 81, 0.4);
+  color: var(--color-bg);
+  background: transparent;
+}
+.venue-map--church:hover, .venue-map--reception:hover {
+  background: rgba(197, 159, 81, 0.1);
+}
+
 
 /* ───────────────────────────────────────────────
    Date Sequence: Classical Clock Timepiece
