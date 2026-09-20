@@ -7,7 +7,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function ReceptionScene() {
   const sectionRef = useRef(null);
-  const { receptionVenue } = eventConfig;
+  const { reception } = eventConfig;
 
   useLayoutEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
@@ -39,16 +39,16 @@ export default function ReceptionScene() {
           <div className="rec-copy">
             <p className="rec-label">Reception</p>
             <div className="lux-rule" />
-            <h2 className="rec-venue-name">{receptionVenue.name}</h2>
-            <p className="rec-venue-sub">{receptionVenue.subtitle || 'Gardenia'}</p>
+            <h2 className="rec-venue-name">{reception.name}</h2>
+            <p className="rec-venue-sub">{reception.area}</p>
             
             <div className="venue-destination venue-destination--reception">
-              <span>{receptionVenue.location}</span>
+              <span>{reception.note}</span>
             </div>
             
             <a
               className="cta-link venue-map venue-map--reception"
-              href={receptionVenue.mapUrl}
+              href={reception.mapUrl}
               target="_blank"
               rel="noopener noreferrer"
             >

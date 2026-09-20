@@ -15,8 +15,8 @@ function PhotoImage({ src, alt, className }) {
 
 export default function PhotoStory() {
   const sectionRef = useRef(null);
-  const primaryPhoto = eventConfig.couplePhotos[1];
-  const secondaryPhoto = eventConfig.couplePhotos[2];
+  const primaryPhoto = eventConfig.couplePhotos[0];
+  const secondaryPhoto = eventConfig.couplePhotos[1];
 
   useLayoutEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;

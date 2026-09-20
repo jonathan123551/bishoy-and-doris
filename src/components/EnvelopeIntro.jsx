@@ -48,7 +48,7 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
     }, containerRef);
 
     return () => ctx.revert();
-  }, [hasStarted]);
+  }, []); // Run only on mount
 
   const handleOpen = () => {
     if (hasStarted || !isReady) return;

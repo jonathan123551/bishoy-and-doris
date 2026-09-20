@@ -7,7 +7,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function CeremonyScene() {
   const sectionRef = useRef(null);
-  const { ceremonyVenue } = eventConfig;
+  const { church } = eventConfig;
 
   useLayoutEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
@@ -42,18 +42,18 @@ export default function CeremonyScene() {
           <div className="cer-copy">
             <p className="cer-label">Ceremony</p>
             <div className="lux-rule" />
-            <h2 className="cer-venue-name">{ceremonyVenue.name}</h2>
-            <h2 className="cer-venue-name" dir="rtl">{ceremonyVenue.nameAr}</h2>
-            <p className="venue-date">{eventConfig.date}</p>
-            <p className="venue-time">{eventConfig.time}</p>
+            <h2 className="cer-venue-name">{church.name}</h2>
+            <h2 className="cer-venue-name" dir="rtl">كنيسة رئيس الملائكة ميخائيل</h2>
+            <p className="venue-date">{eventConfig.displayDate}</p>
+            <p className="venue-time">{eventConfig.displayTime}</p>
             
             <div className="venue-destination venue-destination--church">
-              <span>{ceremonyVenue.location}</span>
+              <span>{church.area}, {church.city}</span>
             </div>
             
             <a
               className="cta-link venue-map venue-map--church"
-              href={ceremonyVenue.mapUrl}
+              href={church.mapUrl}
               target="_blank"
               rel="noopener noreferrer"
             >
