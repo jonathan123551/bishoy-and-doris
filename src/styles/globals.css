@@ -709,132 +709,88 @@ img {
    ─────────────────────────────────────────────── */
 
 .env-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: var(--color-bg);
-  display: grid;
-  place-items: center;
+  position: fixed; inset: 0; z-index: 9999;
+  background: #02050f;
+  display: grid; place-items: center;
 }
-
 .env-night {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% 50%, var(--color-stage-light) 0%, var(--color-bg) 70%);
-  display: grid;
-  place-items: center;
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 50%, #0d1e3f 0%, #02050f 80%);
+  display: grid; place-items: center;
 }
-
 .env-stage {
-  z-index: 3;
-  display: grid;
-  justify-items: center;
-  gap: 2rem;
-  width: 100%;
+  z-index: 3; display: grid; justify-items: center; gap: 2.5rem; width: 100%;
 }
-
-.env-cue { text-align: center; }
-.env-cue p {
-  font-family: var(--font-sans);
-  font-size: 0.58rem;
-  font-weight: 500;
-  letter-spacing: 0.32em;
+.env-top-text, .env-bottom-text { text-align: center; }
+.env-top-text p, .env-bottom-text p {
+  font-family: var(--font-serif);
+  font-size: 0.7rem;
+  letter-spacing: 0.4em;
   text-transform: uppercase;
-  color: var(--color-text-muted);
+  color: var(--color-champagne);
+  margin: 0;
+}
+.env-divider { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 0.8rem; }
+.env-div-line { width: 35px; height: 1px; background: rgba(197, 159, 81, 0.4); }
+.env-div-diamond {
+  width: 6px; height: 6px;
+  border: 1px solid var(--color-champagne);
+  transform: rotate(45deg);
+  opacity: 0.8;
 }
 
 .env-envelope {
   position: relative;
-  width: min(88vw, 390px);
-  height: min(60vw, 268px);
+  width: min(88vw, 400px);
+  height: min(60vw, 275px);
   perspective: 1600px;
   transform-style: preserve-3d;
   cursor: pointer;
 }
-
 .env-shadow {
-  position: absolute;
-  bottom: -12%;
-  left: 8%;
-  right: 8%;
-  height: 28%;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.3);
-  filter: blur(20px);
+  position: absolute; bottom: -15%; left: 5%; right: 5%; height: 30%;
+  border-radius: 50%; background: rgba(0, 0, 0, 0.5); filter: blur(25px);
 }
-
-.env-envelope-shell {
-  position: absolute;
-  inset: 0;
+.env-envelope-back {
+  position: absolute; inset: 0; border-radius: 2px;
+  background: #081226;
+  border: 1px solid rgba(197, 159, 81, 0.5);
+  box-shadow: inset 0 0 40px rgba(0,0,0,0.6);
 }
-
-.env-envelope-body {
-  position: absolute;
-  inset: 0;
-  border-radius: 20px;
-  z-index: 1;
-  border: 1px solid rgba(197, 159, 81, 0.4);
+.env-envelope-front {
+  position: absolute; inset: 0; pointer-events: none; z-index: 3;
 }
+.env-flap {
+  position: absolute; top: 0; left: 0; width: 100%; height: 62%;
+  transform-origin: top center; z-index: 4;
+}
+.env-seal {
+  position: absolute; left: 50%; top: 62%; transform: translate(-50%, -50%);
+  width: 68px; height: 68px; border-radius: 50%; z-index: 5;
+  display: grid; place-items: center;
+  background: radial-gradient(circle at 35% 30%, #e6c875 0%, #b89130 40%, #5c440a 100%);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.4), inset 0 3px 8px rgba(255,255,255,0.5), inset 0 -4px 8px rgba(0,0,0,0.4);
+  border: 1px solid #d4af37;
+}
+.env-seal-inner {
+  font-family: var(--font-serif); color: #3b2b06; font-size: 1.5rem;
+  text-shadow: 1px 1px 0 rgba(255,255,255,0.3), -1px -1px 0 rgba(0,0,0,0.2);
+  display: flex; align-items: center; justify-content: center; gap: 0.1rem;
+}
+.env-seal-amp { font-size: 0.7em; font-style: italic; }
 
 .env-letter {
-  position: absolute;
-  left: 50%;
-  bottom: 18px;
-  transform: translateX(-50%);
-  width: 84%;
-  height: 88%;
-  border-radius: 14px;
-  z-index: 2;
-  display: grid;
-  place-items: center;
-  padding: 1.6rem 1.3rem;
-  border: 1px solid rgba(197, 159, 81, 0.3);
+  position: absolute; left: 4%; right: 4%; bottom: 4%; top: 4%;
+  background: var(--color-paper);
+  border-radius: 4px; z-index: 2;
+  display: grid; place-items: center; padding: 2rem 1.5rem;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+  border: 1px solid rgba(197, 159, 81, 0.2);
 }
-
-.env-letter-copy {
-  text-align: center;
-  width: 100%;
-}
-.env-letter-title { font-family: var(--font-display); font-size: 1.4rem; color: var(--color-text-dark); }
-.env-letter-subtitle { font-family: var(--font-sans); font-size: 0.6rem; letter-spacing: 0.3em; margin-top: 0.5rem; }
-.env-letter-text { font-family: var(--font-serif); font-style: italic; font-size: 0.95rem; line-height: 1.4; color: var(--color-text-muted); }
-
-.env-flap {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 59%;
-  border-radius: 20px 20px 0 0;
-  clip-path: polygon(0 0, 100% 0, 50% 100%);
-  transform-origin: top center;
-  z-index: 3;
-  border: 1px solid rgba(197, 159, 81, 0.3);
-}
-
-.env-seal {
-  position: absolute;
-  left: 50%;
-  top: 52.5%;
-  transform: translate(-50%, -50%);
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  z-index: 4;
-  display: grid;
-  place-items: center;
-  background: radial-gradient(circle at 35% 30%, rgba(255, 235, 180, 0.32), transparent 24%), linear-gradient(135deg, #c59f51 0%, #8a6a2e 52%, #6b4f1e 100%);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 235, 180, 0.36), inset 0 -6px 12px rgba(106, 79, 30, 0.28);
-  color: #fff8f1;
-}
-
-.env-seal span { font-family: var(--font-display); font-size: 1.4rem; }
-.env-seal-amp {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 0.8em;
-  margin: 0 0.2rem;
-}
+.env-letter-copy { text-align: center; width: 100%; color: var(--color-text-dark); }
+.env-letter-title { font-family: var(--font-display); font-size: clamp(1.4rem, 6vw, 1.8rem); margin-bottom: 0.25rem; }
+.env-letter-subtitle { font-family: var(--font-sans); font-size: 0.65rem; letter-spacing: 0.3em; margin-bottom: 1rem; }
+.env-letter-text { font-family: var(--font-serif); font-style: italic; font-size: 0.95rem; line-height: 1.5; opacity: 0.8;}
 
 /* ───────────────────────────────────────────────
    Wedding film main wrapper
