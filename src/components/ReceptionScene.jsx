@@ -13,20 +13,16 @@ export default function ReceptionScene() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
 
     const ctx = gsap.context(() => {
-      gsap.set('.rec-copy > *', { y: 15, autoAlpha: 0 });
-
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'center center',
-          end: '+=80%',
+          start: 'top 85%',
+          end: 'center center',
           scrub: true,
-          pin: true,
         },
       });
 
-      tl.to('.rec-copy > *', { y: 0, autoAlpha: 1, stagger: 0.05, ease: 'none', duration: 0.3 }, 0.0)
-        .to({}, { duration: 0.6 });
+      tl.fromTo('.rec-copy > *', { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, stagger: 0.05, ease: 'none', duration: 0.3 }, 0.0);
     }, sectionRef);
 
     return () => ctx.revert();

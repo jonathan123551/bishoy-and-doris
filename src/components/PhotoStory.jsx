@@ -22,25 +22,19 @@ export default function PhotoStory() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
 
     const ctx = gsap.context(() => {
-      // Set initial states hidden before scrub
-      gsap.set('.ps-photo--secondary', { yPercent: 4, autoAlpha: 0 });
-      gsap.set('.ps-caption > *', { y: 10, autoAlpha: 0 });
-
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top top',
-          end: '+=80%',
+          start: 'top 80%',
+          end: 'center center',
           scrub: true,
-          pin: true,
         },
       });
 
       // Animate contents
-      tl.to('.ps-photo--primary', { scale: 1, ease: 'none', duration: 0.1 }, 0.0)
-        .to('.ps-photo--secondary', { yPercent: 0, autoAlpha: 1, ease: 'none', duration: 0.15 }, 0.05)
-        .to('.ps-caption > *', { y: 0, autoAlpha: 1, stagger: 0.05, ease: 'none', duration: 0.15 }, 0.1)
-        .to({}, { duration: 0.5 }); // reading buffer
+      tl.fromTo('.ps-photo--primary', { scale: 1.05 }, { scale: 1, ease: 'none', duration: 0.1 }, 0.0)
+        .fromTo('.ps-photo--secondary', { yPercent: 10, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, ease: 'none', duration: 0.15 }, 0.05)
+        .fromTo('.ps-caption > *', { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, stagger: 0.05, ease: 'none', duration: 0.15 }, 0.1);
     }, sectionRef);
 
     return () => ctx.revert();

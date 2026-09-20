@@ -23,9 +23,10 @@ export default function OpeningScene({ isActive }) {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: '+=90%',
+          end: '+=100%',
           scrub: 0.8,
           pin: true,
+          pinSpacing: false,
         },
       });
 

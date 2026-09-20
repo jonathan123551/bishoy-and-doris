@@ -13,23 +13,17 @@ export default function CeremonyScene() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
 
     const ctx = gsap.context(() => {
-      // Set initial states hidden before scrub
-      gsap.set('.cer-copy > *', { y: 15, autoAlpha: 0 });
-
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'center center',
-          end: '+=80%',
+          start: 'top 85%',
+          end: 'center center',
           scrub: true,
-          pin: true,
         },
       });
 
       // Animate inner content
-      tl.to('.cer-copy > *', { y: 0, autoAlpha: 1, stagger: 0.05, ease: 'none', duration: 0.3 }, 0.0)
-        // Read buffer
-        .to({}, { duration: 0.6 });
+      tl.fromTo('.cer-copy > *', { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, stagger: 0.05, ease: 'none', duration: 0.3 }, 0.0);
     }, sectionRef);
 
     return () => ctx.revert();

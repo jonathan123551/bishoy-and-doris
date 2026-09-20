@@ -12,29 +12,20 @@ export default function NamesScene() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
 
     const ctx = gsap.context(() => {
-      // Set initial states so they are hidden before scrub starts
-      gsap.set('.ns-copy > *', { y: 14, autoAlpha: 0 });
-      gsap.set('.ns-name-a', { xPercent: -15, autoAlpha: 0 });
-      gsap.set('.ns-name-b', { xPercent: 15, autoAlpha: 0 });
-      gsap.set('.ns-ribbon', { scaleX: 0.3, autoAlpha: 0 });
-
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top top',
-          end: '+=100%',
+          start: 'top 80%',
+          end: 'center center',
           scrub: true,
-          pin: true,
         },
       });
 
-      // Animate contents as user scrubs
-      tl.to('.ns-copy > p, .ns-copy > .lux-rule', { y: 0, autoAlpha: 1, stagger: 0.05, ease: 'none', duration: 0.2 }, 0.0)
-        .to('.ns-name-a', { xPercent: 0, autoAlpha: 1, ease: 'none', duration: 0.2 }, 0.1)
-        .to('.ns-name-b', { xPercent: 0, autoAlpha: 1, ease: 'none', duration: 0.2 }, 0.15)
-        .to('.ns-amp', { y: 0, autoAlpha: 1, ease: 'none', duration: 0.15 }, 0.2)
-        // Read buffer
-        .to({}, { duration: 0.5 });
+      // Animate contents as user naturally scrolls
+      tl.fromTo('.ns-copy > p, .ns-copy > .lux-rule', { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, stagger: 0.05, ease: 'none', duration: 0.2 }, 0.0)
+        .fromTo('.ns-name-a', { xPercent: -10, autoAlpha: 0 }, { xPercent: 0, autoAlpha: 1, ease: 'none', duration: 0.2 }, 0.1)
+        .fromTo('.ns-name-b', { xPercent: 10, autoAlpha: 0 }, { xPercent: 0, autoAlpha: 1, ease: 'none', duration: 0.2 }, 0.15)
+        .fromTo('.ns-amp', { y: 10, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ease: 'none', duration: 0.15 }, 0.2);
     }, sectionRef);
 
     return () => ctx.revert();
