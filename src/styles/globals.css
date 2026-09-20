@@ -750,29 +750,41 @@ img {
   z-index: 1; /* Envelope sequence is the base */
 }
 
-/* 
-  The mask ensures the letter does not exist outside the envelope pocket line.
-  We clip the bottom half of the mask off, exactly where the envelope opening is (approx 52%).
+/*
+  The mask IS the visible "pocket opening" window: it spans from the top of
+  the stage down to the envelope's pocket line, and its own box height is
+  set in JS (EnvelopeIntro measures the actual rendered envelope artwork so
+  this always lines up with the photo, at any viewport size). overflow:hidden
+  clips the letter on both edges as it moves through this window.
+  height:0 is the load-bearing default here -- if JS hasn't run yet for any
+  reason, the window has zero height and the letter is guaranteed invisible,
+  rather than defaulting open.
 */
 .env-letter-mask {
   position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: min(88vw, 400px);
-  height: min(88vw, 400px);
-  clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+  height: 0;
+  overflow: hidden;
   pointer-events: none;
   z-index: 2; /* Letter sits on top of the sequence (but is clipped to the pocket) */
-  display: flex; align-items: center; justify-content: center;
 }
 
 .env-asset-letter {
   position: absolute;
+  top: 0;
+  left: 50%;
   width: 78%; /* Relative to the mask container */
-  height: 95%;
-  background: var(--color-paper);
+  aspect-ratio: 0.82;
+  background: linear-gradient(180deg, var(--color-paper) 0%, var(--color-paper-deep) 100%);
   border-radius: 4px;
   box-shadow: 0 4px 30px rgba(0,0,0,0.6);
   display: grid; place-items: center; padding: 2rem 1.5rem;
   border: 1px solid rgba(197, 159, 81, 0.2);
+  pointer-events: none;
+  will-change: transform;
 }
 
 .env-letter-copy { text-align: center; width: 100%; color: var(--color-text-dark); }
