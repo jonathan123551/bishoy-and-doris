@@ -704,33 +704,28 @@ img {
   background: linear-gradient(180deg, transparent 0%, rgba(2, 4, 9, 0.2) 50%, rgba(2, 4, 9, 1) 100%);
 }
 
-/* ───────────────────────────────────────────────
-   Envelope intro: ivory paper stationery on navy
-   ─────────────────────────────────────────────── */
-
 .env-overlay {
   position: fixed; inset: 0; z-index: 9999;
-  background: #02050f;
-  display: grid; place-items: center;
+  background: #02040a; /* Match the dark edges of the images */
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
 }
-.env-night {
-  position: absolute; inset: 0;
-  background: radial-gradient(circle at 50% 50%, #0d1e3f 0%, #02050f 80%);
-  display: grid; place-items: center;
-}
+
 .env-stage {
-  z-index: 3; display: grid; justify-items: center; gap: 2.5rem; width: 100%;
+  z-index: 3; display: flex; flex-direction: column; justify-content: space-between; align-items: center; 
+  height: 100vh; padding: 12vh 0; width: 100%;
 }
-.env-top-text, .env-bottom-text { text-align: center; }
+
+.env-top-text, .env-bottom-text { text-align: center; z-index: 10; }
 .env-top-text p, .env-bottom-text p {
   font-family: var(--font-serif);
-  font-size: 0.7rem;
-  letter-spacing: 0.4em;
+  font-size: 0.65rem;
+  letter-spacing: 0.45em;
   text-transform: uppercase;
   color: var(--color-champagne);
   margin: 0;
 }
-.env-divider { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 0.8rem; }
+
+.env-divider { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 0.75rem; }
 .env-div-line { width: 35px; height: 1px; background: rgba(197, 159, 81, 0.4); }
 .env-div-diamond {
   width: 6px; height: 6px;
@@ -739,58 +734,45 @@ img {
   opacity: 0.8;
 }
 
-.env-envelope {
-  position: relative;
-  width: min(88vw, 400px);
-  height: min(60vw, 275px);
-  perspective: 1600px;
-  transform-style: preserve-3d;
+.env-asset-wrapper {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
   cursor: pointer;
+  z-index: 5;
 }
-.env-shadow {
-  position: absolute; bottom: -15%; left: 5%; right: 5%; height: 30%;
-  border-radius: 50%; background: rgba(0, 0, 0, 0.5); filter: blur(25px);
-}
-.env-envelope-back {
-  position: absolute; inset: 0; border-radius: 2px;
-  background: #081226;
-  border: 1px solid rgba(197, 159, 81, 0.5);
-  box-shadow: inset 0 0 40px rgba(0,0,0,0.6);
-}
-.env-envelope-front {
-  position: absolute; inset: 0; pointer-events: none; z-index: 3;
-}
-.env-flap {
-  position: absolute; top: 0; left: 0; width: 100%; height: 62%;
-  transform-origin: top center; z-index: 4;
-}
-.env-seal {
-  position: absolute; left: 50%; top: 62%; transform: translate(-50%, -50%);
-  width: 68px; height: 68px; border-radius: 50%; z-index: 5;
-  display: grid; place-items: center;
-  background: radial-gradient(circle at 35% 30%, #e6c875 0%, #b89130 40%, #5c440a 100%);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.4), inset 0 3px 8px rgba(255,255,255,0.5), inset 0 -4px 8px rgba(0,0,0,0.4);
-  border: 1px solid #d4af37;
-}
-.env-seal-inner {
-  font-family: var(--font-serif); color: #3b2b06; font-size: 1.5rem;
-  text-shadow: 1px 1px 0 rgba(255,255,255,0.3), -1px -1px 0 rgba(0,0,0,0.2);
-  display: flex; align-items: center; justify-content: center; gap: 0.1rem;
-}
-.env-seal-amp { font-size: 0.7em; font-style: italic; }
 
-.env-letter {
-  position: absolute; left: 4%; right: 4%; bottom: 4%; top: 4%;
-  background: var(--color-paper);
-  border-radius: 4px; z-index: 2;
+.env-asset-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.env-asset-open-base { opacity: 0; }
+
+.env-asset-open-front {
+  opacity: 0;
+  /* Clip precisely below the middle fold line of the envelope */
+  clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+}
+
+.env-asset-letter {
+  position: absolute;
+  width: min(72vw, 320px);
+  height: min(90vw, 420px);
+  background: #fdfaf6;
+  border-radius: 4px;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.6);
+  z-index: 2; /* Sits between base and front */
   display: grid; place-items: center; padding: 2rem 1.5rem;
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
   border: 1px solid rgba(197, 159, 81, 0.2);
 }
+
 .env-letter-copy { text-align: center; width: 100%; color: var(--color-text-dark); }
-.env-letter-title { font-family: var(--font-display); font-size: clamp(1.4rem, 6vw, 1.8rem); margin-bottom: 0.25rem; }
-.env-letter-subtitle { font-family: var(--font-sans); font-size: 0.65rem; letter-spacing: 0.3em; margin-bottom: 1rem; }
-.env-letter-text { font-family: var(--font-serif); font-style: italic; font-size: 0.95rem; line-height: 1.5; opacity: 0.8;}
+.env-letter-title { font-family: var(--font-display); font-size: clamp(1.4rem, 6vw, 1.8rem); margin-bottom: 0.25rem; color: var(--color-text-dark); }
+.env-letter-subtitle { font-family: var(--font-sans); font-size: 0.65rem; letter-spacing: 0.3em; margin-bottom: 1rem; color: var(--color-text-muted); }
+.env-letter-text { font-family: var(--font-serif); font-style: italic; font-size: 0.95rem; line-height: 1.5; opacity: 0.8; color: var(--color-text-dark); }
 
 /* ───────────────────────────────────────────────
    Wedding film main wrapper

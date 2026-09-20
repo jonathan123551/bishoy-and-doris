@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { playMusic } from '../utils/audioManager';
 
+import envelopeClosed from '../assets/envelope/closed.jpg';
+import envelopeOpen from '../assets/envelope/open.jpg';
+
 const EnvDivider = () => (
   <div className="env-divider">
     <div className="env-div-line" />
@@ -28,13 +31,12 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
     if (hasStarted) return undefined;
     const ctx = gsap.context(() => {
       const introTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-      introTl.fromTo('.env-night', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3 })
-             .fromTo('.env-envelope', { y: 30, scale: 0.95, autoAlpha: 0 }, { y: 0, scale: 1, autoAlpha: 1, duration: 0.8 }, 0.1)
-             .fromTo('.env-top-text, .env-bottom-text', { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, stagger: 0.1, duration: 0.6 }, 0.4)
-             .call(() => setIsReady(true), null, 1.2);
+      introTl.fromTo('.env-asset-closed', { autoAlpha: 0, scale: 0.95 }, { autoAlpha: 1, scale: 1, duration: 1.2 })
+             .fromTo('.env-top-text, .env-bottom-text', { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, stagger: 0.1, duration: 0.8 }, 0.4)
+             .call(() => setIsReady(true), null, 1.5);
     }, containerRef);
     return () => ctx.revert();
-  }, []); // Run only on mount
+  }, []);
 
   const handleOpen = () => {
     if (hasStarted || !isReady) return;
@@ -50,93 +52,73 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
 
       openTimelineRef.current = tl;
 
-      // 1. Text and seal fade out
-      tl.to('.env-top-text, .env-bottom-text', { autoAlpha: 0, duration: 0.3 }, 0)
-        .to('.env-seal', { scale: 1.1, autoAlpha: 0, duration: 0.3, ease: 'power2.in' }, 0.1);
+      // 1. Text fades out
+      tl.to('.env-top-text, .env-bottom-text', { autoAlpha: 0, duration: 0.4 }, 0);
       
-      // 2. Flap opens and music triggers
-      tl.to('.env-flap', { rotateX: -180, duration: 0.6, ease: 'power2.inOut' }, 0.2)
+      // 2. Crossfade closed -> open envelope
+      tl.to('.env-asset-closed', { autoAlpha: 0, duration: 0.8, ease: 'power2.inOut' }, 0.3)
+        .to('.env-asset-open-base, .env-asset-open-front', { autoAlpha: 1, duration: 0.8, ease: 'power2.inOut' }, 0.3)
         .call(() => playMusic(true), null, 0.4);
 
-      // 3. Letter slides up
-      tl.to('.env-letter', { yPercent: -65, duration: 0.8, ease: 'power2.out' }, 0.5);
+      // 3. Invitation paper slides up from inside the pocket
+      tl.fromTo('.env-asset-letter', 
+        { yPercent: 20, autoAlpha: 0 }, 
+        { yPercent: -45, autoAlpha: 1, duration: 1.2, ease: 'power3.out' }, 
+        1.0
+      );
 
-      // 4. Envelope falls away, leaving the physical invitation paper
-      tl.to('.env-envelope-back, .env-envelope-front, .env-flap, .env-shadow', { y: 100, autoAlpha: 0, duration: 0.8, ease: 'power2.in' }, 1.0)
-        .to('.env-letter', { yPercent: -15, scale: 1.12, duration: 0.8, ease: 'power2.inOut' }, 1.0);
+      // 4. Envelope falls away, letter scales up
+      tl.to('.env-asset-open-base, .env-asset-open-front', { y: 150, autoAlpha: 0, duration: 1.0, ease: 'power2.in' }, 2.5)
+        .to('.env-asset-letter', { yPercent: -15, scale: 1.15, duration: 1.2, ease: 'power2.inOut' }, 2.5);
 
-      // 5. Short pause to read the invitation paper
+      // 5. Short pause to read
       tl.to({}, { duration: 2.2 });
 
-      // 6. Transition naturally to OpeningScene
-      tl.call(() => onReveal?.(), null, 3.8)
-        .to(containerRef.current, { autoAlpha: 0, duration: 1.2, ease: 'power2.inOut' }, 4.0);
+      // 6. Transition to actual website
+      tl.call(() => onReveal?.(), null, 5.5)
+        .to(containerRef.current, { autoAlpha: 0, duration: 1.2, ease: 'power2.inOut' }, 5.5);
 
     }, containerRef);
   };
 
   return (
     <div ref={containerRef} className="env-overlay">
-      <div className="env-night">
-        <div className="env-stage">
+      
+      <div className="env-stage">
+        
+        <div className="env-top-text">
+          <p>A Special Invitation</p>
+          <EnvDivider />
+        </div>
+
+        <div className="env-asset-wrapper" onClick={handleOpen}>
           
-          <div className="env-top-text">
-            <p>A Special Invitation</p>
-            <EnvDivider />
+          {/* Base Open Envelope (Back layer) */}
+          <img src={envelopeOpen} className="env-asset-img env-asset-open-base" alt="Open Envelope Background" />
+
+          {/* The Physical Letter (Middle layer) */}
+          <div className="env-asset-letter">
+            <div className="env-letter-copy">
+              <p className="env-letter-title">BISHOY &amp; DORIS</p>
+              <p className="env-letter-subtitle">INVITATION</p>
+              <div className="lux-rule" style={{ margin: '1.2rem auto' }} />
+              <p className="env-letter-text">Two stories, one vow, and a day we would be honored to share with you.</p>
+            </div>
           </div>
 
-          <div className="env-envelope" onClick={handleOpen}>
-            <div className="env-shadow" />
-            
-            {/* Back inner wall of the envelope */}
-            <div className="env-envelope-back" />
-            
-            {/* The physical invitation paper */}
-            <div className="env-letter lux-paper">
-              <div className="env-letter-copy">
-                <p className="env-letter-title">BISHOY &amp; DORIS</p>
-                <p className="env-letter-subtitle">INVITATION</p>
-                <div className="lux-rule" style={{ margin: '1.2rem auto' }} />
-                <p className="env-letter-text">Two stories, one vow, and a day we would be honored to share with you.</p>
-              </div>
-            </div>
+          {/* Front Open Envelope (Top layer, clipped to bottom half) */}
+          <img src={envelopeOpen} className="env-asset-img env-asset-open-front" alt="Open Envelope Front Pocket" />
 
-            {/* Front folded pockets of the envelope */}
-            <div className="env-envelope-front">
-              <svg viewBox="0 0 400 275" preserveAspectRatio="none" style={{ width: '100%', height: '100%', display: 'block' }}>
-                <path d="M 0 0 L 200 160 L 400 0 L 400 275 L 0 275 Z" fill="#0a1733" stroke="rgba(197, 159, 81, 0.7)" strokeWidth="1.5" strokeLinejoin="round" />
-                <path d="M 0 275 L 200 160 L 400 275" stroke="rgba(197, 159, 81, 0.4)" fill="none" strokeWidth="1" />
-              </svg>
-            </div>
-
-            {/* Top flap with elegant gold botanical details */}
-            <div className="env-flap">
-              <svg viewBox="0 0 400 170" preserveAspectRatio="none" style={{ width: '100%', height: '100%', display: 'block' }}>
-                <polygon points="0,0 400,0 200,170" fill="#0c1a3a" stroke="rgba(197, 159, 81, 0.7)" strokeWidth="1.5" strokeLinejoin="round" />
-                <path d="M 180 145 Q 120 90 40 40" stroke="rgba(197, 159, 81, 0.5)" fill="none" strokeWidth="1" />
-                <path d="M 220 145 Q 280 90 360 40" stroke="rgba(197, 159, 81, 0.5)" fill="none" strokeWidth="1" />
-                <path d="M 135 105 Q 125 95 115 105 Q 125 115 135 105" fill="rgba(197, 159, 81, 0.4)" />
-                <path d="M 95 70 Q 85 60 75 70 Q 85 80 95 70" fill="rgba(197, 159, 81, 0.4)" />
-                <path d="M 265 105 Q 275 95 285 105 Q 275 115 265 105" fill="rgba(197, 159, 81, 0.4)" />
-                <path d="M 305 70 Q 315 60 325 70 Q 315 80 305 70" fill="rgba(197, 159, 81, 0.4)" />
-              </svg>
-            </div>
-
-            {/* Realistic wax seal */}
-            <div className="env-seal">
-              <div className="env-seal-inner">
-                B<span className="env-seal-amp">&amp;</span>D
-              </div>
-            </div>
-
-          </div>
-          
-          <div className="env-bottom-text">
-            <p>Tap to open</p>
-            <EnvDivider />
-          </div>
+          {/* Closed Envelope (Topmost layer initially) */}
+          <img src={envelopeClosed} className="env-asset-img env-asset-closed" alt="Closed Envelope" />
 
         </div>
+        
+        <div className="env-bottom-text">
+          <p>Tap to open</p>
+          <EnvDivider />
+        </div>
+
       </div>
     </div>
   );
