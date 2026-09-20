@@ -46,68 +46,38 @@ export default function PhotoStory() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
 
     const ctx = gsap.context(() => {
-      const photos = sectionRef.current.querySelectorAll('.ps-photo');
-      const caption = sectionRef.current.querySelector('.ps-caption');
-      const veil = sectionRef.current.querySelector('.ps-veil');
-
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: 'bottom top',
-          scrub: true,
+          end: '+=80%',
+          scrub: 0.6,
+          pin: true,
         },
       });
 
-      if (photos[0]) {
-        tl.fromTo(
-          photos[0],
-          { autoAlpha: 0.84, scale: 1.06, yPercent: 2 },
-          { autoAlpha: 1, scale: 1, yPercent: 0, ease: 'none' },
-          0
-        );
-        tl.to(
-          photos[0],
-          { yPercent: -3.5, ease: 'none' },
-          0.34
-        );
-      }
+      tl.fromTo(
+        '.ps-photo--primary',
+        { scale: 1.02, autoAlpha: 0.9 },
+        { scale: 1, autoAlpha: 1, ease: 'none' },
+        0.0
+      );
 
-      if (photos[1]) {
-        tl.fromTo(
-          photos[1],
-          { autoAlpha: 0.58, xPercent: -6, yPercent: 6, rotate: -1.8 },
-          { autoAlpha: 1, xPercent: 0, yPercent: 0, rotate: -0.4, ease: 'none' },
-          0.12
-        );
-        tl.to(
-          photos[1],
-          { yPercent: 4, ease: 'none' },
-          0.44
-        );
-      }
+      tl.fromTo(
+        '.ps-photo--secondary',
+        { yPercent: 4, autoAlpha: 0.7 },
+        { yPercent: 0, autoAlpha: 1, ease: 'none' },
+        0.10
+      );
 
-      if (caption) {
-        tl.fromTo(
-          caption.children,
-          { autoAlpha: 0, y: 16 },
-          { autoAlpha: 1, y: 0, stagger: 0.06, ease: 'none' },
-          0.16
-        );
-        tl.to(
-          caption,
-          { yPercent: -6, ease: 'none' },
-          0.52
-        );
-      }
+      tl.fromTo(
+        '.ps-caption > *',
+        { y: 10, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, stagger: 0.05, ease: 'none' },
+        0.15
+      );
 
-      if (veil) {
-        tl.to(
-          veil,
-          { autoAlpha: 0.82, ease: 'none' },
-          0.62
-        );
-      }
+      tl.to({}, { duration: 0.45 }, 0.45);
     }, sectionRef);
 
     return () => ctx.revert();
@@ -121,10 +91,6 @@ export default function PhotoStory() {
     <section
       ref={sectionRef}
       className="ps-scene scene-stage scene-stage--photo"
-      style={{
-        position: 'relative',
-        minHeight: isDual ? '118svh' : '110svh',
-      }}
     >
       <div
         className="ps-inner"
@@ -140,21 +106,6 @@ export default function PhotoStory() {
       >
         <div className="ps-side-type">BISHOY<br />&amp;<br />DORIS</div>
         <div className="ps-matte" />
-        <div
-          style={{
-            position: 'absolute',
-            inset: '6% auto auto 50%',
-            width: '86vw',
-            height: '86vw',
-            maxWidth: 540,
-            maxHeight: 540,
-            transform: 'translateX(-50%)',
-            borderRadius: '50%',
-            background:
-              'radial-gradient(circle, rgba(248, 205, 154, 0.62) 0%, rgba(180, 93, 66, 0.2) 34%, transparent 74%)',
-            pointerEvents: 'none',
-          }}
-        />
 
         {isDual ? (
           <div
@@ -199,7 +150,7 @@ export default function PhotoStory() {
         ) : (
           <PhotoImage
             photo={couplePhotos[0]}
-          className="ps-photo ps-photo--primary"
+            className="ps-photo ps-photo--primary"
             style={{
               width: 'min(86vw, 460px)',
               height: 'min(74vh, 640px)',
@@ -230,7 +181,7 @@ export default function PhotoStory() {
               fontWeight: 500,
               letterSpacing: '0.34em',
               textTransform: 'uppercase',
-            color: 'rgba(255, 228, 195, 0.82)',
+              color: 'rgba(255, 228, 195, 0.82)',
               opacity: 0,
             }}
           >
@@ -256,9 +207,7 @@ export default function PhotoStory() {
           style={{
             position: 'absolute',
             inset: 0,
-            opacity: 0,
-            background:
-              'linear-gradient(180deg, rgba(79,55,51,0) 0%, rgba(79,55,51,0.08) 52%, rgba(79,55,51,0.94) 100%)',
+            background: 'linear-gradient(180deg, rgba(79,55,51,0) 0%, rgba(79,55,51,0.08) 52%, rgba(79,55,51,0.6) 100%)',
             pointerEvents: 'none',
           }}
         />
