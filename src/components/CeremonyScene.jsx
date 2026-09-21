@@ -299,6 +299,15 @@ export default function CeremonyScene() {
         },
         0.90
       );
+      tl.to(
+  section,
+  {
+    autoAlpha: 0,
+    ease: 'none',
+    duration: 0.06,
+  },
+  0.985
+);
 
       /*
        * IMPORTANT:
