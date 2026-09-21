@@ -34,10 +34,10 @@ export default function ReceptionScene() {
       const maps = section.querySelector('.rec-map-link');
 
       gsap.set(image, {
-        opacity: 1,
-        scale: 1,
-        xPercent: 0,
-      });
+  opacity: 0,
+  scale: 1,
+  xPercent: 0,
+});
 
       gsap.set(shade, {
         opacity: 0,
@@ -64,7 +64,15 @@ const receptionDuration = isMobile ? 1000 : 1100;
           refreshPriority: 0,
         },
       });
-
+      tl.to(
+  image,
+  {
+    opacity: 1,
+    duration: 0.08,
+    ease: 'none',
+  },
+  0
+);
       tl.fromTo(
         shade,
         { opacity: 0 },
@@ -170,12 +178,24 @@ const receptionDuration = isMobile ? 1000 : 1100;
       );
 
       tl.to(
-        {},
-        {
-          duration: 0.18,
-        },
-        0.82
-      );
+  image,
+  {
+    opacity: 0,
+    ease: 'power2.inOut',
+    duration: 0.12,
+  },
+  0.94
+);
+
+tl.to(
+  shade,
+  {
+    opacity: 0,
+    ease: 'power2.inOut',
+    duration: 0.12,
+  },
+  0.94
+);
     }, sectionRef);
 
     return () => ctx.revert();
