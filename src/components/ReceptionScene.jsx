@@ -58,77 +58,52 @@ export default function ReceptionScene() {
         '.rec-map-link'
       );
 
-      const delayPixels = 1400 - window.innerHeight;
-      const activePixels = 1000;
-      const totalPixels = delayPixels > 0 ? delayPixels + activePixels : activePixels;
-      const D = 1.07;
-      const startT = delayPixels > 0 ? (delayPixels / activePixels) * D : 0;
-
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
+
           start: 'top top',
-          end: `+=${totalPixels}`,
+          end: '+=1100',
+
           scrub: 1,
+
+          /*
+           * Reception gets its own clean scroll space.
+           * It does NOT overlap Ceremony.
+           */
           pin: true,
           pinSpacing: true,
+
+          anticipatePin: 1,
           invalidateOnRefresh: true,
+          refreshPriority: 0,
         },
       });
 
-      if (startT > 0) {
-        tl.to({}, { duration: startT }, 0);
-      }
-
-      /*
-       * ======================================================
-       * 1. RECEPTION IMAGE ENTERS
-       * ======================================================
-       *
-       * No clipPath.
-       * The whole Reception scene is already there,
-       * but starts just outside the right side.
-       */
-
-      tl.fromTo(
-        section,
-        {
-          xPercent: 12,
-        },
-        {
-          xPercent: 0,
-          ease: 'power3.inOut',
-          duration: 0.34,
-        },
-        startT + 0
-      );
-
-      /*
-       * ======================================================
-       * 2. CINEMATIC IMAGE SETTLES
-       * ======================================================
-       */
+      /* ======================================================
+         1. IMAGE ENTERS
+         ====================================================== */
 
       tl.fromTo(
         image,
         {
-          scale: 1.10,
-          xPercent: 4,
+          opacity: 0.15,
+          scale: 1.06,
+          xPercent: 3,
         },
         {
+          opacity: 1,
           scale: 1,
           xPercent: 0,
           ease: 'power2.out',
-          duration: 0.42,
+          duration: 0.24,
         },
-        startT + 0
+        0
       );
 
-      /*
-       * ======================================================
-       * 3. DARK CINEMATIC WASH
-       * ======================================================
-       */
+      /* ======================================================
+         2. CINEMATIC WASH
+         ====================================================== */
 
       tl.fromTo(
         shade,
@@ -136,32 +111,28 @@ export default function ReceptionScene() {
           opacity: 0,
         },
         {
-          opacity: 0.46,
+          opacity: 0.50,
           ease: 'none',
-          duration: 0.28,
+          duration: 0.20,
         },
-        startT + 0.12
+        0.04
       );
 
-      /*
-       * ======================================================
-       * 4. HOLD IMAGE
-       * ======================================================
-       */
+      /* ======================================================
+         3. IMAGE HOLD
+         ====================================================== */
 
       tl.to(
         {},
         {
-          duration: 0.10,
+          duration: 0.12,
         },
-        startT + 0.42
+        0.28
       );
 
-      /*
-       * ======================================================
-       * 5. RECEPTION TEXT
-       * ======================================================
-       */
+      /* ======================================================
+         4. RECEPTION LABEL
+         ====================================================== */
 
       tl.fromTo(
         label,
@@ -175,8 +146,12 @@ export default function ReceptionScene() {
           ease: 'power3.out',
           duration: 0.14,
         },
-        startT + 0.48
+        0.34
       );
+
+      /* ======================================================
+         5. RULE
+         ====================================================== */
 
       tl.fromTo(
         rule,
@@ -191,8 +166,12 @@ export default function ReceptionScene() {
           ease: 'none',
           duration: 0.12,
         },
-        startT + 0.54
+        0.40
       );
+
+      /* ======================================================
+         6. VENUE
+         ====================================================== */
 
       tl.fromTo(
         venue,
@@ -206,8 +185,12 @@ export default function ReceptionScene() {
           ease: 'power3.out',
           duration: 0.18,
         },
-        startT + 0.59
+        0.45
       );
+
+      /* ======================================================
+         7. AREA
+         ====================================================== */
 
       tl.fromTo(
         area,
@@ -221,8 +204,12 @@ export default function ReceptionScene() {
           ease: 'power2.out',
           duration: 0.13,
         },
-        startT + 0.68
+        0.56
       );
+
+      /* ======================================================
+         8. NOTE
+         ====================================================== */
 
       tl.fromTo(
         note,
@@ -238,14 +225,12 @@ export default function ReceptionScene() {
           ease: 'power2.out',
           duration: 0.14,
         },
-        startT + 0.74
+        0.63
       );
 
-      /*
-       * ======================================================
-       * 6. MAPS — LAST
-       * ======================================================
-       */
+      /* ======================================================
+         9. MAPS — LAST
+         ====================================================== */
 
       tl.fromTo(
         maps,
@@ -261,23 +246,30 @@ export default function ReceptionScene() {
           ease: 'back.out(1.4)',
           duration: 0.16,
         },
-        startT + 0.81
+        0.71
       );
 
-      /*
-       * ======================================================
-       * 7. FINAL HOLD
-       * ======================================================
-       */
+      /* ======================================================
+         10. FINAL HOLD
+         ====================================================== */
+
+      tl.to(
+        copy,
+        {
+          yPercent: -2,
+          ease: 'none',
+          duration: 0.12,
+        },
+        0.86
+      );
 
       tl.to(
         {},
         {
-          duration: 0.19,
+          duration: 0.12,
         },
-        startT + 0.88
+        0.92
       );
-
     }, sectionRef);
 
     return () => ctx.revert();
@@ -288,7 +280,6 @@ export default function ReceptionScene() {
       ref={sectionRef}
       className="rec-cinematic"
     >
-
       <img
         src={receptionImg}
         className="rec-cinematic-image"

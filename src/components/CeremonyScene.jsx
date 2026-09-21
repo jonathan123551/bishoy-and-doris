@@ -41,34 +41,26 @@ export default function CeremonyScene() {
         scrollTrigger: {
           trigger: section,
           start: 'top top',
-
-          /*
-           * Keep the Ceremony pinned long enough
-           * for the cinematic hand-off to happen.
-           */
           end: '+=1400',
-
           scrub: 1,
-
-          pin: true,
 
           /*
            * IMPORTANT:
-           * Reception is allowed to move underneath
-           * this pinned Ceremony.
+           * Ceremony owns its own scroll space.
+           * Reception will NOT move underneath it.
            */
-          pinSpacing: false,
+          pin: true,
+          pinSpacing: true,
 
           anticipatePin: 1,
           invalidateOnRefresh: true,
+          refreshPriority: 10,
         },
       });
 
-      /*
-       * ======================================================
-       * CEREMONY INTRO
-       * ======================================================
-       */
+      /* ======================================================
+         CEREMONY INTRO
+         ====================================================== */
 
       tl.fromTo(
         bg,
@@ -111,11 +103,9 @@ export default function CeremonyScene() {
         0
       );
 
-      /*
-       * ======================================================
-       * TEXT REVEAL
-       * ======================================================
-       */
+      /* ======================================================
+         TEXT REVEAL
+         ====================================================== */
 
       tl.fromTo(
         eyebrow,
@@ -227,7 +217,12 @@ export default function CeremonyScene() {
 
       tl.fromTo(
         maps,
-        { y: 24, autoAlpha: 0, scale: 0.94, xPercent: -50 },
+        {
+          y: 24,
+          autoAlpha: 0,
+          scale: 0.94,
+          xPercent: -50,
+        },
         {
           y: 0,
           autoAlpha: 1,
@@ -241,7 +236,10 @@ export default function CeremonyScene() {
 
       tl.fromTo(
         bottomRule,
-        { scaleX: 0, autoAlpha: 0 },
+        {
+          scaleX: 0,
+          autoAlpha: 0,
+        },
         {
           scaleX: 1,
           autoAlpha: 1,
@@ -252,9 +250,9 @@ export default function CeremonyScene() {
         0.84
       );
 
-      /* =========================
-         HOLD — everything stays visible
-         ========================= */
+      /* ======================================================
+         HOLD
+         ====================================================== */
 
       tl.to(
         {},
@@ -264,9 +262,9 @@ export default function CeremonyScene() {
         0.88
       );
 
-      /* =========================
+      /* ======================================================
          CEREMONY EXIT
-         ========================= */
+         ====================================================== */
 
       tl.to(
         content,
@@ -302,22 +300,21 @@ export default function CeremonyScene() {
         0.90
       );
 
-      tl.to(
-        section,
-        {
-          yPercent: -2,
-          ease: 'none',
-          duration: 0.14,
-        },
-        0.96
-      );
+      /*
+       * IMPORTANT:
+       * No yPercent transform on the whole section.
+       * That transform was contributing to the bad hand-off.
+       */
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={sectionRef} className="ceremony-cinematic">
+    <section
+      ref={sectionRef}
+      className="ceremony-cinematic"
+    >
       <img
         className="ceremony-bg"
         src={churchBg}
@@ -347,7 +344,6 @@ export default function CeremonyScene() {
         </div>
 
         <div className="ceremony-title">
-
           <div className="ceremony-title-top">
             CHURCH OF
           </div>
@@ -355,7 +351,6 @@ export default function CeremonyScene() {
           <div className="ceremony-title-bottom">
             ARCHANGEL MICHAEL
           </div>
-
         </div>
 
         <div
@@ -401,7 +396,9 @@ export default function CeremonyScene() {
             />
           </svg>
 
-          <span>VIEW ON MAPS</span>
+          <span>
+            VIEW ON MAPS
+          </span>
         </a>
 
         <div className="ceremony-rule ceremony-rule-bottom">
