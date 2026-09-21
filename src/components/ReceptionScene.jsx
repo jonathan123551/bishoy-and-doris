@@ -33,11 +33,56 @@ export default function ReceptionScene() {
       const note = section.querySelector('.rec-note');
       const maps = section.querySelector('.rec-map-link');
 
+      const isMobile = window.matchMedia(
+        '(max-width: 600px)'
+      ).matches;
+
+      const receptionDuration = isMobile ? 1000 : 1100;
+
+      /*
+       * Ceremony is pinned for 1400px while its real rendered
+       * height is only the viewport height.
+       *
+       * On mobile, Reception becomes sticky underneath Ceremony
+       * before Ceremony finishes its pin. The image must already
+       * be visible at that point, while the Reception text waits.
+       */
+      const ceremonySection = document.querySelector(
+        '.ceremony-cinematic'
+      );
+
+      const ceremonyHeight =
+        ceremonySection?.offsetHeight ||
+        window.innerHeight;
+
+      const ceremonyPinDuration = 1400;
+
+      const overlapPixels = isMobile
+        ? Math.max(
+            0,
+            ceremonyPinDuration - ceremonyHeight
+          )
+        : 0;
+
+      const START_DELAY =
+        overlapPixels / receptionDuration;
+
+      /*
+       * IMPORTANT:
+       * The Reception image is visible from the beginning.
+       *
+       * This is what allows it to sit underneath Ceremony while
+       * Ceremony is pinned/fading out.
+       *
+       * We do NOT fade the image out at the end.
+       * It should remain visible until DateSequence naturally
+       * takes over after this section.
+       */
       gsap.set(image, {
-  opacity: 0,
-  scale: 1,
-  xPercent: 0,
-});
+        opacity: 1,
+        scale: 1,
+        xPercent: 0,
+      });
 
       gsap.set(shade, {
         opacity: 0,
@@ -50,9 +95,6 @@ export default function ReceptionScene() {
         }
       );
 
-     const isMobile = window.matchMedia('(max-width: 600px)').matches;
-const receptionDuration = isMobile ? 1000 : 1100;
-
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
@@ -64,15 +106,11 @@ const receptionDuration = isMobile ? 1000 : 1100;
           refreshPriority: 0,
         },
       });
-      tl.to(
-  image,
-  {
-    opacity: 1,
-    duration: 0.08,
-    ease: 'none',
-  },
-  0
-);
+
+      /*
+       * Once Reception becomes the active scene,
+       * bring in the cinematic shade.
+       */
       tl.fromTo(
         shade,
         { opacity: 0 },
@@ -84,21 +122,33 @@ const receptionDuration = isMobile ? 1000 : 1100;
         0
       );
 
+      /*
+       * Reception
+       */
       tl.fromTo(
         label,
-        { y: 28, autoAlpha: 0 },
+        {
+          y: 28,
+          autoAlpha: 0,
+        },
         {
           y: 0,
           autoAlpha: 1,
           ease: 'power3.out',
           duration: 0.14,
         },
-        0.12
+        START_DELAY + 0.12
       );
 
+      /*
+       * Gold rule
+       */
       tl.fromTo(
         rule,
-        { scaleX: 0, autoAlpha: 0 },
+        {
+          scaleX: 0,
+          autoAlpha: 0,
+        },
         {
           scaleX: 1,
           autoAlpha: 1,
@@ -106,33 +156,48 @@ const receptionDuration = isMobile ? 1000 : 1100;
           ease: 'none',
           duration: 0.12,
         },
-        0.20
+        START_DELAY + 0.20
       );
 
+      /*
+       * LA PENSÉE
+       */
       tl.fromTo(
         venue,
-        { y: 38, autoAlpha: 0 },
+        {
+          y: 38,
+          autoAlpha: 0,
+        },
         {
           y: 0,
           autoAlpha: 1,
           ease: 'power3.out',
           duration: 0.18,
         },
-        0.28
+        START_DELAY + 0.28
       );
 
+      /*
+       * Gardenia
+       */
       tl.fromTo(
         area,
-        { y: 20, autoAlpha: 0 },
+        {
+          y: 20,
+          autoAlpha: 0,
+        },
         {
           y: 0,
           autoAlpha: 1,
           ease: 'power2.out',
           duration: 0.13,
         },
-        0.38
+        START_DELAY + 0.38
       );
 
+      /*
+       * AFTER THE CEREMONY
+       */
       tl.fromTo(
         note,
         {
@@ -147,9 +212,12 @@ const receptionDuration = isMobile ? 1000 : 1100;
           ease: 'power2.out',
           duration: 0.14,
         },
-        0.48
+        START_DELAY + 0.48
       );
 
+      /*
+       * Maps — last
+       */
       tl.fromTo(
         maps,
         {
@@ -164,9 +232,12 @@ const receptionDuration = isMobile ? 1000 : 1100;
           ease: 'back.out(1.4)',
           duration: 0.16,
         },
-        0.58
+        START_DELAY + 0.58
       );
 
+      /*
+       * Small cinematic movement after the content is complete.
+       */
       tl.to(
         copy,
         {
@@ -174,35 +245,32 @@ const receptionDuration = isMobile ? 1000 : 1100;
           ease: 'none',
           duration: 0.12,
         },
-        0.70
+        START_DELAY + 0.70
       );
 
+      /*
+       * Hold the finished Reception scene.
+       *
+       * DO NOT fade the image out here.
+       * The next section should naturally take over.
+       */
       tl.to(
-  image,
-  {
-    opacity: 0,
-    ease: 'power2.inOut',
-    duration: 0.12,
-  },
-  0.94
-);
-
-tl.to(
-  shade,
-  {
-    opacity: 0,
-    ease: 'power2.inOut',
-    duration: 0.12,
-  },
-  0.94
-);
+        {},
+        {
+          duration: 0.18,
+        },
+        START_DELAY + 0.82
+      );
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={sectionRef} className="rec-scroll">
+    <section
+      ref={sectionRef}
+      className="rec-scroll"
+    >
       <div className="rec-cinematic">
 
         <img
