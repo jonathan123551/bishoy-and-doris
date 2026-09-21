@@ -58,16 +58,27 @@ export default function ReceptionScene() {
         '.rec-map-link'
       );
 
+      const delayPixels = 1400 - window.innerHeight;
+      const activePixels = 1000;
+      const totalPixels = delayPixels > 0 ? delayPixels + activePixels : activePixels;
+      const D = 1.07;
+      const startT = delayPixels > 0 ? (delayPixels / activePixels) * D : 0;
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
           start: 'top top',
-          end: '+=1000',
+          end: `+=${totalPixels}`,
           scrub: 1,
-          pin: false,
+          pin: true,
+          pinSpacing: true,
           invalidateOnRefresh: true,
         },
       });
+
+      if (startT > 0) {
+        tl.to({}, { duration: startT }, 0);
+      }
 
       /*
        * ======================================================
@@ -89,7 +100,7 @@ export default function ReceptionScene() {
           ease: 'power3.inOut',
           duration: 0.34,
         },
-        0
+        startT + 0
       );
 
       /*
@@ -110,7 +121,7 @@ export default function ReceptionScene() {
           ease: 'power2.out',
           duration: 0.42,
         },
-        0
+        startT + 0
       );
 
       /*
@@ -129,7 +140,7 @@ export default function ReceptionScene() {
           ease: 'none',
           duration: 0.28,
         },
-        0.12
+        startT + 0.12
       );
 
       /*
@@ -143,7 +154,7 @@ export default function ReceptionScene() {
         {
           duration: 0.10,
         },
-        0.42
+        startT + 0.42
       );
 
       /*
@@ -164,7 +175,7 @@ export default function ReceptionScene() {
           ease: 'power3.out',
           duration: 0.14,
         },
-        0.48
+        startT + 0.48
       );
 
       tl.fromTo(
@@ -180,7 +191,7 @@ export default function ReceptionScene() {
           ease: 'none',
           duration: 0.12,
         },
-        0.54
+        startT + 0.54
       );
 
       tl.fromTo(
@@ -195,7 +206,7 @@ export default function ReceptionScene() {
           ease: 'power3.out',
           duration: 0.18,
         },
-        0.59
+        startT + 0.59
       );
 
       tl.fromTo(
@@ -210,7 +221,7 @@ export default function ReceptionScene() {
           ease: 'power2.out',
           duration: 0.13,
         },
-        0.68
+        startT + 0.68
       );
 
       tl.fromTo(
@@ -227,7 +238,7 @@ export default function ReceptionScene() {
           ease: 'power2.out',
           duration: 0.14,
         },
-        0.74
+        startT + 0.74
       );
 
       /*
@@ -250,7 +261,7 @@ export default function ReceptionScene() {
           ease: 'back.out(1.4)',
           duration: 0.16,
         },
-        0.81
+        startT + 0.81
       );
 
       /*
@@ -264,7 +275,7 @@ export default function ReceptionScene() {
         {
           duration: 0.19,
         },
-        0.88
+        startT + 0.88
       );
 
     }, sectionRef);
