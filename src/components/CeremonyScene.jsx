@@ -50,8 +50,7 @@ export default function CeremonyScene() {
            * Reception will move underneath it.
            */
           pin: true,
-pinSpacing: window.innerWidth <= 600,
-          anticipatePin: 1,
+pinSpacing: false,          anticipatePin: 1,
           invalidateOnRefresh: true,
           refreshPriority: 10,
         },

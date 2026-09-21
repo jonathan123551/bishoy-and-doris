@@ -62,77 +62,79 @@ export default function ReceptionScene() {
         '(max-width: 600px)'
       ).matches;
 
-      /*
-       * Ceremony has:
-       *
-       * start: top top
-       * end: +=1400
-       * pin: true
-       * pinSpacing: false
-       *
-       * Reception naturally starts after the rendered
-       * Ceremony section height.
-       *
-       * Therefore this is the exact amount of scroll
-       * during which Reception is underneath the pinned
-       * Ceremony.
-       */
       const CEREMONY_PIN = 1400;
 
       const RECEPTION_DURATION = isMobile
         ? 1000
         : 1100;
 
+      /*
+       * Ceremony is:
+       *
+       * height: 100svh
+       * pin: true
+       * pinSpacing: false
+       * end: +=1400
+       *
+       * Because pinSpacing is false, Reception's natural
+       * document position is only one viewport below the
+       * previous content.
+       *
+       * At the exact moment Ceremony releases, Reception's
+       * top may already be above the viewport.
+       *
+       * Therefore the Reception timeline must start at:
+       *
+       *     top - handoffOffset
+       *
+       * NOT:
+       *
+       *     top + handoffOffset
+       *
+       * The previous + value was the reason the Reception
+       * animation was happening too early.
+       */
+
       const ceremonySection = document.querySelector(
         '.ceremony-cinematic'
       );
 
-      /*
-       * Use the actual rendered Ceremony height.
-       * This is much more reliable than visualViewport /
-       * innerHeight for this handoff.
-       */
       const ceremonyHeight =
         ceremonySection?.offsetHeight ||
         window.innerHeight;
 
-      /*
-       * Example on mobile:
-       *
-       * Ceremony height = 844
-       * Ceremony pin = 1400
-       *
-       * Reception is underneath for:
-       *
-       * 1400 - 844 = 556px
-       *
-       * So Reception must NOT visually reveal itself
-       * during those 556px.
-       */
       const handoffOffset = Math.max(
         0,
         CEREMONY_PIN - ceremonyHeight
       );
 
       /*
-       * Initial state.
+       * IMPORTANT:
        *
-       * Reception exists in the DOM, but its visual image
-       * stays hidden until the exact Ceremony handoff.
+       * The image exists from the beginning.
        *
-       * This removes the ugly mobile "bottom quarter"
-       * reveal.
+       * It is supposed to sit underneath Ceremony.
+       * Ceremony must cover it until Ceremony disappears.
+       *
+       * DO NOT animate image opacity from 0 here.
        */
       gsap.set(image, {
-        opacity: 0,
+        opacity: 1,
         scale: 1,
         xPercent: 0,
       });
 
+      /*
+       * Shade starts invisible.
+       * It comes in only when Reception becomes active.
+       */
       gsap.set(shade, {
         opacity: 0,
       });
 
+      /*
+       * Reception text starts hidden.
+       */
       gsap.set(
         [
           label,
@@ -148,25 +150,28 @@ export default function ReceptionScene() {
       );
 
       /*
-       * IMPORTANT:
+       * =====================================================
+       * RECEPTION SCROLL TIMELINE
+       * =====================================================
        *
-       * The ScrollTrigger does NOT start when Reception
-       * first reaches the top of the viewport.
+       * The IMPORTANT correction is the minus sign:
        *
-       * It starts exactly when Ceremony's 1400px pin
-       * has finished.
+       *     top -= handoffOffset
        *
-       * This is the key fix.
+       * This means the timeline begins exactly when the
+       * Ceremony pin reaches its release point.
        */
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
 
           start: () =>
-            `top+=${handoffOffset}px top`,
+            `top-=${handoffOffset}px top`,
 
           end: () =>
-            `top+=${handoffOffset + RECEPTION_DURATION}px top`,
+            `top-=${
+              handoffOffset + RECEPTION_DURATION
+            }px top`,
 
           scrub: 1,
 
@@ -180,36 +185,39 @@ export default function ReceptionScene() {
 
       /*
        * =====================================================
-       * 1. IMAGE
+       * 1. RECEPTION IMAGE
        * =====================================================
        *
-       * Image becomes visible immediately at handoff.
+       * Already visible underneath Ceremony.
+       *
+       * No opacity animation here.
        */
-      tl.to(
+      tl.set(
         image,
         {
           opacity: 1,
           scale: 1,
           xPercent: 0,
-          ease: 'none',
-          duration: 0.06,
         },
         0
       );
 
       /*
        * =====================================================
-       * 2. CINEMATIC SHADE
+       * 2. SHADE
        * =====================================================
        */
-      tl.to(
+      tl.fromTo(
         shade,
+        {
+          opacity: 0,
+        },
         {
           opacity: 0.50,
           ease: 'none',
           duration: 0.14,
         },
-        0.02
+        0
       );
 
       /*
@@ -357,7 +365,7 @@ export default function ReceptionScene() {
        * 10. HOLD
        * =====================================================
        *
-       * Reception stays fully visible.
+       * Reception remains visible.
        * No fade-out.
        */
       tl.to(
