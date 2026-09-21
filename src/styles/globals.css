@@ -901,140 +901,247 @@ img {
   background: linear-gradient(180deg, transparent 0%, rgba(2, 4, 9, 0.2) 50%, rgba(2, 4, 9, 1) 100%);
 }
 
+/* ───────────────────────────────────────────────
+   Envelope intro: one coherent physical envelope
+   ─────────────────────────────────────────────── */
+
 .env-overlay {
-  position: fixed; inset: 0; z-index: 9999;
-  background: #02040a; /* Match the dark edges of the images */
-  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(34, 65, 103, 0.46) 0%, rgba(7, 16, 31, 0.1) 34%, transparent 58%),
+    radial-gradient(circle at 12% 12%, rgba(207, 173, 107, 0.08) 0%, transparent 24%),
+    radial-gradient(circle at 88% 86%, rgba(70, 103, 142, 0.1) 0%, transparent 26%),
+    #02050c;
+}
+
+.env-overlay::before,
+.env-overlay::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  inset: -12%;
+  z-index: 0;
+}
+
+.env-overlay::before {
+  background:
+    radial-gradient(circle at 8% 18%, rgba(214, 186, 136, 0.12) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 92% 72%, rgba(214, 186, 136, 0.08) 0 1px, transparent 1.5px);
+  background-size: 220px 220px, 260px 260px;
+  opacity: 0.35;
+}
+
+.env-overlay::after {
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.32) 100%);
 }
 
 .env-stage {
-  z-index: 3; display: flex; flex-direction: column; justify-content: space-between; align-items: center; 
-  height: 100vh; padding: 12vh 0; width: 100%;
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100dvh;
+  min-height: 100vh;
+  padding: max(8vh, 3rem) 0 max(8vh, 3rem);
 }
 
-.env-top-text, .env-bottom-text { text-align: center; z-index: 10; }
-.env-top-text p, .env-bottom-text p {
+.env-top-text,
+.env-bottom-text {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  pointer-events: none;
+}
+
+.env-top-text p,
+.env-bottom-text p {
+  margin: 0;
   font-family: var(--font-serif);
-  font-size: 0.65rem;
-  letter-spacing: 0.45em;
+  font-size: 0.66rem;
+  letter-spacing: 0.44em;
+  line-height: 1.2;
   text-transform: uppercase;
   color: var(--color-champagne);
-  margin: 0;
 }
 
-.env-divider { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 0.75rem; }
-.env-div-line { width: 35px; height: 1px; background: rgba(197, 159, 81, 0.4); }
+.env-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.72rem;
+}
+
+.env-div-line {
+  width: 35px;
+  height: 1px;
+  background: rgba(207, 173, 107, 0.5);
+}
+
 .env-div-diamond {
-  width: 6px; height: 6px;
+  width: 6px;
+  height: 6px;
   border: 1px solid var(--color-champagne);
   transform: rotate(45deg);
   opacity: 0.8;
 }
 
 .env-asset-wrapper {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   z-index: 5;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
 }
 
-.env-envelope-seq {
+.env-envelope-canvas {
   position: absolute;
-  width: min(88vw, 400px);
-  height: min(88vw, 400px); /* the generated images are square */
+  width: min(90vw, 430px);
+  aspect-ratio: 1 / 1;
+  height: auto;
   object-fit: contain;
   pointer-events: none;
-  z-index: 1; /* Envelope sequence is the base */
-  will-change: transform, opacity; /* only animated in phase 4 (fall-away); cheap compositor hint */
-  backface-visibility: hidden; /* avoids a repaint flash on some mobile Safari versions during src swaps */
+  z-index: 1;
+  display: block;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
-/*
-  Every one of the 15 source frames is pixel-identical in a band around
-  y=0.68-0.89 of the image -- a second envelope/pocket-bottom shape baked
-  into the photography itself, present in the asset regardless of flap
-  state. This is a static, colour-matched cover for exactly that band
-  (colours sampled from the image's own surrounding tones), not a toggled
-  overlay -- since the thing underneath never changes frame to frame,
-  neither does this.
-*/
-.env-bottom-patch {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: min(88vw, 400px);
-  height: min(88vw, 400px);
-  pointer-events: none;
-  z-index: 1; /* same level as the envelope image; comes after it in the DOM so it paints on top */
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    transparent 68%,
-    rgba(16, 28, 48, 0.98) 70%,
-    rgba(11, 20, 38, 0.98) 78%,
-    rgba(5, 12, 25, 0.96) 86%,
-    transparent 89%,
-    transparent 100%
-  );
-}
-
-/*
-  This window paints nothing of its own -- no background, no border. It is
-  purely an overflow:hidden aperture, sized in JS to match the envelope's
-  own pocket line (measured off the single envelope image), so the letter
-  clips against it natively as it translates through. There is no second
-  envelope or pocket shape here, visible or otherwise.
-  height:0 is the load-bearing default -- if JS hasn't run yet for any
-  reason, the window has zero height and the letter is guaranteed
-  invisible, rather than defaulting open.
-*/
+/* Pure clipping aperture. It paints nothing and cannot create another envelope. */
 .env-letter-window {
   position: absolute;
   top: 0;
   left: 50%;
-  transform: translateX(-50%);
-  width: min(88vw, 400px);
+  width: min(90vw, 430px);
   height: 0;
+  transform: translateX(-50%);
   overflow: hidden;
   pointer-events: none;
-  z-index: 2; /* above the single envelope image, nothing else at this level */
+  z-index: 2;
 }
 
 .env-asset-letter {
   position: absolute;
   top: 0;
   left: 50%;
-  width: 78%; /* relative to the window, which mirrors the envelope's own min(88vw,400px) box */
+  width: 78%;
   aspect-ratio: 0.82;
+  display: grid;
+  place-items: center;
+  padding: 2rem 1.5rem;
   background: linear-gradient(180deg, var(--color-paper) 0%, var(--color-paper-deep) 100%);
-  border-radius: 4px;
-  box-shadow: none;
-  transition: box-shadow 0.6s ease-out;
-  display: grid; place-items: center; padding: 2rem 1.5rem;
+  border-radius: 3px;
+  color: var(--color-text-dark);
   pointer-events: none;
   will-change: transform;
+  transform: translateZ(0);
 }
 
-/* Only once the paper has fully cleared the pocket and become the hero does
-   it get a real drop shadow -- while it's still emerging it stays visually
-   flush/tucked-in, with no border of its own to be mistaken for a second
-   set of gold pocket edges next to the envelope's real ones. */
+.env-asset-letter::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.04) 0,
+    rgba(255, 255, 255, 0.04) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  opacity: 0.5;
+}
+
 .env-asset-letter.is-hero {
-  box-shadow: 0 20px 60px rgba(0,0,0,0.55);
+  box-shadow:
+    0 22px 60px rgba(0, 0, 0, 0.48),
+    0 2px 8px rgba(0, 0, 0, 0.16);
 }
 
 .env-letter-tuck-shadow {
   position: absolute;
-  left: 0; right: 0; bottom: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   height: 22%;
-  background: linear-gradient(to top, rgba(7,10,20,0.4), rgba(7,10,20,0));
-  border-radius: 0 0 4px 4px;
+  border-radius: 0 0 3px 3px;
+  background: linear-gradient(to top, rgba(7, 10, 20, 0.34), rgba(7, 10, 20, 0));
+  pointer-events: none;
 }
 
-.env-letter-copy { text-align: center; width: 100%; color: var(--color-text-dark); }
-.env-letter-title { font-family: var(--font-display); font-size: clamp(1.4rem, 6vw, 1.8rem); margin-bottom: 0.25rem; color: var(--color-text-dark); }
-.env-letter-subtitle { font-family: var(--font-sans); font-size: 0.65rem; letter-spacing: 0.3em; margin-bottom: 1rem; color: var(--color-text-muted); }
-.env-letter-text { font-family: var(--font-serif); font-style: italic; font-size: 0.95rem; line-height: 1.5; opacity: 0.8; color: var(--color-text-dark); }
+.env-letter-copy {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  text-align: center;
+  color: var(--color-text-dark);
+}
+
+.env-letter-title {
+  margin-bottom: 0.25rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 6vw, 1.8rem);
+  line-height: 1.05;
+  color: var(--color-text-dark);
+}
+
+.env-letter-subtitle {
+  margin-bottom: 1rem;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.env-letter-text {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1.5;
+  opacity: 0.82;
+  color: var(--color-text-dark);
+}
+
+@media (max-width: 520px) {
+  .env-stage {
+    padding-top: max(7vh, 2.4rem);
+    padding-bottom: max(7vh, 2.4rem);
+  }
+
+  .env-envelope-canvas {
+    width: min(94vw, 380px);
+  }
+
+  .env-letter-window {
+    width: min(94vw, 380px);
+  }
+
+  .env-top-text p,
+  .env-bottom-text p {
+    font-size: 0.6rem;
+    letter-spacing: 0.38em;
+  }
+
+  .env-div-line {
+    width: 30px;
+  }
+}
 
 /* ───────────────────────────────────────────────
    Wedding film main wrapper

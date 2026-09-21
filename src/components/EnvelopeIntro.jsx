@@ -2,51 +2,47 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import gsap from 'gsap';
 import { playMusic } from '../utils/audioManager';
 
-import f00 from '../assets/envelope/frames/frame_00.jpg';
-import f01 from '../assets/envelope/frames/frame_01.jpg';
-import f02 from '../assets/envelope/frames/frame_02.jpg';
-import f03 from '../assets/envelope/frames/frame_03.jpg';
-import f04 from '../assets/envelope/frames/frame_04.jpg';
-import f05 from '../assets/envelope/frames/frame_05.jpg';
-import f06 from '../assets/envelope/frames/frame_06.jpg';
-import f07 from '../assets/envelope/frames/frame_07.jpg';
-import f08 from '../assets/envelope/frames/frame_08.jpg';
-import f09 from '../assets/envelope/frames/frame_09.jpg';
-import f10 from '../assets/envelope/frames/frame_10.jpg';
-import f11 from '../assets/envelope/frames/frame_11.jpg';
-import f12 from '../assets/envelope/frames/frame_12.jpg';
-import f13 from '../assets/envelope/frames/frame_13.jpg';
-import f14 from '../assets/envelope/frames/frame_14.jpg';
+import d00 from '../assets/envelope/frames/frame_00.jpg';
+import d01 from '../assets/envelope/frames/frame_01.jpg';
+import d02 from '../assets/envelope/frames/frame_02.jpg';
+import d03 from '../assets/envelope/frames/frame_03.jpg';
+import d04 from '../assets/envelope/frames/frame_04.jpg';
+import d05 from '../assets/envelope/frames/frame_05.jpg';
+import d06 from '../assets/envelope/frames/frame_06.jpg';
+import d07 from '../assets/envelope/frames/frame_07.jpg';
+import d08 from '../assets/envelope/frames/frame_08.jpg';
+import d09 from '../assets/envelope/frames/frame_09.jpg';
+import d10 from '../assets/envelope/frames/frame_10.jpg';
+import d11 from '../assets/envelope/frames/frame_11.jpg';
+import d12 from '../assets/envelope/frames/frame_12.jpg';
+import d13 from '../assets/envelope/frames/frame_13.jpg';
+import d14 from '../assets/envelope/frames/frame_14.jpg';
 
-const frames = [f00, f01, f02, f03, f04, f05, f06, f07, f08, f09, f10, f11, f12, f13, f14];
+import m00 from '../assets/envelope/mobile/frame_00.jpg';
+import m01 from '../assets/envelope/mobile/frame_01.jpg';
+import m02 from '../assets/envelope/mobile/frame_02.jpg';
+import m03 from '../assets/envelope/mobile/frame_03.jpg';
+import m04 from '../assets/envelope/mobile/frame_04.jpg';
+import m05 from '../assets/envelope/mobile/frame_05.jpg';
+import m06 from '../assets/envelope/mobile/frame_06.jpg';
+import m07 from '../assets/envelope/mobile/frame_07.jpg';
+import m08 from '../assets/envelope/mobile/frame_08.jpg';
+import m09 from '../assets/envelope/mobile/frame_09.jpg';
+import m10 from '../assets/envelope/mobile/frame_10.jpg';
+import m11 from '../assets/envelope/mobile/frame_11.jpg';
+import m12 from '../assets/envelope/mobile/frame_12.jpg';
+import m13 from '../assets/envelope/mobile/frame_13.jpg';
+import m14 from '../assets/envelope/mobile/frame_14.jpg';
 
-// The envelope artwork is a square (1024x1024) photo. The front pocket's top
-// edge sits at a flat 38.5% of the image height (verified pixel-by-pixel
-// across every one of frame_05..frame_14). Above that line is open air;
-// below it the paper is physically behind the front panel.
+const desktopFrames = [d00, d01, d02, d03, d04, d05, d06, d07, d08, d09, d10, d11, d12, d13, d14];
+const mobileFrames = [m00, m01, m02, m03, m04, m05, m06, m07, m08, m09, m10, m11, m12, m13, m14];
+
+// The front pocket line is measured from the source artwork.
 const POCKET_LINE_FRACTION = 0.385;
 const HERO_SCALE = 1.15;
 
-// IMPORTANT, read before touching this file:
-// All 15 source JPEGs are byte-identical to each other in a horizontal band
-// around y=0.80 of the image (verified: identical pixel means across every
-// frame). That band contains a second, separate envelope/pocket-bottom
-// shape baked into the photography itself -- it is not something this
-// component renders or layers; it is present in the source asset in every
-// single frame. Since we can't regenerate the art, .env-bottom-patch papers
-// over exactly that band with a colour-matched gradient (sampled from the
-// image's own surrounding tones) so only one envelope silhouette reads.
-// It is intentionally NOT tied to currentFrame/opacity logic -- the thing
-// it's covering never changes, so neither does it.
-//
-// Visual layers, back to front, and nothing else:
-//   1. envelope <img>            the one physical envelope surface
-//   2. .env-bottom-patch          static colour-matched cover, see above
-//   3. .env-letter-window         invisible overflow:hidden clip aperture
-//        .env-asset-letter          the paper, clipped by its parent (2)
-
 const EnvDivider = () => (
-  <div className="env-divider">
+  <div className="env-divider" aria-hidden="true">
     <div className="env-div-line" />
     <div className="env-div-diamond" />
     <div className="env-div-line" />
@@ -56,53 +52,84 @@ const EnvDivider = () => (
 export default function EnvelopeIntro({ onReveal, onComplete }) {
   const containerRef = useRef(null);
   const wrapperRef = useRef(null);
-  const envImgRef = useRef(null);
+  const canvasRef = useRef(null);
   const windowRef = useRef(null);
   const letterRef = useRef(null);
   const openTimelineRef = useRef(null);
-  const geometryRef = useRef({ pocketLineY: 0, hiddenY: 0, revealedY: 0, emergeScale: 0.35, wrapperHeight: 0, naturalHeight: 0 });
-  const hasStartedRef = useRef(false);
-  // Current frame index lives here, NOT in React state -- the GSAP onUpdate
-  // below writes straight to the <img> element's .src every tick. Nothing
-  // about the 15-frame flap sequence triggers a React re-render.
+  const frameImagesRef = useRef([]);
+  const activeFramesRef = useRef(desktopFrames);
   const frameIndexRef = useRef(0);
+  const canvasSizeRef = useRef({ width: 0, height: 0, dpr: 1 });
+  const hasStartedRef = useRef(false);
+  const isMobileRef = useRef(false);
+  const geometryRef = useRef({
+    pocketLineY: 0,
+    hiddenY: 0,
+    revealedY: 0,
+    emergeScale: 0.35,
+    wrapperHeight: 0,
+    naturalHeight: 0,
+  });
 
   const [hasStarted, setHasStarted] = useState(false);
   const [framesDecoded, setFramesDecoded] = useState(false);
   const [introDone, setIntroDone] = useState(false);
   const isReady = framesDecoded && introDone;
 
-  // Preload AND fully decode every frame up front, so no src swap during
-  // the animation ever has to decode on the fly on the main thread.
-  useEffect(() => {
-    let cancelled = false;
-    Promise.all(frames.map((src) => {
-      const img = new Image();
-      img.src = src;
-      return img.decode ? img.decode().catch(() => {}) : Promise.resolve();
-    })).then(() => {
-      if (!cancelled) setFramesDecoded(true);
-    });
-    return () => { cancelled = true; };
+  const resizeCanvas = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, isMobileRef.current ? 2 : 2);
+    const width = Math.max(1, Math.round(rect.width * dpr));
+    const height = Math.max(1, Math.round(rect.height * dpr));
+
+    if (canvas.width !== width || canvas.height !== height) {
+      canvas.width = width;
+      canvas.height = height;
+    }
+
+    canvasSizeRef.current = { width, height, dpr };
+
+    const ctx = canvas.getContext('2d', { alpha: true });
+    if (!ctx) return;
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = isMobileRef.current ? 'medium' : 'high';
   }, []);
 
-  // Measure the envelope image and derive the pocket line, plus the letter's
-  // "hidden inside the envelope" / "just cleared the pocket" resting spots.
-  // Called once up front (and on resize) -- NEVER inside the animation loop.
+  const drawFrame = useCallback((index) => {
+    const canvas = canvasRef.current;
+    const images = frameImagesRef.current;
+    const image = images[index];
+    if (!canvas || !image) return;
+
+    const ctx = canvas.getContext('2d', { alpha: true });
+    if (!ctx) return;
+
+    const { width, height } = canvasSizeRef.current;
+    if (!width || !height) return;
+
+    ctx.clearRect(0, 0, width, height);
+    ctx.drawImage(image, 0, 0, width, height);
+  }, []);
+
   const measureGeometry = useCallback(() => {
     const wrapper = wrapperRef.current;
-    const envImg = envImgRef.current;
+    const canvas = canvasRef.current;
     const win = windowRef.current;
     const letter = letterRef.current;
-    if (!wrapper || !envImg || !win || !letter) return;
+    if (!wrapper || !canvas || !win || !letter) return;
+
+    resizeCanvas();
 
     const wrapperRect = wrapper.getBoundingClientRect();
-    const envRect = envImg.getBoundingClientRect();
+    const envRect = canvas.getBoundingClientRect();
     const pocketLineY = (envRect.top - wrapperRect.top) + envRect.height * POCKET_LINE_FRACTION;
 
-    win.style.height = `${pocketLineY}px`;
+    win.style.height = `${Math.max(0, pocketLineY)}px`;
 
-    const naturalHeight = letter.offsetHeight; // layout size, unaffected by transform
+    const naturalHeight = letter.offsetHeight;
     const emergeScale = Math.min(0.6, (pocketLineY * 0.92) / Math.max(naturalHeight, 1));
 
     geometryRef.current = {
@@ -123,15 +150,49 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
         transformOrigin: 'top center',
       });
     }
-  }, []);
+
+    drawFrame(frameIndexRef.current);
+  }, [drawFrame, resizeCanvas]);
+
+  useEffect(() => {
+    isMobileRef.current = window.matchMedia('(max-width: 520px)').matches;
+    activeFramesRef.current = isMobileRef.current ? mobileFrames : desktopFrames;
+
+    let cancelled = false;
+    Promise.all(activeFramesRef.current.map((src) => {
+      const img = new Image();
+      img.decoding = 'async';
+      img.src = src;
+      frameImagesRef.current.push(img);
+      return img.decode ? img.decode().catch(() => {}) : new Promise((resolve) => {
+        img.onload = resolve;
+        img.onerror = resolve;
+      });
+    })).then(() => {
+      if (!cancelled) {
+        frameIndexRef.current = 0;
+        requestAnimationFrame(() => {
+          resizeCanvas();
+          drawFrame(0);
+        });
+        setFramesDecoded(true);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+      frameImagesRef.current = [];
+    };
+  }, [drawFrame, resizeCanvas]);
 
   useLayoutEffect(() => {
     measureGeometry();
-    window.addEventListener('resize', measureGeometry);
-    window.addEventListener('orientationchange', measureGeometry);
+    const handleResize = () => measureGeometry();
+    window.addEventListener('resize', handleResize, { passive: true });
+    window.addEventListener('orientationchange', handleResize, { passive: true });
     return () => {
-      window.removeEventListener('resize', measureGeometry);
-      window.removeEventListener('orientationchange', measureGeometry);
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
     };
   }, [measureGeometry]);
 
@@ -145,26 +206,29 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
 
   useEffect(() => {
     if (hasStarted) return undefined;
+
     const ctx = gsap.context(() => {
       const introTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-      introTl.fromTo('.env-asset-wrapper', { autoAlpha: 0, scale: 0.95 }, { autoAlpha: 1, scale: 1, duration: 1.2 })
-             .fromTo('.env-top-text, .env-bottom-text', { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, stagger: 0.1, duration: 0.8 }, 0.4)
-             .call(() => setIntroDone(true), null, 1.5);
+      introTl
+        .fromTo('.env-asset-wrapper', { autoAlpha: 0, scale: 0.97 }, { autoAlpha: 1, scale: 1, duration: 0.9 })
+        .fromTo('.env-top-text, .env-bottom-text', { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, stagger: 0.08, duration: 0.7 }, 0.2)
+        .call(() => setIntroDone(true), null, 1.0);
     }, containerRef);
+
     return () => ctx.revert();
-  }, []);
+  }, [hasStarted]);
 
   const handleOpen = () => {
     if (hasStarted || !isReady) return;
+
     setHasStarted(true);
     hasStartedRef.current = true;
-
-    // Re-measure right before we animate (cheap, one-off), in case of a
-    // resize/orientation change while the envelope was sitting idle.
     measureGeometry();
-    const geo = geometryRef.current;
 
-    gsap.context(() => {
+    const geo = geometryRef.current;
+    const frames = activeFramesRef.current;
+
+    const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         onComplete: () => {
           document.body.classList.remove('lock-scroll');
@@ -174,87 +238,66 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
 
       openTimelineRef.current = tl;
 
-      // 1. Text fades out
-      tl.to('.env-top-text, .env-bottom-text', { autoAlpha: 0, duration: 0.3 }, 0);
+      // 1. Labels leave before the physical opening starts.
+      tl.to('.env-top-text, .env-bottom-text', { autoAlpha: 0, duration: 0.28 }, 0);
 
-      // 2. PHASE 2 -- the flap physically lifts open on the ONE envelope
-      // image (a real stepped frame sequence, never a two-image crossfade).
-      // frameObj is a plain proxy object, not React state: onUpdate writes
-      // directly to the <img>'s .src via envImgRef, so the 15-step sequence
-      // never touches React's render cycle.
+      // 2. The SINGLE envelope surface advances through the preloaded frame sequence.
       const frameObj = { frame: 0 };
       tl.to(frameObj, {
         frame: frames.length - 1,
         snap: 'frame',
-        duration: 0.85,
+        duration: isMobileRef.current ? 0.98 : 0.85,
         ease: 'power1.inOut',
         onUpdate: () => {
-          const next = frameObj.frame;
-          if (next !== frameIndexRef.current) {
-            frameIndexRef.current = next;
-            envImgRef.current.src = frames[next];
-          }
+          const next = Math.round(frameObj.frame);
+          if (next === frameIndexRef.current) return;
+          frameIndexRef.current = next;
+          drawFrame(next);
         },
-      }, 0.15);
+      }, 0.14);
 
+      // Start audio from the original user gesture while the opening is underway.
       tl.call(() => playMusic(true), null, 0.4);
 
-      // 3. PHASE 3 -- only once the flap sequence has fully finished (no
-      // overlap with phase 2) does the paper rise out of the pocket,
-      // through the fixed window. Pure transform (y + scale, set once at
-      // rest and tweened here) -- cheap to composite, nothing recalculated
-      // per frame.
+      // 3. Only after the flap sequence is complete does the paper begin to emerge.
       tl.to(letterRef.current, {
         y: () => geometryRef.current.revealedY,
-        duration: 1.0,
+        duration: isMobileRef.current ? 1.05 : 1.0,
         ease: 'power2.out',
-      }, 1.05);
+      }, 1.10);
 
-      // 4. PHASE 4 -- the paper has fully cleared the pocket. Release the
-      // window, let the hero shadow settle in, and only now does the
-      // envelope fall away while the letter scales/recenters into its
-      // final resting position.
-      tl.set(windowRef.current, { overflow: 'visible' }, 2.05)
-        .call(() => letterRef.current.classList.add('is-hero'), null, 2.05)
-        .to('.env-envelope-seq, .env-bottom-patch', { y: 150, autoAlpha: 0, duration: 1.0, ease: 'power2.in' }, 2.05)
+      // 4. The paper becomes the hero only after it has cleared the pocket.
+      tl.set(windowRef.current, { overflow: 'visible' }, 2.12)
+        .call(() => letterRef.current?.classList.add('is-hero'), null, 2.12)
+        .to(canvasRef.current, { y: 150, autoAlpha: 0, duration: 1.0, ease: 'power2.in' }, 2.12)
         .to(letterRef.current, {
           y: () => (geo.wrapperHeight - geo.naturalHeight * HERO_SCALE) / 2,
           scale: HERO_SCALE,
           duration: 1.2,
           ease: 'power2.inOut',
-        }, 2.05);
+        }, 2.12);
 
-      // 5. Short pause to read
+      // 5. Brief reading beat.
       tl.to({}, { duration: 2.0 });
 
-      // 6. Transition to the actual website
+      // 6. Reveal the real website.
       tl.call(() => onReveal?.())
         .to(containerRef.current, { autoAlpha: 0, duration: 1.2, ease: 'power2.inOut' });
-
     }, containerRef);
+
+    void ctx;
   };
 
   return (
-    <div ref={containerRef} className="env-overlay">
-
+    <div ref={containerRef} className="env-overlay" aria-label="Wedding invitation opening">
       <div className="env-stage">
-
         <div className="env-top-text">
           <p>A Special Invitation</p>
           <EnvDivider />
         </div>
 
-        <div className="env-asset-wrapper" ref={wrapperRef} onClick={handleOpen}>
-
-          {/* The ONE envelope surface. src is set once (frame 0) and from
-              then on mutated directly via ref inside GSAP's onUpdate --
-              never re-rendered by React. */}
-          <img ref={envImgRef} src={frames[0]} className="env-envelope-seq" alt="Envelope Animation" />
-
-          {/* Static colour-matched cover for the duplicate-looking band
-              baked into the source photography -- see the note above the
-              component for why this exists. Always on; not frame-dependent. */}
-          <div className="env-bottom-patch" aria-hidden="true" />
+        <div className="env-asset-wrapper" ref={wrapperRef} onClick={handleOpen} role="button" tabIndex={0} aria-disabled={!isReady}>
+          <canvas ref={canvasRef} className="env-envelope-canvas" aria-label="Closed wedding envelope" />
 
           <div className="env-letter-window" ref={windowRef}>
             <div className="env-asset-letter" ref={letterRef}>
@@ -267,14 +310,12 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
               <div className="env-letter-tuck-shadow" aria-hidden="true" />
             </div>
           </div>
-
         </div>
 
         <div className="env-bottom-text">
           <p>Tap to open</p>
           <EnvDivider />
         </div>
-
       </div>
     </div>
   );
