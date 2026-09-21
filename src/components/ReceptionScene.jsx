@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { eventConfig } from '../config/eventConfig';
-import gardeniaImg from '../assets/decor/gardenia.jpg';
+import receptionImg from '../assets/decor/reception-twilight.jpg';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -58,63 +58,47 @@ export default function ReceptionScene() {
         '.rec-map-link'
       );
 
-      /*
-       * ======================================================
-       * RECEPTION ENTERS UNDER THE CEREMONY
-       * ======================================================
-       */
-
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-
           start: 'top top',
-
           end: '+=1250',
-
           scrub: 1,
-
           pin: true,
-
-          /*
-           * Important:
-           * don't create another giant gap after Reception.
-           */
           pinSpacing: true,
-
           anticipatePin: 1,
-
           invalidateOnRefresh: true,
-
           refreshPriority: -1,
         },
       });
 
       /*
-       * ------------------------------------------------------
-       * 1. REVEAL THE WHOLE PAGE FROM THE RIGHT
-       * ------------------------------------------------------
+       * ======================================================
+       * 1. RECEPTION IMAGE ENTERS
+       * ======================================================
+       *
+       * No clipPath.
+       * The whole Reception scene is already there,
+       * but starts just outside the right side.
        */
 
       tl.fromTo(
         section,
         {
-          clipPath:
-            'inset(0 0 0 100%)',
+          xPercent: 100,
         },
         {
-          clipPath:
-            'inset(0 0 0 0%)',
-          ease: 'power2.inOut',
+          xPercent: 0,
+          ease: 'power3.inOut',
           duration: 0.34,
         },
         0
       );
 
       /*
-       * ------------------------------------------------------
-       * 2. IMAGE HAS A SLIGHT CINEMATIC MOVEMENT
-       * ------------------------------------------------------
+       * ======================================================
+       * 2. CINEMATIC IMAGE SETTLES
+       * ======================================================
        */
 
       tl.fromTo(
@@ -126,16 +110,16 @@ export default function ReceptionScene() {
         {
           scale: 1,
           xPercent: 0,
-          ease: 'none',
+          ease: 'power2.out',
           duration: 0.42,
         },
         0
       );
 
       /*
-       * ------------------------------------------------------
-       * 3. DARKNESS SETTLES
-       * ------------------------------------------------------
+       * ======================================================
+       * 3. DARK CINEMATIC WASH
+       * ======================================================
        */
 
       tl.fromTo(
@@ -144,23 +128,37 @@ export default function ReceptionScene() {
           opacity: 0,
         },
         {
-          opacity: 0.48,
+          opacity: 0.46,
           ease: 'none',
-          duration: 0.30,
+          duration: 0.28,
         },
-        0.08
+        0.12
       );
 
       /*
-       * ------------------------------------------------------
-       * 4. TEXT — NOT IMMEDIATELY
-       * ------------------------------------------------------
+       * ======================================================
+       * 4. HOLD IMAGE
+       * ======================================================
+       */
+
+      tl.to(
+        {},
+        {
+          duration: 0.10,
+        },
+        0.42
+      );
+
+      /*
+       * ======================================================
+       * 5. RECEPTION TEXT
+       * ======================================================
        */
 
       tl.fromTo(
         label,
         {
-          y: 30,
+          y: 28,
           autoAlpha: 0,
         },
         {
@@ -169,7 +167,7 @@ export default function ReceptionScene() {
           ease: 'power3.out',
           duration: 0.14,
         },
-        0.43
+        0.48
       );
 
       tl.fromTo(
@@ -185,42 +183,28 @@ export default function ReceptionScene() {
           ease: 'none',
           duration: 0.12,
         },
-        0.49
+        0.54
       );
-
-      /*
-       * ------------------------------------------------------
-       * 5. LA PENSÉE
-       * ------------------------------------------------------
-       */
 
       tl.fromTo(
         venue,
         {
-          y: 45,
+          y: 38,
           autoAlpha: 0,
-          scale: 0.97,
         },
         {
           y: 0,
           autoAlpha: 1,
-          scale: 1,
           ease: 'power3.out',
           duration: 0.18,
         },
-        0.54
+        0.59
       );
-
-      /*
-       * ------------------------------------------------------
-       * 6. GARDENIA
-       * ------------------------------------------------------
-       */
 
       tl.fromTo(
         area,
         {
-          y: 22,
+          y: 20,
           autoAlpha: 0,
         },
         {
@@ -229,21 +213,15 @@ export default function ReceptionScene() {
           ease: 'power2.out',
           duration: 0.13,
         },
-        0.64
+        0.68
       );
-
-      /*
-       * ------------------------------------------------------
-       * 7. AFTER THE CEREMONY
-       * ------------------------------------------------------
-       */
 
       tl.fromTo(
         note,
         {
-          y: 20,
+          y: 18,
           autoAlpha: 0,
-          filter: 'blur(5px)',
+          filter: 'blur(4px)',
         },
         {
           y: 0,
@@ -252,47 +230,46 @@ export default function ReceptionScene() {
           ease: 'power2.out',
           duration: 0.14,
         },
-        0.71
+        0.74
       );
 
       /*
-       * ------------------------------------------------------
-       * 8. MAPS — LAST
-       * ------------------------------------------------------
+       * ======================================================
+       * 6. MAPS — LAST
+       * ======================================================
        */
 
       tl.fromTo(
         maps,
         {
-          y: 26,
+          y: 24,
           autoAlpha: 0,
-          scale: 0.88,
+          scale: 0.92,
         },
         {
           y: 0,
           autoAlpha: 1,
           scale: 1,
-          ease: 'back.out(1.5)',
-          duration: 0.17,
+          ease: 'back.out(1.4)',
+          duration: 0.16,
         },
-        0.79
+        0.81
       );
 
       /*
-       * ------------------------------------------------------
-       * 9. FINAL HOLD
-       * ------------------------------------------------------
+       * ======================================================
+       * 7. FINAL HOLD
+       * ======================================================
        */
 
       tl.to(
-        copy,
+        {},
         {
-          yPercent: -2,
-          ease: 'none',
-          duration: 0.18,
+          duration: 0.19,
         },
-        0.90
+        0.88
       );
+
     }, sectionRef);
 
     return () => ctx.revert();
@@ -305,7 +282,7 @@ export default function ReceptionScene() {
     >
 
       <img
-        src={gardeniaImg}
+        src={receptionImg}
         className="rec-cinematic-image"
         alt=""
         aria-hidden="true"

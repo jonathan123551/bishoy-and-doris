@@ -3305,24 +3305,24 @@ img {
   overflow: hidden;
 }
 
+/* =========================================================
+   RECEPTION — TWILIGHT CINEMATIC
+   ========================================================= */
+
 .rec-cinematic {
   position: relative;
   z-index: 30;
-
-  overflow: hidden;
 
   width: 100%;
   height: 100svh;
   min-height: 680px;
 
-  background: #061a33;
+  overflow: hidden;
 
-  clip-path: inset(0 0 0 100%);
-  will-change: clip-path;
+  background: #0b1f39;
+
+  will-change: transform;
 }
-
-
-/* Reception artwork */
 
 .rec-cinematic-image {
   position: absolute;
@@ -3336,18 +3336,15 @@ img {
   object-fit: cover;
   object-position: center center;
 
-  will-change: transform;
-
   pointer-events: none;
   user-select: none;
 
   filter:
     saturate(0.94)
-    contrast(1.03);
+    contrast(1.04);
+
+  will-change: transform;
 }
-
-
-/* Cinematic dark layer */
 
 .rec-image-shade {
   position: absolute;
@@ -3360,17 +3357,14 @@ img {
   background:
     linear-gradient(
       180deg,
-      rgba(3, 17, 36, 0.22) 0%,
-      rgba(3, 17, 36, 0.02) 35%,
-      rgba(2, 12, 27, 0.12) 58%,
-      rgba(2, 11, 25, 0.58) 100%
+      rgba(3, 15, 31, 0.12) 0%,
+      rgba(3, 15, 31, 0.02) 34%,
+      rgba(4, 14, 28, 0.18) 58%,
+      rgba(2, 10, 23, 0.72) 100%
     );
 
   opacity: 0;
 }
-
-
-/* Reception content */
 
 .rec-cinematic-copy {
   position: absolute;
@@ -3382,7 +3376,8 @@ img {
 
   width: min(90vw, 720px);
 
-  transform: translate(-50%, -50%);
+  transform:
+    translate(-50%, -50%);
 
   display: flex;
   flex-direction: column;
@@ -3393,131 +3388,102 @@ img {
   pointer-events: none;
 }
 
+.rec-label {
+  margin: 0;
 
-/* Label */
+  font-family: var(--font-serif);
 
-.rec-cinematic .rec-label {
-  margin: 0 0 12px;
-
-  color: #dfb975;
-
-  font-family:
-    "Cormorant Garamond",
-    Georgia,
-    serif;
-
-  font-size: clamp(22px, 3vw, 34px);
+  font-size: clamp(
+    1.15rem,
+    4vw,
+    1.6rem
+  );
 
   font-style: italic;
 
-  line-height: 1;
+  font-weight: 400;
 
-  letter-spacing: 0.04em;
+  letter-spacing: 0.16em;
+
+  color: #f1d9a7;
 
   text-shadow:
     0 3px 18px rgba(0, 0, 0, 0.55);
 }
 
+.rec-rule-top {
+  width: min(
+    210px,
+    52vw
+  );
 
-/* Gold rule */
-
-.rec-cinematic .rec-rule {
-  position: relative;
-
-  width: 150px;
   height: 1px;
+
+  margin:
+    0.75rem auto
+    1.1rem;
 
   background:
     linear-gradient(
       90deg,
       transparent,
-      #d9b16b,
+      rgba(224, 188, 111, 0.9),
       transparent
     );
 }
 
-.rec-cinematic .rec-rule span {
-  position: absolute;
+.rec-venue-name {
+  margin: 0;
 
-  left: 50%;
-  top: 50%;
+  font-family: var(--font-display);
 
-  width: 7px;
-  height: 7px;
-
-  transform:
-    translate(-50%, -50%)
-    rotate(45deg);
-
-  background: #092445;
-
-  border: 1px solid #d9b16b;
-}
-
-
-/* LA PENSÉE */
-
-.rec-cinematic .rec-venue-name {
-  margin: 24px 0 0;
-
-  color: #f8f3ea;
-
-  font-family:
-    "Cormorant Garamond",
-    "Bodoni 72",
-    "Didot",
-    "Times New Roman",
-    serif;
-
-  font-size: clamp(48px, 7vw, 82px);
+  font-size: clamp(
+    2.5rem,
+    9vw,
+    5rem
+  );
 
   font-weight: 500;
 
-  line-height: 0.9;
+  line-height: 0.95;
 
-  letter-spacing: 0.055em;
+  letter-spacing: 0.075em;
 
   text-transform: uppercase;
 
+  color: #fffaf0;
+
   text-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.58);
+    0 5px 28px rgba(0, 0, 0, 0.58);
 }
 
+.rec-venue-sub {
+  margin: 0.55rem 0 0;
 
-/* Gardenia */
+  font-family: var(--font-serif);
 
-.rec-cinematic .rec-venue-sub {
-  margin: 16px 0 0;
-
-  color: #ddb875;
-
-  font-family:
-    "Cormorant Garamond",
-    Georgia,
-    serif;
-
-  font-size: clamp(21px, 3vw, 31px);
+  font-size: clamp(
+    1.35rem,
+    5vw,
+    2rem
+  );
 
   font-style: italic;
 
-  line-height: 1;
+  letter-spacing: 0.08em;
+
+  color: #e2c27f;
+
+  text-shadow:
+    0 3px 18px rgba(0, 0, 0, 0.5);
 }
 
+.rec-note {
+  margin: 1rem 0 0;
 
-/* AFTER THE CEREMONY */
+  font-family: var(--font-sans);
 
-.rec-cinematic .rec-note {
-  margin: 22px 0 0;
-
-  color: rgba(250, 246, 239, 0.88);
-
-  font-family:
-    "Inter",
-    "Helvetica Neue",
-    Arial,
-    sans-serif;
-
-  font-size: 9px;
+  font-size: 0.64rem;
 
   font-weight: 500;
 
@@ -3525,136 +3491,118 @@ img {
 
   text-transform: uppercase;
 
+  color: rgba(
+    248,
+    245,
+    238,
+    0.82
+  );
+
   text-shadow:
-    0 3px 15px rgba(0, 0, 0, 0.65);
+    0 2px 12px rgba(0, 0, 0, 0.55);
 }
 
-
-/* MAP BUTTON */
-
-.rec-cinematic .rec-map-link {
-  pointer-events: auto;
-
+.rec-map-link {
   display: inline-flex;
 
   align-items: center;
   justify-content: center;
 
-  gap: 9px;
+  gap: 0.55rem;
 
-  margin-top: 28px;
+  margin-top: 1.25rem;
 
-  min-width: 178px;
+  min-height: 48px;
 
-  padding: 11px 23px;
+  padding:
+    0.72rem
+    1.35rem;
 
-  border: 1px solid #d9b16b;
+  border:
+    1px solid
+    rgba(224, 188, 111, 0.72);
 
   border-radius: 999px;
 
   background:
-    rgba(3, 18, 37, 0.42);
+    rgba(4, 15, 29, 0.38);
 
-  color: #f8f3ea;
+  backdrop-filter: blur(6px);
 
-  text-decoration: none;
+  color: #fffaf0;
 
-  font-family:
-    "Inter",
-    "Helvetica Neue",
-    Arial,
-    sans-serif;
+  font-family: var(--font-sans);
 
-  font-size: 8px;
+  font-size: 0.62rem;
 
-  font-weight: 500;
+  font-weight: 600;
 
-  letter-spacing: 0.22em;
+  letter-spacing: 0.2em;
 
   text-transform: uppercase;
 
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  pointer-events: auto;
 
   box-shadow:
-    0 8px 30px rgba(0, 0, 0, 0.28);
+    0 10px 30px
+    rgba(0, 0, 0, 0.28);
 
-  -webkit-tap-highlight-color: transparent;
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.3s ease;
 }
 
+.rec-map-icon {
+  width: 18px;
+  height: 18px;
 
-/* REAL MAP PIN */
+  flex: 0 0 auto;
 
-.rec-cinematic .rec-map-icon {
-  width: 15px;
-  height: 15px;
-
-  color: #ddb875;
-
-  flex: 0 0 15px;
+  color: #e2c27f;
 }
-
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
 
 @media (max-width: 600px) {
 
   .rec-cinematic {
-    height: 100svh;
-    min-height: 680px;
-  }
-
-  .rec-cinematic-image {
-    object-position: center center;
+    min-height: 100svh;
   }
 
   .rec-cinematic-copy {
     width: 88vw;
-    top: 49%;
   }
 
-  .rec-cinematic .rec-label {
-    font-size: 21px;
-    margin-bottom: 10px;
+  .rec-label {
+    font-size: 1.05rem;
   }
 
-  .rec-cinematic .rec-rule {
-    width: 130px;
+  .rec-venue-name {
+    font-size: clamp(
+      2.15rem,
+      10vw,
+      3.5rem
+    );
+
+    letter-spacing: 0.055em;
   }
 
-  .rec-cinematic .rec-venue-name {
-    margin-top: 20px;
-
-    font-size: 43px;
-
-    letter-spacing: 0.04em;
+  .rec-venue-sub {
+    font-size: 1.35rem;
   }
 
-  .rec-cinematic .rec-venue-sub {
-    margin-top: 14px;
-    font-size: 20px;
-  }
-
-  .rec-cinematic .rec-note {
-    margin-top: 18px;
-
-    font-size: 7px;
-
+  .rec-note {
+    font-size: 0.58rem;
     letter-spacing: 0.25em;
   }
 
-  .rec-cinematic .rec-map-link {
-    margin-top: 21px;
-
-    min-width: 165px;
-
-    padding: 10px 20px;
-
-    font-size: 7px;
+  .rec-map-link {
+    min-height: 46px;
+    padding:
+      0.68rem
+      1.15rem;
   }
 }
+
 
 
 
