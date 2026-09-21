@@ -2881,5 +2881,419 @@ img {
   }
 }
 
+/* =========================================================
+   NAMES — CINEMATIC WEDDING SCENE
+   Light Blue → Royal Blue → Navy
+   ========================================================= */
+
+.ns-cinematic {
+  position: relative;
+
+  width: 100%;
+  height: 100svh;
+  min-height: 680px;
+
+  overflow: hidden;
+  isolation: isolate;
+
+  background:
+    linear-gradient(
+      180deg,
+      #79aee0 0%,
+      #3e79b2 22%,
+      #174c82 48%,
+      #082c55 72%,
+      #03162f 100%
+    );
+
+  color: #f8f3e9;
+}
+
+/* ---------------------------------------------------------
+   BACKGROUND IMAGE
+   --------------------------------------------------------- */
+
+.ns-cinematic .ns-bg {
+  position: absolute;
+
+  inset: -4%;
+
+  width: 108%;
+  height: 108%;
+
+  object-fit: cover;
+  object-position: center center;
+
+  z-index: -5;
+
+  display: block;
+
+  user-select: none;
+  pointer-events: none;
+
+  will-change: transform;
+
+  filter:
+    saturate(0.94)
+    contrast(1.02);
+}
+
+/* ---------------------------------------------------------
+   ATMOSPHERE
+   --------------------------------------------------------- */
+
+.ns-atmosphere {
+  position: absolute;
+
+  inset: -20%;
+
+  z-index: -2;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 38%,
+      rgba(164, 211, 247, 0.22) 0%,
+      rgba(77, 137, 195, 0.12) 28%,
+      transparent 62%
+    );
+
+  mix-blend-mode: screen;
+
+  opacity: 0.65;
+
+  will-change: transform, opacity;
+}
+
+/* Extra cinematic darkening at bottom */
+.ns-cinematic::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  z-index: -1;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(2, 15, 34, 0.04) 0%,
+      rgba(2, 15, 34, 0.02) 42%,
+      rgba(1, 10, 25, 0.40) 100%
+    );
+}
+
+/* ---------------------------------------------------------
+   CONTENT
+   --------------------------------------------------------- */
+
+.ns-cinematic .ns-copy {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  z-index: 10;
+
+  width: min(90vw, 720px);
+
+  transform: translate(-50%, -50%);
+
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------
+   OVERLINE
+   --------------------------------------------------------- */
+
+.ns-cinematic .ns-overline {
+  margin: 0 0 14px;
+
+  color: rgba(250, 246, 238, 0.88);
+
+  font-family:
+    "Inter",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+
+  font-size: clamp(8px, 1vw, 12px);
+
+  font-weight: 500;
+
+  letter-spacing: 0.36em;
+
+  text-transform: uppercase;
+
+  text-shadow:
+    0 2px 16px rgba(0, 0, 0, 0.55);
+}
+
+/* ---------------------------------------------------------
+   GOLD RULES
+   --------------------------------------------------------- */
+
+.ns-cinematic .ns-rule {
+  position: relative;
+
+  width: min(190px, 45vw);
+
+  height: 1px;
+
+  margin: 0 auto;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(222, 183, 109, 0.95),
+      transparent
+    );
+}
+
+.ns-cinematic .ns-rule span {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  width: 7px;
+  height: 7px;
+
+  transform:
+    translate(-50%, -50%)
+    rotate(45deg);
+
+  background: #174779;
+
+  border: 1px solid #e0b96d;
+
+  box-shadow:
+    0 0 15px rgba(224, 185, 109, 0.28);
+}
+
+/* ---------------------------------------------------------
+   NAMES
+   --------------------------------------------------------- */
+
+.ns-cinematic .ns-names {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin: 25px 0 4px;
+}
+
+.ns-cinematic .ns-name-a,
+.ns-cinematic .ns-name-b {
+  margin: 0;
+
+  color: #f8f3e9;
+
+  font-family:
+    "Cormorant Garamond",
+    "Bodoni 72",
+    "Didot",
+    "Times New Roman",
+    serif;
+
+  font-size: clamp(68px, 10vw, 120px);
+
+  font-weight: 500;
+
+  line-height: 0.78;
+
+  letter-spacing: 0.015em;
+
+  text-transform: uppercase;
+
+  text-shadow:
+    0 2px 0 rgba(255, 255, 255, 0.13),
+    0 7px 30px rgba(0, 0, 0, 0.34);
+}
+
+/* ---------------------------------------------------------
+   AMPERSAND
+   --------------------------------------------------------- */
+
+.ns-cinematic .ns-amp-wrapper {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: min(260px, 58vw);
+
+  margin: 27px 0;
+}
+
+.ns-cinematic .ns-amp-line {
+  flex: 1;
+
+  height: 1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(221, 181, 105, 0.82)
+    );
+}
+
+.ns-cinematic .ns-amp-line:last-child {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(221, 181, 105, 0.82),
+      transparent
+    );
+}
+
+.ns-cinematic .ns-amp {
+  margin: 0 18px;
+
+  color: #dfb56b;
+
+  font-family:
+    "Cormorant Garamond",
+    "Bodoni 72",
+    "Didot",
+    serif;
+
+  font-size: clamp(30px, 4.5vw, 48px);
+
+  line-height: 1;
+
+  text-shadow:
+    0 2px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* ---------------------------------------------------------
+   SUBLINE
+   --------------------------------------------------------- */
+
+.ns-cinematic .ns-subline {
+  margin: 27px auto 0;
+
+  max-width: 650px;
+
+  color: rgba(250, 246, 238, 0.84);
+
+  font-family:
+    "Cormorant Garamond",
+    Georgia,
+    serif;
+
+  font-size: clamp(16px, 2vw, 23px);
+
+  font-style: italic;
+
+  line-height: 1.5;
+
+  letter-spacing: 0.01em;
+
+  text-shadow:
+    0 2px 15px rgba(0, 0, 0, 0.48);
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+  .ns-cinematic {
+    height: 100svh;
+    min-height: 680px;
+  }
+
+  .ns-cinematic .ns-bg {
+    inset: -3%;
+
+    width: 106%;
+    height: 106%;
+
+    object-position: center center;
+  }
+
+  .ns-cinematic .ns-copy {
+    width: 90vw;
+
+    top: 50%;
+  }
+
+  .ns-cinematic .ns-overline {
+    margin-bottom: 11px;
+
+    font-size: 7px;
+
+    letter-spacing: 0.27em;
+  }
+
+  .ns-cinematic .ns-rule {
+    width: 135px;
+  }
+
+  .ns-cinematic .ns-names {
+    margin-top: 23px;
+  }
+
+  .ns-cinematic .ns-name-a,
+  .ns-cinematic .ns-name-b {
+    font-size: 55px;
+
+    line-height: 0.84;
+  }
+
+  .ns-cinematic .ns-amp-wrapper {
+    width: 150px;
+
+    margin: 21px 0;
+  }
+
+  .ns-cinematic .ns-amp {
+    margin: 0 13px;
+
+    font-size: 31px;
+  }
+
+  .ns-cinematic .ns-subline {
+    margin-top: 23px;
+
+    max-width: 330px;
+
+    font-size: 15px;
+
+    line-height: 1.48;
+  }
+}
+
+/* Short iPhones */
+@media (max-width: 600px) and (max-height: 720px) {
+  .ns-cinematic .ns-name-a,
+  .ns-cinematic .ns-name-b {
+    font-size: 49px;
+  }
+
+  .ns-cinematic .ns-amp-wrapper {
+    margin: 17px 0;
+  }
+
+  .ns-cinematic .ns-subline {
+    margin-top: 18px;
+    font-size: 14px;
+  }
+}
+
+
 
 
