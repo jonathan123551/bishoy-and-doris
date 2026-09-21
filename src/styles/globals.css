@@ -902,244 +902,534 @@ img {
 }
 
 /* ───────────────────────────────────────────────
-   Envelope intro: one coherent physical envelope
+   Envelope Intro — clean single-envelope system
    ─────────────────────────────────────────────── */
 
 .env-overlay {
   position: fixed;
   inset: 0;
   z-index: 9999;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 50% 42%, rgba(34, 65, 103, 0.46) 0%, rgba(7, 16, 31, 0.1) 34%, transparent 58%),
-    radial-gradient(circle at 12% 12%, rgba(207, 173, 107, 0.08) 0%, transparent 24%),
-    radial-gradient(circle at 88% 86%, rgba(70, 103, 142, 0.1) 0%, transparent 26%),
-    #02050c;
-}
 
-.env-overlay::before,
-.env-overlay::after {
-  content: '';
-  position: absolute;
-  pointer-events: none;
-  inset: -12%;
-  z-index: 0;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 50% 44%,
+      rgba(18, 45, 79, 0.42) 0%,
+      rgba(5, 14, 28, 0.72) 42%,
+      #02050b 100%
+    );
+
+  isolation: isolate;
 }
 
 .env-overlay::before {
-  background:
-    radial-gradient(circle at 8% 18%, rgba(214, 186, 136, 0.12) 0 1px, transparent 1.5px),
-    radial-gradient(circle at 92% 72%, rgba(214, 186, 136, 0.08) 0 1px, transparent 1.5px);
-  background-size: 220px 220px, 260px 260px;
-  opacity: 0.35;
-}
+  content: '';
+  position: absolute;
+  inset: 0;
 
-.env-overlay::after {
-  background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.32) 100%);
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      transparent 30%,
+      rgba(0, 0, 0, 0.32) 100%
+    );
+
+  z-index: -1;
 }
 
 .env-stage {
   position: relative;
-  z-index: 3;
+
+  width: 100%;
+  height: 100dvh;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
-  height: 100dvh;
-  min-height: 100vh;
-  padding: max(8vh, 3rem) 0 max(8vh, 3rem);
+
+  padding:
+    clamp(3.5rem, 10vh, 7rem)
+    1rem
+    clamp(3.5rem, 9vh, 6rem);
+
+  z-index: 2;
 }
 
 .env-top-text,
 .env-bottom-text {
   position: relative;
-  z-index: 10;
+
   text-align: center;
+
+  z-index: 20;
+
+  opacity: 0;
+
   pointer-events: none;
+
+  flex-shrink: 0;
 }
 
 .env-top-text p,
 .env-bottom-text p {
   margin: 0;
-  font-family: var(--font-serif);
-  font-size: 0.66rem;
-  letter-spacing: 0.44em;
-  line-height: 1.2;
+
+  font-family:
+    var(--font-serif);
+
+  font-size:
+    clamp(0.56rem, 1.7vw, 0.72rem);
+
+  line-height: 1;
+
+  letter-spacing:
+    clamp(0.32em, 0.9vw, 0.48em);
+
   text-transform: uppercase;
-  color: var(--color-champagne);
+
+  color:
+    var(--color-champagne-light);
+
+  text-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.45);
 }
 
 .env-divider {
   display: flex;
+
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  margin-top: 0.72rem;
+
+  gap: 0.55rem;
+
+  margin-top: 0.8rem;
 }
 
 .env-div-line {
-  width: 35px;
+  width: clamp(26px, 8vw, 42px);
   height: 1px;
-  background: rgba(207, 173, 107, 0.5);
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(207, 173, 107, 0.85)
+    );
+}
+
+.env-div-line:last-child {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(207, 173, 107, 0.85),
+      transparent
+    );
 }
 
 .env-div-diamond {
-  width: 6px;
-  height: 6px;
-  border: 1px solid var(--color-champagne);
+  width: 7px;
+  height: 7px;
+
+  border:
+    1px solid
+    var(--color-champagne);
+
   transform: rotate(45deg);
-  opacity: 0.8;
+
+  box-shadow:
+    0 0 10px
+    rgba(207, 173, 107, 0.18);
 }
 
 .env-asset-wrapper {
   position: absolute;
+
   inset: 0;
+
   display: flex;
+
   align-items: center;
   justify-content: center;
+
   cursor: pointer;
+
   z-index: 5;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
+
   outline: none;
+
+  -webkit-tap-highlight-color: transparent;
+
+  touch-action: manipulation;
 }
 
-.env-envelope-canvas {
+/*
+ * NEW CLOSED ARTWORK
+ *
+ * This is visible before the user taps.
+ * It is the ONLY visible envelope in the initial state.
+ */
+.env-closed-v2 {
   position: absolute;
-  width: min(90vw, 430px);
-  aspect-ratio: 1 / 1;
-  height: auto;
-  object-fit: contain;
+
+  width: 100%;
+  height: 100%;
+
+  inset: 0;
+
+  object-fit: cover;
+  object-position: center;
+
   pointer-events: none;
+
   z-index: 1;
-  display: block;
-  will-change: transform, opacity;
-  backface-visibility: hidden;
-  transform: translateZ(0);
+
+  opacity: 1;
+
+  will-change: opacity;
+
+  user-select: none;
+
+  -webkit-user-drag: none;
 }
 
-/* Pure clipping aperture. It paints nothing and cannot create another envelope. */
+/*
+ * Existing 15-frame animation.
+ *
+ * It starts hidden and replaces the new clean closed artwork
+ * immediately after the tap.
+ */
+.env-envelope-seq {
+  position: absolute;
+
+  width: min(88vw, 400px);
+  height: min(88vw, 400px);
+
+  object-fit: contain;
+
+  pointer-events: none;
+
+  z-index: 3;
+
+  opacity: 0;
+
+  will-change:
+    transform,
+    opacity;
+
+  backface-visibility: hidden;
+
+  transform: translateZ(0);
+
+  user-select: none;
+
+  -webkit-user-drag: none;
+}
+
+/*
+ * IMPORTANT:
+ *
+ * There is intentionally NO .env-bottom-patch anymore.
+ *
+ * We do not hide the old duplicated envelope with a fake gradient.
+ * The new closed state is clean and the animation is kept untouched.
+ */
+
+/*
+ * Paper aperture.
+ *
+ * It paints NOTHING.
+ * It only clips the invitation paper while the paper
+ * emerges from the envelope.
+ */
 .env-letter-window {
   position: absolute;
+
   top: 0;
   left: 50%;
-  width: min(90vw, 430px);
+
+  transform:
+    translateX(-50%);
+
+  width:
+    min(88vw, 400px);
+
   height: 0;
-  transform: translateX(-50%);
+
   overflow: hidden;
+
   pointer-events: none;
-  z-index: 2;
+
+  z-index: 5;
 }
 
+/*
+ * Invitation paper.
+ */
 .env-asset-letter {
   position: absolute;
+
   top: 0;
   left: 50%;
+
   width: 78%;
+
   aspect-ratio: 0.82;
+
+  transform:
+    translateX(-50%);
+
+  background:
+    linear-gradient(
+      180deg,
+      var(--color-paper) 0%,
+      var(--color-paper-deep) 100%
+    );
+
+  border-radius: 4px;
+
+  box-shadow: none;
+
   display: grid;
+
   place-items: center;
-  padding: 2rem 1.5rem;
-  background: linear-gradient(180deg, var(--color-paper) 0%, var(--color-paper-deep) 100%);
-  border-radius: 3px;
-  color: var(--color-text-dark);
+
+  padding:
+    2rem 1.5rem;
+
   pointer-events: none;
-  will-change: transform;
-  transform: translateZ(0);
+
+  will-change:
+    transform;
+
+  overflow: hidden;
 }
 
 .env-asset-letter::before {
   content: '';
+
   position: absolute;
   inset: 0;
+
   pointer-events: none;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(255, 255, 255, 0.04) 0,
-    rgba(255, 255, 255, 0.04) 1px,
-    transparent 1px,
-    transparent 4px
-  );
-  opacity: 0.5;
+
+  background:
+    radial-gradient(
+      circle at 20% 15%,
+      rgba(255, 255, 255, 0.65),
+      transparent 30%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.18),
+      transparent 40%
+    );
+
+  opacity: 0.7;
 }
 
 .env-asset-letter.is-hero {
   box-shadow:
-    0 22px 60px rgba(0, 0, 0, 0.48),
-    0 2px 8px rgba(0, 0, 0, 0.16);
-}
-
-.env-letter-tuck-shadow {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 22%;
-  border-radius: 0 0 3px 3px;
-  background: linear-gradient(to top, rgba(7, 10, 20, 0.34), rgba(7, 10, 20, 0));
-  pointer-events: none;
+    0 20px 60px
+    rgba(0, 0, 0, 0.55);
 }
 
 .env-letter-copy {
   position: relative;
-  z-index: 1;
+
+  z-index: 2;
+
   width: 100%;
+
   text-align: center;
-  color: var(--color-text-dark);
+
+  color:
+    var(--color-text-dark);
 }
 
 .env-letter-title {
   margin-bottom: 0.25rem;
-  font-family: var(--font-display);
-  font-size: clamp(1.4rem, 6vw, 1.8rem);
-  line-height: 1.05;
-  color: var(--color-text-dark);
+
+  font-family:
+    var(--font-display);
+
+  font-size:
+    clamp(1.4rem, 6vw, 1.8rem);
+
+  line-height: 1.15;
+
+  letter-spacing: 0.04em;
+
+  color:
+    var(--color-text-dark);
 }
 
 .env-letter-subtitle {
   margin-bottom: 1rem;
-  font-family: var(--font-sans);
+
+  font-family:
+    var(--font-sans);
+
   font-size: 0.65rem;
+
   letter-spacing: 0.3em;
+
   text-transform: uppercase;
-  color: var(--color-text-muted);
+
+  color:
+    var(--color-text-muted);
 }
 
 .env-letter-text {
-  font-family: var(--font-serif);
-  font-size: 0.95rem;
+  max-width: 270px;
+
+  margin: 0 auto;
+
+  font-family:
+    var(--font-serif);
+
   font-style: italic;
+
+  font-size: 0.95rem;
+
   line-height: 1.5;
-  opacity: 0.82;
-  color: var(--color-text-dark);
+
+  color:
+    var(--color-text-dark);
+
+  opacity: 0.8;
 }
 
-@media (max-width: 520px) {
+.env-letter-tuck-shadow {
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: 22%;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(7, 10, 20, 0.4),
+      rgba(7, 10, 20, 0)
+    );
+
+  border-radius:
+    0 0 4px 4px;
+
+  pointer-events: none;
+}
+
+
+/* ───────────────────────────────────────────────
+   Mobile
+   ─────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+
   .env-stage {
-    padding-top: max(7vh, 2.4rem);
-    padding-bottom: max(7vh, 2.4rem);
-  }
-
-  .env-envelope-canvas {
-    width: min(94vw, 380px);
-  }
-
-  .env-letter-window {
-    width: min(94vw, 380px);
+    padding:
+      3.5rem
+      0.75rem
+      3.25rem;
   }
 
   .env-top-text p,
   .env-bottom-text p {
-    font-size: 0.6rem;
-    letter-spacing: 0.38em;
+    font-size: 0.55rem;
+
+    letter-spacing:
+      0.34em;
+  }
+
+  .env-divider {
+    margin-top: 0.65rem;
   }
 
   .env-div-line {
-    width: 30px;
+    width: 27px;
+  }
+
+  .env-div-diamond {
+    width: 6px;
+    height: 6px;
+  }
+
+  .env-envelope-seq {
+    width: min(94vw, 400px);
+    height: min(94vw, 400px);
+  }
+
+  .env-letter-window {
+    width:
+      min(94vw, 400px);
+  }
+
+  .env-asset-letter {
+    width: 78%;
+
+    padding:
+      1.7rem 1.2rem;
+  }
+
+  .env-letter-title {
+    font-size:
+      clamp(1.25rem, 7vw, 1.65rem);
+  }
+
+  .env-letter-text {
+    font-size: 0.9rem;
+  }
+}
+
+
+/* ───────────────────────────────────────────────
+   Larger desktop
+   ─────────────────────────────────────────────── */
+
+@media (min-width: 769px) {
+
+  .env-stage {
+    padding:
+      7rem
+      1.5rem
+      5.5rem;
+  }
+
+  .env-envelope-seq {
+    width:
+      min(88vw, 400px);
+
+    height:
+      min(88vw, 400px);
+  }
+
+  .env-letter-window {
+    width:
+      min(88vw, 400px);
+  }
+}
+
+
+/* ───────────────────────────────────────────────
+   Reduced motion
+   ─────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .env-envelope-seq,
+  .env-closed-v2,
+  .env-asset-letter {
+    transition: none !important;
   }
 }
 
