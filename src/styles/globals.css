@@ -1621,3 +1621,559 @@ img {
   margin-top: 0.28rem;
   opacity: 0.96;
 }
+
+/* =========================================================
+   BISHOY & DORIS — NAMES SCENE
+   Navy / Champagne / Ivory Editorial Wedding
+   ========================================================= */
+
+.ns-scene {
+  position: relative;
+  min-height: 100svh;
+  width: 100%;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #f7f2e9;
+
+  background:
+    radial-gradient(
+      circle at 50% 48%,
+      rgba(25, 62, 105, 0.72) 0%,
+      rgba(8, 29, 55, 0.88) 38%,
+      rgba(3, 15, 32, 0.98) 100%
+    ),
+    linear-gradient(
+      135deg,
+      #061a32 0%,
+      #0a294a 48%,
+      #031226 100%
+    );
+
+  isolation: isolate;
+}
+
+/* Subtle paper/fabric texture */
+.ns-scene::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  pointer-events: none;
+
+  opacity: 0.15;
+
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.035) 0px,
+      rgba(255, 255, 255, 0.035) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.045) 0px,
+      rgba(0, 0, 0, 0.045) 1px,
+      transparent 1px,
+      transparent 5px
+    );
+
+  mix-blend-mode: soft-light;
+}
+
+/* Deep vignette */
+.ns-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      transparent 28%,
+      rgba(1, 9, 20, 0.12) 58%,
+      rgba(1, 8, 18, 0.62) 100%
+    );
+}
+
+/* Main content */
+.ns-inner {
+  position: relative;
+  z-index: 5;
+
+  width: min(100%, 1100px);
+
+  padding:
+    clamp(80px, 11vh, 140px)
+    clamp(28px, 7vw, 100px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ns-copy {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+
+  text-align: center;
+}
+
+/* Top small heading */
+.ns-overline {
+  margin: 0 0 22px;
+
+  color: rgba(247, 242, 233, 0.76);
+
+  font-family:
+    "Inter",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+
+  font-size: clamp(9px, 1vw, 13px);
+  font-weight: 500;
+
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+}
+
+/* Gold horizontal rules */
+.ns-rule-top,
+.ns-rule-bottom {
+  position: relative;
+
+  width: min(190px, 42vw);
+  height: 1px;
+
+  margin: 0 auto;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(205, 166, 92, 0.9),
+      transparent
+    );
+
+  opacity: 0.9;
+}
+
+/* Diamond in center of rules */
+.ns-diamond {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  width: 7px;
+  height: 7px;
+
+  transform:
+    translate(-50%, -50%)
+    rotate(45deg);
+
+  border: 1px solid rgba(218, 177, 100, 0.95);
+
+  background: #071b34;
+}
+
+/* Names */
+.ns-names {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin: clamp(20px, 3.2vh, 38px) 0;
+}
+
+.ns-name-a,
+.ns-name-b {
+  margin: 0;
+
+  color: #f7f2e9;
+
+  font-family:
+    "Cormorant Garamond",
+    "Bodoni 72",
+    "Didot",
+    "Times New Roman",
+    serif;
+
+  font-size: clamp(64px, 9.2vw, 118px);
+
+  font-weight: 500;
+  line-height: 0.82;
+
+  letter-spacing: 0.025em;
+
+  text-transform: uppercase;
+
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.12),
+    0 8px 28px rgba(0, 0, 0, 0.28);
+}
+
+/* The gold ampersand */
+.ns-amp-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: min(260px, 58vw);
+
+  margin: clamp(19px, 3vh, 32px) 0;
+}
+
+.ns-amp-line {
+  flex: 1;
+  height: 1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(203, 162, 88, 0.72)
+    );
+}
+
+.ns-amp-line:last-child {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(203, 162, 88, 0.72),
+      transparent
+    );
+}
+
+.ns-amp {
+  margin: 0 18px;
+
+  color: #d4ad67;
+
+  font-family:
+    "Cormorant Garamond",
+    "Bodoni 72",
+    "Didot",
+    serif;
+
+  font-size: clamp(29px, 4vw, 46px);
+  font-weight: 400;
+
+  line-height: 1;
+}
+
+/* Bottom rule */
+.ns-rule-bottom {
+  margin-top: 2px;
+}
+
+/* Love story */
+.ns-subline {
+  margin: clamp(26px, 4vh, 42px) auto 0;
+
+  max-width: 680px;
+
+  color: rgba(247, 242, 233, 0.78);
+
+  font-family:
+    "Cormorant Garamond",
+    Georgia,
+    serif;
+
+  font-size: clamp(17px, 2vw, 24px);
+
+  font-style: italic;
+  font-weight: 400;
+
+  line-height: 1.55;
+
+  letter-spacing: 0.015em;
+}
+
+/* =========================================================
+   FLORAL CORNERS
+   ========================================================= */
+
+.ns-floral {
+  position: absolute;
+
+  width: 280px;
+  height: 360px;
+
+  z-index: 1;
+
+  pointer-events: none;
+
+  opacity: 0.78;
+
+  filter:
+    drop-shadow(0 10px 25px rgba(0, 0, 0, 0.35));
+}
+
+.ns-floral-left {
+  left: -45px;
+  top: -35px;
+
+  transform: rotate(-8deg);
+}
+
+.ns-floral-right {
+  right: -45px;
+  bottom: -35px;
+
+  transform: rotate(172deg);
+}
+
+/* Botanical stem */
+.ns-floral::before {
+  content: "";
+
+  position: absolute;
+
+  width: 260px;
+  height: 330px;
+
+  left: 0;
+  top: 0;
+
+  border-left: 1px solid rgba(190, 153, 91, 0.38);
+  border-radius: 50%;
+
+  transform: rotate(-24deg);
+}
+
+/* Leaves */
+.ns-leaf {
+  position: absolute;
+
+  width: 38px;
+  height: 18px;
+
+  border:
+    1px solid rgba(194, 157, 96, 0.62);
+
+  border-radius: 100% 0 100% 0;
+
+  transform: rotate(-35deg);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(190, 153, 91, 0.12),
+      rgba(190, 153, 91, 0.02)
+    );
+}
+
+.ns-leaf::after {
+  content: "";
+
+  position: absolute;
+
+  width: 1px;
+  height: 34px;
+
+  left: 50%;
+  top: -8px;
+
+  background: rgba(194, 157, 96, 0.42);
+
+  transform: rotate(72deg);
+}
+
+.ns-leaf-1 {
+  left: 42px;
+  top: 75px;
+  transform: rotate(-15deg);
+}
+
+.ns-leaf-2 {
+  left: 76px;
+  top: 122px;
+  transform: rotate(28deg);
+}
+
+.ns-leaf-3 {
+  left: 26px;
+  top: 168px;
+  transform: rotate(-22deg);
+}
+
+.ns-leaf-4 {
+  left: 91px;
+  top: 215px;
+  transform: rotate(35deg);
+}
+
+/* Flowers */
+.ns-flower {
+  position: absolute;
+
+  width: 72px;
+  height: 72px;
+
+  border: 1px solid rgba(194, 157, 96, 0.52);
+
+  border-radius: 50%;
+
+  opacity: 0.72;
+}
+
+.ns-flower::before,
+.ns-flower::after {
+  content: "";
+
+  position: absolute;
+  inset: 11px;
+
+  border: 1px solid rgba(194, 157, 96, 0.38);
+
+  border-radius: 50%;
+}
+
+.ns-flower::after {
+  inset: 24px;
+
+  border-color: rgba(194, 157, 96, 0.58);
+}
+
+.ns-flower-1 {
+  left: -3px;
+  top: 35px;
+
+  transform: scale(1.15) rotate(15deg);
+}
+
+.ns-flower-2 {
+  left: 105px;
+  top: 245px;
+
+  width: 55px;
+  height: 55px;
+
+  transform: rotate(-20deg);
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+  .ns-scene {
+    min-height: 100svh;
+  }
+
+  .ns-inner {
+    min-height: 100svh;
+
+    padding:
+      86px
+      22px
+      72px;
+  }
+
+  .ns-overline {
+    margin-bottom: 18px;
+    font-size: 8px;
+    letter-spacing: 0.32em;
+  }
+
+  .ns-rule-top,
+  .ns-rule-bottom {
+    width: 145px;
+  }
+
+  .ns-name-a,
+  .ns-name-b {
+    font-size: clamp(53px, 17vw, 78px);
+    line-height: 0.86;
+    letter-spacing: 0.015em;
+  }
+
+  .ns-names {
+    margin: 25px 0;
+  }
+
+  .ns-amp-wrapper {
+    width: 150px;
+    margin: 24px 0;
+  }
+
+  .ns-amp {
+    margin: 0 13px;
+    font-size: 31px;
+  }
+
+  .ns-subline {
+    max-width: 330px;
+    margin-top: 27px;
+
+    font-size: 17px;
+    line-height: 1.5;
+  }
+
+  .ns-floral {
+    width: 190px;
+    height: 260px;
+
+    opacity: 0.5;
+  }
+
+  .ns-floral-left {
+    left: -78px;
+    top: -20px;
+  }
+
+  .ns-floral-right {
+    right: -78px;
+    bottom: -20px;
+  }
+
+  .ns-floral::before {
+    width: 180px;
+    height: 240px;
+  }
+
+  .ns-leaf {
+    transform: scale(0.75) rotate(-35deg);
+  }
+
+  .ns-flower {
+    transform: scale(0.72);
+  }
+
+  .ns-flower-2 {
+    transform: scale(0.62);
+  }
+}
+
+@media (max-height: 700px) and (max-width: 600px) {
+  .ns-inner {
+    padding-top: 68px;
+    padding-bottom: 58px;
+  }
+
+  .ns-name-a,
+  .ns-name-b {
+    font-size: 52px;
+  }
+
+  .ns-names {
+    margin: 18px 0;
+  }
+
+  .ns-amp-wrapper {
+    margin: 17px 0;
+  }
+
+  .ns-subline {
+    margin-top: 22px;
+    font-size: 15px;
+  }
+}
