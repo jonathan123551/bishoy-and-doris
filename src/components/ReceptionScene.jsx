@@ -22,143 +22,102 @@ export default function ReceptionScene() {
     const ctx = gsap.context(() => {
       const section = sectionRef.current;
 
-      const image = section.querySelector(
-        '.rec-cinematic-image'
+      const image = section.querySelector('.rec-cinematic-image');
+      const shade = section.querySelector('.rec-image-shade');
+      const copy = section.querySelector('.rec-cinematic-copy');
+
+      const label = section.querySelector('.rec-label');
+      const rule = section.querySelector('.rec-rule-top');
+      const venue = section.querySelector('.rec-venue-name');
+      const area = section.querySelector('.rec-venue-sub');
+      const note = section.querySelector('.rec-note');
+      const maps = section.querySelector('.rec-map-link');
+
+      // The image must be immediately visible behind Ceremony.
+      gsap.set(image, {
+        opacity: 1,
+        scale: 1,
+        xPercent: 0,
+      });
+
+      gsap.set(shade, {
+        opacity: 0,
+      });
+
+      gsap.set(copy, {
+        autoAlpha: 1,
+      });
+
+      gsap.set(
+        [label, rule, venue, area, note, maps],
+        {
+          autoAlpha: 0,
+        }
       );
 
-      const shade = section.querySelector(
-        '.rec-image-shade'
-      );
-
-      const copy = section.querySelector(
-        '.rec-cinematic-copy'
-      );
-
-      const label = section.querySelector(
-        '.rec-label'
-      );
-
-      const rule = section.querySelector(
-        '.rec-rule-top'
-      );
-
-      const venue = section.querySelector(
-        '.rec-venue-name'
-      );
-
-      const area = section.querySelector(
-        '.rec-venue-sub'
-      );
-
-      const note = section.querySelector(
-        '.rec-note'
-      );
-
-      const maps = section.querySelector(
-        '.rec-map-link'
-      );
+      // Compute how many pixels we need to wait while Ceremony finishes its 1400px pin
+      const delayPixels = Math.max(0, 1400 - window.innerHeight);
+      const activePixels = 1100;
+      const totalPixels = delayPixels + activePixels;
+      
+      // Let active text animation take roughly 0.86 units of GSAP time.
+      // So delay time should be proportional:
+      const activeDuration = 0.86;
+      const START_DELAY = (delayPixels / activePixels) * activeDuration;
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-
           start: 'top top',
-          end: '+=1100',
-
+          end: `+=${totalPixels}`,
           scrub: 1,
-
-          /*
-           * Reception gets its own clean scroll space.
-           * It does NOT overlap Ceremony.
-           */
           pin: true,
           pinSpacing: true,
-
           anticipatePin: 1,
           invalidateOnRefresh: true,
           refreshPriority: 0,
         },
       });
 
-      /* ======================================================
-         1. IMAGE ENTERS
-         ====================================================== */
-
-      tl.fromTo(
-        image,
-        {
-          opacity: 0.15,
-          scale: 1.06,
-          xPercent: 3,
-        },
-        {
-          opacity: 1,
-          scale: 1,
-          xPercent: 0,
-          ease: 'power2.out',
-          duration: 0.24,
-        },
-        0
-      );
+      // Pad the start of the timeline to wait for Ceremony to finish
+      if (START_DELAY > 0) {
+        tl.to({}, { duration: START_DELAY }, 0);
+      }
 
       /* ======================================================
-         2. CINEMATIC WASH
+         1. CINEMATIC WASH (starts slightly before text)
          ====================================================== */
 
       tl.fromTo(
         shade,
-        {
-          opacity: 0,
-        },
-        {
-          opacity: 0.50,
-          ease: 'none',
-          duration: 0.20,
-        },
-        0.04
+        { opacity: 0 },
+        { opacity: 0.50, ease: 'none', duration: 0.20 },
+        START_DELAY + 0
       );
 
       /* ======================================================
-         3. IMAGE HOLD
-         ====================================================== */
-
-      tl.to(
-        {},
-        {
-          duration: 0.12,
-        },
-        0.28
-      );
-
-      /* ======================================================
-         4. RECEPTION LABEL
+         2. RECEPTION LABEL
          ====================================================== */
 
       tl.fromTo(
         label,
-        {
-          y: 28,
-          autoAlpha: 0,
-        },
+        { y: 28, autoAlpha: 0 },
         {
           y: 0,
           autoAlpha: 1,
           ease: 'power3.out',
           duration: 0.14,
         },
-        0.34
+        START_DELAY + 0.05
       );
 
       /* ======================================================
-         5. RULE
+         3. RULE
          ====================================================== */
 
       tl.fromTo(
         rule,
-        {
-          scaleX: 0,
-          autoAlpha: 0,
-        },
+        { scaleX: 0, autoAlpha: 0 },
         {
           scaleX: 1,
           autoAlpha: 1,
@@ -166,49 +125,43 @@ export default function ReceptionScene() {
           ease: 'none',
           duration: 0.12,
         },
-        0.40
+        START_DELAY + 0.11
       );
 
       /* ======================================================
-         6. VENUE
+         4. VENUE
          ====================================================== */
 
       tl.fromTo(
         venue,
-        {
-          y: 38,
-          autoAlpha: 0,
-        },
+        { y: 38, autoAlpha: 0 },
         {
           y: 0,
           autoAlpha: 1,
           ease: 'power3.out',
           duration: 0.18,
         },
-        0.45
+        START_DELAY + 0.17
       );
 
       /* ======================================================
-         7. AREA
+         5. AREA
          ====================================================== */
 
       tl.fromTo(
         area,
-        {
-          y: 20,
-          autoAlpha: 0,
-        },
+        { y: 20, autoAlpha: 0 },
         {
           y: 0,
           autoAlpha: 1,
           ease: 'power2.out',
           duration: 0.13,
         },
-        0.56
+        START_DELAY + 0.29
       );
 
       /* ======================================================
-         8. NOTE
+         6. NOTE
          ====================================================== */
 
       tl.fromTo(
@@ -225,11 +178,11 @@ export default function ReceptionScene() {
           ease: 'power2.out',
           duration: 0.14,
         },
-        0.63
+        START_DELAY + 0.37
       );
 
       /* ======================================================
-         9. MAPS — LAST
+         7. MAPS — LAST
          ====================================================== */
 
       tl.fromTo(
@@ -246,11 +199,11 @@ export default function ReceptionScene() {
           ease: 'back.out(1.4)',
           duration: 0.16,
         },
-        0.71
+        START_DELAY + 0.47
       );
 
       /* ======================================================
-         10. FINAL HOLD
+         8. FINAL HOLD
          ====================================================== */
 
       tl.to(
@@ -260,7 +213,7 @@ export default function ReceptionScene() {
           ease: 'none',
           duration: 0.12,
         },
-        0.86
+        START_DELAY + 0.62
       );
 
       tl.to(
@@ -268,7 +221,7 @@ export default function ReceptionScene() {
         {
           duration: 0.12,
         },
-        0.92
+        START_DELAY + 0.74
       );
     }, sectionRef);
 

@@ -99,7 +99,7 @@ export default function NamesScene() {
           ease: 'power2.out',
           duration: 0.18,
         },
-        0.12
+        0.10
       );
 
       /*
@@ -116,14 +116,13 @@ export default function NamesScene() {
           autoAlpha: 1,
           transformOrigin: 'center',
           ease: 'none',
-          duration: 0.14,
+          duration: 0.12,
         },
-        0.20
+        0.18
       );
 
       /*
        * BISHOY
-       * Comes slightly from the left.
        */
       tl.fromTo(
         groom,
@@ -137,9 +136,9 @@ export default function NamesScene() {
           y: 0,
           autoAlpha: 1,
           ease: 'power3.out',
-          duration: 0.22,
+          duration: 0.20,
         },
-        0.28
+        0.25
       );
 
       /*
@@ -159,12 +158,11 @@ export default function NamesScene() {
           ease: 'back.out(1.7)',
           duration: 0.18,
         },
-        0.43
+        0.39
       );
 
       /*
        * DORIS
-       * Comes slightly from the right.
        */
       tl.fromTo(
         bride,
@@ -178,9 +176,9 @@ export default function NamesScene() {
           y: 0,
           autoAlpha: 1,
           ease: 'power3.out',
-          duration: 0.22,
+          duration: 0.20,
         },
-        0.49
+        0.45
       );
 
       /*
@@ -197,9 +195,9 @@ export default function NamesScene() {
           autoAlpha: 1,
           transformOrigin: 'center',
           ease: 'none',
-          duration: 0.14,
+          duration: 0.12,
         },
-        0.63
+        0.58
       );
 
       /*
@@ -208,7 +206,7 @@ export default function NamesScene() {
       tl.fromTo(
         subline,
         {
-          y: 30,
+          y: 25,
           autoAlpha: 0,
           filter: 'blur(4px)',
         },
@@ -217,9 +215,9 @@ export default function NamesScene() {
           autoAlpha: 1,
           filter: 'blur(0px)',
           ease: 'power2.out',
-          duration: 0.22,
+          duration: 0.20,
         },
-        0.70
+        0.64
       );
 
       /*
@@ -230,9 +228,20 @@ export default function NamesScene() {
         {
           yPercent: -2,
           ease: 'none',
-          duration: 0.20,
+          duration: 0.12,
         },
-        0.84
+        0.78
+      );
+
+      /*
+       * Clean exit before Ceremony
+       */
+      tl.set(
+        section,
+        {
+          autoAlpha: 0,
+        },
+        0.96
       );
     }, sectionRef);
 

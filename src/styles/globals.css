@@ -3307,52 +3307,33 @@ img {
 /* Reception is a clean full-screen scene */
 .rec-cinematic {
   position: relative;
-
   z-index: 10;
-
   width: 100%;
   height: 100svh;
   min-height: 100svh;
-
   overflow: hidden;
-
   isolation: isolate;
-
   background: #0b1f39;
-
-  /*
-   * IMPORTANT:
-   * Reception itself is NEVER translated.
-   */
-  transform: none;
+  transform: none !important;
 }
 
 /* Reception image fills the stage */
 .rec-cinematic-image {
   position: absolute;
   inset: 0;
-
   width: 100%;
   height: 100%;
-
   display: block;
-
   object-fit: cover;
   object-position: center center;
-
-  transform-origin: center center;
-
   pointer-events: none;
   user-select: none;
-
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-
   filter:
     saturate(0.96)
     contrast(1.03);
-
-  will-change: transform, opacity;
+  transform: none !important;
+  opacity: 1;
+  will-change: auto;
 }
 
 /* Keep the cinematic wash behind text */

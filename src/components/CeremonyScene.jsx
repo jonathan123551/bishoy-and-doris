@@ -47,10 +47,10 @@ export default function CeremonyScene() {
           /*
            * IMPORTANT:
            * Ceremony owns its own scroll space.
-           * Reception will NOT move underneath it.
+           * Reception will move underneath it.
            */
           pin: true,
-          pinSpacing: true,
+          pinSpacing: false,
 
           anticipatePin: 1,
           invalidateOnRefresh: true,
