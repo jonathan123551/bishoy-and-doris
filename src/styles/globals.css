@@ -2086,3 +2086,83 @@ img {
     font-size: 15px;
   }
 }
+
+/* =========================================================
+   CEREMONY — EXACT REFERENCE ARTWORK
+   The supplied reference image is the actual visual.
+   ========================================================= */
+
+.ceremony-reference-scene {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+
+  background: #07182d;
+
+  line-height: 0;
+}
+
+.ceremony-reference-art {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+
+  line-height: 0;
+}
+
+.ceremony-reference-art img {
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  margin: 0;
+  padding: 0;
+
+  user-select: none;
+  -webkit-user-drag: none;
+
+  pointer-events: none;
+}
+
+/*
+ * Invisible clickable area positioned over the
+ * actual VIEW ON MAPS button in the reference artwork.
+ *
+ * Coordinates are percentages of the reference image.
+ */
+.ceremony-map-hitbox {
+  position: absolute;
+
+  left: 26%;
+  top: 41%;
+
+  width: 48%;
+  height: 5.2%;
+
+  display: block;
+
+  z-index: 10;
+
+  background: transparent;
+  border: 0;
+
+  cursor: pointer;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Also support secondary coordinates */
+.ceremony-map-hitbox::after {
+  content: '';
+  position: absolute;
+  left: 62.5%;
+  top: 75.2%;
+  width: 23.8%;
+  height: 13.5%;
+  pointer-events: auto;
+}
+
