@@ -51,7 +51,7 @@ export default function ReceptionScene() {
       );
 
      const isMobile = window.matchMedia('(max-width: 600px)').matches;
-const receptionDuration = isMobile ? 900 : 1100;
+const receptionDuration = isMobile ? 1000 : 1100;
 
       const tl = gsap.timeline({
         scrollTrigger: {
