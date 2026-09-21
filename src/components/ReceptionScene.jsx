@@ -11,51 +11,121 @@ export default function ReceptionScene() {
   const { reception } = eventConfig;
 
   useLayoutEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (
+      window.matchMedia(
+        '(prefers-reduced-motion: reduce)'
+      ).matches
+    ) {
       return undefined;
     }
 
     const ctx = gsap.context(() => {
       const section = sectionRef.current;
 
-      const image = section.querySelector('.rec-cinematic-image');
-      const imageShade = section.querySelector('.rec-image-shade');
-      const copy = section.querySelector('.rec-cinematic-copy');
+      const image = section.querySelector(
+        '.rec-cinematic-image'
+      );
 
-      const label = section.querySelector('.rec-label');
-      const topRule = section.querySelector('.rec-rule-top');
-      const venue = section.querySelector('.rec-venue-name');
-      const area = section.querySelector('.rec-venue-sub');
-      const note = section.querySelector('.rec-note');
-      const maps = section.querySelector('.rec-map-link');
+      const shade = section.querySelector(
+        '.rec-image-shade'
+      );
+
+      const copy = section.querySelector(
+        '.rec-cinematic-copy'
+      );
+
+      const label = section.querySelector(
+        '.rec-label'
+      );
+
+      const rule = section.querySelector(
+        '.rec-rule-top'
+      );
+
+      const venue = section.querySelector(
+        '.rec-venue-name'
+      );
+
+      const area = section.querySelector(
+        '.rec-venue-sub'
+      );
+
+      const note = section.querySelector(
+        '.rec-note'
+      );
+
+      const maps = section.querySelector(
+        '.rec-map-link'
+      );
+
+      /*
+       * ======================================================
+       * RECEPTION ENTERS UNDER THE CEREMONY
+       * ======================================================
+       */
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
+
           start: 'top top',
+
           end: '+=1250',
+
           scrub: 1,
+
           pin: true,
+
+          /*
+           * Important:
+           * don't create another giant gap after Reception.
+           */
+          pinSpacing: true,
+
           anticipatePin: 1,
+
           invalidateOnRefresh: true,
+
+          refreshPriority: -1,
         },
       });
 
       /*
        * ------------------------------------------------------
-       * 1. RECEPTION IMAGE ENTERS FROM THE RIGHT
+       * 1. REVEAL THE WHOLE PAGE FROM THE RIGHT
+       * ------------------------------------------------------
+       */
+
+      tl.fromTo(
+        section,
+        {
+          clipPath:
+            'inset(0 0 0 100%)',
+        },
+        {
+          clipPath:
+            'inset(0 0 0 0%)',
+          ease: 'power2.inOut',
+          duration: 0.34,
+        },
+        0
+      );
+
+      /*
+       * ------------------------------------------------------
+       * 2. IMAGE HAS A SLIGHT CINEMATIC MOVEMENT
        * ------------------------------------------------------
        */
 
       tl.fromTo(
         image,
         {
-          xPercent: 100,
-          scale: 1.08,
+          scale: 1.10,
+          xPercent: 4,
         },
         {
-          xPercent: 0,
           scale: 1,
+          xPercent: 0,
           ease: 'none',
           duration: 0.42,
         },
@@ -63,61 +133,47 @@ export default function ReceptionScene() {
       );
 
       /*
-       * Image shade follows the entrance.
+       * ------------------------------------------------------
+       * 3. DARKNESS SETTLES
+       * ------------------------------------------------------
        */
+
       tl.fromTo(
-        imageShade,
+        shade,
         {
-          opacity: 0.1,
+          opacity: 0,
         },
         {
           opacity: 0.48,
           ease: 'none',
-          duration: 0.35,
+          duration: 0.30,
         },
-        0.12
+        0.08
       );
 
       /*
        * ------------------------------------------------------
-       * 2. VERY SMALL CINEMATIC PARALLAX
-       * ------------------------------------------------------
-       */
-
-      tl.to(
-        image,
-        {
-          scale: 1.035,
-          yPercent: -1.5,
-          ease: 'none',
-          duration: 0.35,
-        },
-        0.42
-      );
-
-      /*
-       * ------------------------------------------------------
-       * 3. TEXT STARTS ONLY AFTER IMAGE HAS ARRIVED
+       * 4. TEXT — NOT IMMEDIATELY
        * ------------------------------------------------------
        */
 
       tl.fromTo(
         label,
         {
-          y: 35,
+          y: 30,
           autoAlpha: 0,
         },
         {
           y: 0,
           autoAlpha: 1,
-          ease: 'power2.out',
-          duration: 0.16,
+          ease: 'power3.out',
+          duration: 0.14,
         },
-        0.47
+        0.43
       );
 
       tl.fromTo(
-        topRule,
+        rule,
         {
           scaleX: 0,
           autoAlpha: 0,
@@ -127,34 +183,40 @@ export default function ReceptionScene() {
           autoAlpha: 1,
           transformOrigin: 'center',
           ease: 'none',
-          duration: 0.13,
+          duration: 0.12,
+        },
+        0.49
+      );
+
+      /*
+       * ------------------------------------------------------
+       * 5. LA PENSÉE
+       * ------------------------------------------------------
+       */
+
+      tl.fromTo(
+        venue,
+        {
+          y: 45,
+          autoAlpha: 0,
+          scale: 0.97,
+        },
+        {
+          y: 0,
+          autoAlpha: 1,
+          scale: 1,
+          ease: 'power3.out',
+          duration: 0.18,
         },
         0.54
       );
 
       /*
-       * Venue name enters slightly from below.
+       * ------------------------------------------------------
+       * 6. GARDENIA
+       * ------------------------------------------------------
        */
-      tl.fromTo(
-        venue,
-        {
-          y: 40,
-          autoAlpha: 0,
-          letterSpacing: '0.02em',
-        },
-        {
-          y: 0,
-          autoAlpha: 1,
-          letterSpacing: '0.055em',
-          ease: 'power3.out',
-          duration: 0.20,
-        },
-        0.58
-      );
 
-      /*
-       * Gardenia
-       */
       tl.fromTo(
         area,
         {
@@ -165,62 +227,71 @@ export default function ReceptionScene() {
           y: 0,
           autoAlpha: 1,
           ease: 'power2.out',
-          duration: 0.15,
+          duration: 0.13,
         },
-        0.68
+        0.64
       );
 
       /*
-       * After the ceremony
+       * ------------------------------------------------------
+       * 7. AFTER THE CEREMONY
+       * ------------------------------------------------------
        */
+
       tl.fromTo(
         note,
         {
           y: 20,
           autoAlpha: 0,
-          filter: 'blur(4px)',
+          filter: 'blur(5px)',
         },
         {
           y: 0,
           autoAlpha: 1,
           filter: 'blur(0px)',
           ease: 'power2.out',
-          duration: 0.17,
+          duration: 0.14,
         },
-        0.75
+        0.71
       );
 
       /*
-       * Maps appears LAST.
+       * ------------------------------------------------------
+       * 8. MAPS — LAST
+       * ------------------------------------------------------
        */
+
       tl.fromTo(
         maps,
         {
-          y: 30,
+          y: 26,
           autoAlpha: 0,
-          scale: 0.9,
+          scale: 0.88,
         },
         {
           y: 0,
           autoAlpha: 1,
           scale: 1,
           ease: 'back.out(1.5)',
-          duration: 0.18,
+          duration: 0.17,
         },
-        0.84
+        0.79
       );
 
       /*
-       * Final cinematic hold.
+       * ------------------------------------------------------
+       * 9. FINAL HOLD
+       * ------------------------------------------------------
        */
+
       tl.to(
         copy,
         {
           yPercent: -2,
           ease: 'none',
-          duration: 0.12,
+          duration: 0.18,
         },
-        0.93
+        0.90
       );
     }, sectionRef);
 
@@ -228,11 +299,10 @@ export default function ReceptionScene() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="rec-cinematic">
-      {/* =================================================
-          IMAGE ONLY
-          No text baked into the artwork.
-         ================================================= */}
+    <section
+      ref={sectionRef}
+      className="rec-cinematic"
+    >
 
       <img
         src={gardeniaImg}
@@ -242,14 +312,13 @@ export default function ReceptionScene() {
         draggable="false"
       />
 
-      {/* Cinematic readability layer */}
-      <div className="rec-image-shade" aria-hidden="true" />
-
-      {/* =================================================
-          ALL DATA IS HTML
-         ================================================= */}
+      <div
+        className="rec-image-shade"
+        aria-hidden="true"
+      />
 
       <div className="rec-cinematic-copy">
+
         <p className="rec-label">
           Reception
         </p>
@@ -298,8 +367,11 @@ export default function ReceptionScene() {
             />
           </svg>
 
-          <span>VIEW ON MAPS</span>
+          <span>
+            VIEW ON MAPS
+          </span>
         </a>
+
       </div>
     </section>
   );

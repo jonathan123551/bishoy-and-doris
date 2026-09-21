@@ -3295,101 +3295,92 @@ img {
 }
 
 /* =========================================================
-   RECEPTION — CINEMATIC IMAGE REVEAL
-   Image enters from RIGHT
-   Then typography reveals
+   CEREMONY → RECEPTION CINEMATIC HAND-OFF
    ========================================================= */
+
+.ceremony-cinematic {
+  position: relative;
+  z-index: 20;
+
+  overflow: hidden;
+}
 
 .rec-cinematic {
   position: relative;
+  z-index: 30;
+
+  overflow: hidden;
 
   width: 100%;
   height: 100svh;
   min-height: 680px;
 
-  overflow: hidden;
-  isolation: isolate;
-
   background: #061a33;
 
-  color: #f7f2e9;
+  clip-path: inset(0 0 0 100%);
+  will-change: clip-path;
 }
 
 
-/* =========================================================
-   FULL-SCREEN IMAGE
-   ========================================================= */
+/* Reception artwork */
 
 .rec-cinematic-image {
   position: absolute;
-
   inset: 0;
 
   width: 100%;
   height: 100%;
 
+  display: block;
+
   object-fit: cover;
   object-position: center center;
 
-  display: block;
-
-  z-index: -5;
-
   will-change: transform;
 
-  user-select: none;
   pointer-events: none;
-  -webkit-user-drag: none;
+  user-select: none;
 
-  /*
-   * Slight enhancement only.
-   * We don't want it to look like a card.
-   */
   filter:
     saturate(0.94)
-    contrast(1.02);
+    contrast(1.03);
 }
 
 
-/* =========================================================
-   CINEMATIC SHADE
-   ========================================================= */
+/* Cinematic dark layer */
 
 .rec-image-shade {
   position: absolute;
-
   inset: 0;
 
-  z-index: -3;
+  z-index: 2;
 
   pointer-events: none;
 
   background:
     linear-gradient(
       180deg,
-      rgba(3, 19, 39, 0.28) 0%,
-      rgba(3, 19, 39, 0.04) 35%,
-      rgba(3, 16, 34, 0.08) 60%,
-      rgba(2, 12, 27, 0.46) 100%
+      rgba(3, 17, 36, 0.22) 0%,
+      rgba(3, 17, 36, 0.02) 35%,
+      rgba(2, 12, 27, 0.12) 58%,
+      rgba(2, 11, 25, 0.58) 100%
     );
 
   opacity: 0;
 }
 
 
-/* =========================================================
-   CONTENT
-   ========================================================= */
+/* Reception content */
 
 .rec-cinematic-copy {
   position: absolute;
 
-  top: 50%;
+  z-index: 5;
+
   left: 50%;
+  top: 50%;
 
-  z-index: 10;
-
-  width: min(90vw, 700px);
+  width: min(90vw, 720px);
 
   transform: translate(-50%, -50%);
 
@@ -3403,21 +3394,19 @@ img {
 }
 
 
-/* =========================================================
-   RECEPTION LABEL
-   ========================================================= */
+/* Label */
 
 .rec-cinematic .rec-label {
   margin: 0 0 12px;
 
-  color: #d9b16b;
+  color: #dfb975;
 
   font-family:
     "Cormorant Garamond",
     Georgia,
     serif;
 
-  font-size: clamp(20px, 3vw, 32px);
+  font-size: clamp(22px, 3vw, 34px);
 
   font-style: italic;
 
@@ -3426,26 +3415,23 @@ img {
   letter-spacing: 0.04em;
 
   text-shadow:
-    0 2px 16px rgba(0, 0, 0, 0.45);
+    0 3px 18px rgba(0, 0, 0, 0.55);
 }
 
 
-/* =========================================================
-   GOLD RULE
-   ========================================================= */
+/* Gold rule */
 
 .rec-cinematic .rec-rule {
   position: relative;
 
-  width: min(170px, 42vw);
-
+  width: 150px;
   height: 1px;
 
   background:
     linear-gradient(
       90deg,
       transparent,
-      rgba(217, 177, 105, 0.95),
+      #d9b16b,
       transparent
     );
 }
@@ -3463,18 +3449,13 @@ img {
     translate(-50%, -50%)
     rotate(45deg);
 
-  background: #0a294c;
+  background: #092445;
 
   border: 1px solid #d9b16b;
-
-  box-shadow:
-    0 0 14px rgba(217, 177, 105, 0.28);
 }
 
 
-/* =========================================================
-   LA PENSÉE
-   ========================================================= */
+/* LA PENSÉE */
 
 .rec-cinematic .rec-venue-name {
   margin: 24px 0 0;
@@ -3499,18 +3480,16 @@ img {
   text-transform: uppercase;
 
   text-shadow:
-    0 3px 25px rgba(0, 0, 0, 0.58);
+    0 4px 24px rgba(0, 0, 0, 0.58);
 }
 
 
-/* =========================================================
-   GARDENIA
-   ========================================================= */
+/* Gardenia */
 
 .rec-cinematic .rec-venue-sub {
-  margin: 17px 0 0;
+  margin: 16px 0 0;
 
-  color: #d9b16b;
+  color: #ddb875;
 
   font-family:
     "Cormorant Garamond",
@@ -3522,20 +3501,15 @@ img {
   font-style: italic;
 
   line-height: 1;
-
-  text-shadow:
-    0 2px 16px rgba(0, 0, 0, 0.48);
 }
 
 
-/* =========================================================
-   AFTER THE CEREMONY
-   ========================================================= */
+/* AFTER THE CEREMONY */
 
 .rec-cinematic .rec-note {
   margin: 22px 0 0;
 
-  color: rgba(249, 245, 237, 0.86);
+  color: rgba(250, 246, 239, 0.88);
 
   font-family:
     "Inter",
@@ -3543,22 +3517,20 @@ img {
     Arial,
     sans-serif;
 
-  font-size: clamp(8px, 1.1vw, 12px);
+  font-size: 9px;
 
   font-weight: 500;
 
-  letter-spacing: 0.38em;
+  letter-spacing: 0.34em;
 
   text-transform: uppercase;
 
   text-shadow:
-    0 2px 14px rgba(0, 0, 0, 0.65);
+    0 3px 15px rgba(0, 0, 0, 0.65);
 }
 
 
-/* =========================================================
-   MAPS BUTTON
-   ========================================================= */
+/* MAP BUTTON */
 
 .rec-cinematic .rec-map-link {
   pointer-events: auto;
@@ -3570,18 +3542,18 @@ img {
 
   gap: 9px;
 
-  margin-top: 27px;
+  margin-top: 28px;
 
-  min-width: 180px;
+  min-width: 178px;
 
   padding: 11px 23px;
 
-  border: 1px solid rgba(217, 177, 105, 0.95);
+  border: 1px solid #d9b16b;
 
   border-radius: 999px;
 
   background:
-    rgba(3, 18, 37, 0.35);
+    rgba(3, 18, 37, 0.42);
 
   color: #f8f3ea;
 
@@ -3597,48 +3569,29 @@ img {
 
   font-weight: 500;
 
-  letter-spacing: 0.24em;
+  letter-spacing: 0.22em;
 
   text-transform: uppercase;
 
-  backdrop-filter: blur(4px);
-
-  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 
   box-shadow:
-    0 8px 28px rgba(0, 0, 0, 0.25);
-
-  transition:
-    transform 220ms ease,
-    background 220ms ease,
-    border-color 220ms ease;
+    0 8px 30px rgba(0, 0, 0, 0.28);
 
   -webkit-tap-highlight-color: transparent;
 }
 
-.rec-cinematic .rec-map-link:hover {
-  transform: translateY(-2px);
 
-  background:
-    rgba(217, 177, 105, 0.13);
-
-  border-color: #efd08d;
-}
-
-
-/* =========================================================
-   REAL LOCATION PIN
-   ========================================================= */
+/* REAL MAP PIN */
 
 .rec-cinematic .rec-map-icon {
   width: 15px;
   height: 15px;
 
+  color: #ddb875;
+
   flex: 0 0 15px;
-
-  display: block;
-
-  color: #d9b16b;
 }
 
 
@@ -3653,40 +3606,22 @@ img {
     min-height: 680px;
   }
 
-  /*
-   * On mobile we want the artwork to feel like
-   * a real full-screen page.
-   */
   .rec-cinematic-image {
     object-position: center center;
-
-    transform-origin: center center;
-  }
-
-  .rec-image-shade {
-    background:
-      linear-gradient(
-        180deg,
-        rgba(3, 19, 39, 0.30) 0%,
-        rgba(3, 19, 39, 0.05) 36%,
-        rgba(2, 12, 27, 0.52) 100%
-      );
   }
 
   .rec-cinematic-copy {
     width: 88vw;
-
-    top: 48%;
+    top: 49%;
   }
 
   .rec-cinematic .rec-label {
+    font-size: 21px;
     margin-bottom: 10px;
-
-    font-size: 22px;
   }
 
   .rec-cinematic .rec-rule {
-    width: 135px;
+    width: 130px;
   }
 
   .rec-cinematic .rec-venue-name {
@@ -3694,12 +3629,11 @@ img {
 
     font-size: 43px;
 
-    letter-spacing: 0.045em;
+    letter-spacing: 0.04em;
   }
 
   .rec-cinematic .rec-venue-sub {
     margin-top: 14px;
-
     font-size: 20px;
   }
 
@@ -3708,7 +3642,7 @@ img {
 
     font-size: 7px;
 
-    letter-spacing: 0.28em;
+    letter-spacing: 0.25em;
   }
 
   .rec-cinematic .rec-map-link {
@@ -3719,43 +3653,9 @@ img {
     padding: 10px 20px;
 
     font-size: 7px;
-
-    letter-spacing: 0.20em;
-  }
-
-  .rec-cinematic .rec-map-icon {
-    width: 14px;
-    height: 14px;
   }
 }
 
-
-/* =========================================================
-   SHORT PHONE
-   ========================================================= */
-
-@media (max-width: 600px) and (max-height: 720px) {
-
-  .rec-cinematic .rec-cinematic-copy {
-    top: 47%;
-  }
-
-  .rec-cinematic .rec-venue-name {
-    font-size: 38px;
-  }
-
-  .rec-cinematic .rec-venue-sub {
-    font-size: 18px;
-  }
-
-  .rec-cinematic .rec-note {
-    margin-top: 15px;
-  }
-
-  .rec-cinematic .rec-map-link {
-    margin-top: 17px;
-  }
-}
 
 
 

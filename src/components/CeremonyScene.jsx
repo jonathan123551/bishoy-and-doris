@@ -41,18 +41,35 @@ export default function CeremonyScene() {
         scrollTrigger: {
           trigger: section,
           start: 'top top',
+
+          /*
+           * Keep the Ceremony pinned long enough
+           * for the cinematic hand-off to happen.
+           */
           end: '+=1400',
+
           scrub: 1,
+
           pin: true,
+
+          /*
+           * IMPORTANT:
+           * Reception is allowed to move underneath
+           * this pinned Ceremony.
+           */
+          pinSpacing: false,
+
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },
       });
 
       /*
-       * 0 → 20%
-       * Cinematic image enters.
+       * ======================================================
+       * CEREMONY INTRO
+       * ======================================================
        */
+
       tl.fromTo(
         bg,
         {
@@ -81,9 +98,6 @@ export default function CeremonyScene() {
         0
       );
 
-      /*
-       * Content starts low and slightly invisible.
-       */
       tl.fromTo(
         content,
         {
@@ -98,9 +112,11 @@ export default function CeremonyScene() {
       );
 
       /*
-       * 20 → 35%
-       * Eyebrow + top gold line.
+       * ======================================================
+       * TEXT REVEAL
+       * ======================================================
        */
+
       tl.fromTo(
         eyebrow,
         {
@@ -132,10 +148,6 @@ export default function CeremonyScene() {
         0.28
       );
 
-      /*
-       * 35 → 55%
-       * Title enters from opposite directions.
-       */
       tl.fromTo(
         titleTop,
         {
@@ -166,9 +178,6 @@ export default function CeremonyScene() {
         0.40
       );
 
-      /*
-       * Arabic reveal.
-       */
       tl.fromTo(
         arabic,
         {
@@ -186,9 +195,6 @@ export default function CeremonyScene() {
         0.49
       );
 
-      /*
-       * Date.
-       */
       tl.fromTo(
         date,
         {
@@ -204,9 +210,6 @@ export default function CeremonyScene() {
         0.59
       );
 
-      /*
-       * Location.
-       */
       tl.fromTo(
         location,
         {
@@ -222,9 +225,6 @@ export default function CeremonyScene() {
         0.67
       );
 
-      /*
-       * Maps button draws itself.
-       */
       tl.fromTo(
         maps,
         {
@@ -261,14 +261,59 @@ export default function CeremonyScene() {
       );
 
       /*
-       * Final cinematic hold.
+       * ======================================================
+       * CEREMONY → RECEPTION TRANSITION
+       *
+       * This is the important new part.
+       * The Ceremony starts leaving while the next scene
+       * is coming from underneath it.
+       * ======================================================
        */
+
       tl.to(
         content,
         {
-          yPercent: -1.5,
-          ease: 'none',
+          yPercent: -10,
+          scale: 0.96,
+          autoAlpha: 0,
+          ease: 'power2.inOut',
           duration: 0.18,
+        },
+        0.72
+      );
+
+      tl.to(
+        bg,
+        {
+          scale: 1.08,
+          xPercent: -3,
+          autoAlpha: 0,
+          ease: 'power2.inOut',
+          duration: 0.24,
+        },
+        0.70
+      );
+
+      tl.to(
+        overlay,
+        {
+          opacity: 0,
+          ease: 'power2.inOut',
+          duration: 0.20,
+        },
+        0.72
+      );
+
+      /*
+       * A final slight lift makes the scene feel
+       * like one invitation page moving away.
+       */
+      tl.to(
+        section,
+        {
+          yPercent: -2,
+          ease: 'none',
+          duration: 0.14,
         },
         0.86
       );
@@ -279,7 +324,6 @@ export default function CeremonyScene() {
 
   return (
     <section ref={sectionRef} className="ceremony-cinematic">
-      {/* Actual church artwork — NO TEXT INSIDE */}
       <img
         className="ceremony-bg"
         src={churchBg}
@@ -288,13 +332,18 @@ export default function CeremonyScene() {
         draggable="false"
       />
 
-      {/* Cinematic darkness / readability layer */}
-      <div className="ceremony-overlay" aria-hidden="true" />
+      <div
+        className="ceremony-overlay"
+        aria-hidden="true"
+      />
 
-      {/* Subtle blue glow */}
-      <div className="ceremony-blue-glow" aria-hidden="true" />
+      <div
+        className="ceremony-blue-glow"
+        aria-hidden="true"
+      />
 
       <div className="ceremony-content">
+
         <div className="ceremony-eyebrow">
           THE HOLY MATRIMONY
         </div>
@@ -304,6 +353,7 @@ export default function CeremonyScene() {
         </div>
 
         <div className="ceremony-title">
+
           <div className="ceremony-title-top">
             CHURCH OF
           </div>
@@ -311,9 +361,13 @@ export default function CeremonyScene() {
           <div className="ceremony-title-bottom">
             ARCHANGEL MICHAEL
           </div>
+
         </div>
 
-        <div className="ceremony-arabic" dir="rtl">
+        <div
+          className="ceremony-arabic"
+          dir="rtl"
+        >
           كنيسة رئيس الملائكة ميخائيل
         </div>
 
@@ -342,6 +396,7 @@ export default function CeremonyScene() {
               stroke="currentColor"
               strokeWidth="1.7"
             />
+
             <circle
               cx="12"
               cy="9"
@@ -358,6 +413,7 @@ export default function CeremonyScene() {
         <div className="ceremony-rule ceremony-rule-bottom">
           <span />
         </div>
+
       </div>
     </section>
   );
