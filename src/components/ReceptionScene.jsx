@@ -62,13 +62,10 @@ export default function ReceptionScene() {
         scrollTrigger: {
           trigger: section,
           start: 'top top',
-          end: '+=1250',
+          end: '+=1000',
           scrub: 1,
-          pin: true,
-          pinSpacing: true,
-          anticipatePin: 1,
+          pin: false,
           invalidateOnRefresh: true,
-          refreshPriority: -1,
         },
       });
 
@@ -85,7 +82,7 @@ export default function ReceptionScene() {
       tl.fromTo(
         section,
         {
-          xPercent: 100,
+          xPercent: 12,
         },
         {
           xPercent: 0,
