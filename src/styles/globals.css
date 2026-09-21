@@ -390,103 +390,7 @@ img {
   background: linear-gradient(180deg, var(--color-paper) 0%, var(--color-bg) 100%);
 }
 
-/* ───────────────────────────────────────────────
-   Names Scene: typographic moment on navy
-   ─────────────────────────────────────────────── */
 
-.ns-scene {
-  position: relative;
-  z-index: 2;
-  background: #fbf8f2;
-  color: #071530;
-}
-
-.ns-inner {
-  position: relative;
-  min-height: 80vh;
-  display: grid;
-  place-items: center;
-  padding: 18vh 1.4rem 12vh 1.4rem;
-  overflow: hidden;
-  isolation: isolate;
-  background: radial-gradient(circle at 50% 45%, #ffffff 0%, #fbf8f2 70%);
-}
-
-.ns-inner::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.18'/%3E%3C/svg%3E");
-  opacity: 0.18;
-  pointer-events: none;
-  mix-blend-mode: multiply;
-}
-
-.ns-copy {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  justify-items: center;
-  gap: 1.1rem;
-  text-align: center;
-}
-
-.ns-overline {
-  font-family: var(--font-sans);
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.38em;
-  text-transform: uppercase;
-  color: #5a6b82;
-}
-
-.ns-names {
-  display: grid;
-  gap: 0.25rem;
-  width: 100%;
-}
-
-.ns-name-a, .ns-name-b {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(3.2rem, 15vw, 6.8rem);
-  line-height: 0.86;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #071530;
-}
-
-.ns-amp-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.2rem;
-  margin: 0.4rem 0;
-}
-
-.ns-amp-line {
-  flex: 1;
-  max-width: 50px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(197, 159, 81, 0.6), transparent);
-}
-
-.ns-amp {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: clamp(2.2rem, 9vw, 3.4rem);
-  color: var(--color-champagne);
-  font-weight: 300;
-}
-
-.ns-subline {
-  width: min(78vw, 380px);
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: clamp(1.02rem, 3.9vw, 1.22rem);
-  line-height: 1.48;
-  color: #435471;
-}
 
 /* ───────────────────────────────────────────────
    Ceremony Scene: Warm Ivory Coptic Cathedral
@@ -1715,6 +1619,11 @@ img {
   display: flex;
   justify-content: center;
   align-items: center;
+
+  /* IMPORTANT: remove the old white background */
+  background: transparent !important;
+
+  isolation: isolate;
 }
 
 .ns-copy {
