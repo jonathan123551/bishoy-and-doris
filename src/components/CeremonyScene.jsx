@@ -231,11 +231,13 @@ export default function CeremonyScene() {
           y: 24,
           autoAlpha: 0,
           scale: 0.94,
+          xPercent: -50,
         },
         {
           y: 0,
           autoAlpha: 1,
           scale: 1,
+          xPercent: -50,
           ease: 'back.out(1.4)',
           duration: 0.2,
         },
@@ -329,7 +331,27 @@ export default function CeremonyScene() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <span className="ceremony-pin">⌖</span>
+          <svg
+            className="ceremony-pin"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.7"
+            />
+            <circle
+              cx="12"
+              cy="9"
+              r="2.3"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.7"
+            />
+          </svg>
+
           <span>VIEW ON MAPS</span>
         </a>
 

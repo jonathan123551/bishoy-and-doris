@@ -2701,4 +2701,185 @@ img {
   }
 }
 
+/* =========================================================
+   CEREMONY — MOBILE COMPOSITION
+   Text in the sky / church unobstructed / Maps at bottom
+   ========================================================= */
+
+.ceremony-cinematic .ceremony-content {
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  max-width: none;
+
+  transform: none;
+
+  padding-top: clamp(95px, 19vh, 155px);
+
+  justify-content: flex-start;
+
+  pointer-events: none;
+}
+
+/* Keep the information above the church */
+.ceremony-cinematic .ceremony-eyebrow,
+.ceremony-cinematic .ceremony-rule-top,
+.ceremony-cinematic .ceremony-title,
+.ceremony-cinematic .ceremony-arabic,
+.ceremony-cinematic .ceremony-date,
+.ceremony-cinematic .ceremony-location {
+  position: relative;
+  z-index: 10;
+}
+
+/* Make the typography slightly smaller so it lives in the sky */
+.ceremony-cinematic .ceremony-eyebrow {
+  font-size: 8px;
+  letter-spacing: 0.30em;
+  margin-bottom: 9px;
+}
+
+.ceremony-cinematic .ceremony-rule-top {
+  width: 145px;
+}
+
+.ceremony-cinematic .ceremony-title {
+  margin-top: 12px;
+}
+
+.ceremony-cinematic .ceremony-title-top {
+  font-size: 26px;
+  line-height: 0.9;
+}
+
+.ceremony-cinematic .ceremony-title-bottom {
+  margin-top: 4px;
+  font-size: 28px;
+  line-height: 0.92;
+}
+
+.ceremony-cinematic .ceremony-arabic {
+  margin-top: 11px;
+  font-size: 19px;
+}
+
+.ceremony-cinematic .ceremony-date {
+  margin-top: 11px;
+  font-size: 16px;
+}
+
+.ceremony-cinematic .ceremony-location {
+  margin-top: 9px;
+  font-size: 8px;
+  letter-spacing: 0.28em;
+}
+
+/* =========================================================
+   MAPS — SEPARATE BOTTOM ACTION
+   ========================================================= */
+
+.ceremony-cinematic .ceremony-maps {
+  position: absolute;
+
+  left: 50%;
+  bottom: 7.5%;
+
+  z-index: 30;
+
+  margin-top: 0;
+
+  min-width: 174px;
+
+  padding: 11px 22px;
+
+  transform: translateX(-50%);
+
+  gap: 9px;
+
+  font-size: 8px;
+  letter-spacing: 0.20em;
+
+  background: rgba(3, 17, 35, 0.52);
+
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.38);
+
+  white-space: nowrap;
+}
+
+/* Actual Google Maps-style pin */
+.ceremony-cinematic .ceremony-pin {
+  width: 15px;
+  height: 15px;
+
+  flex: 0 0 15px;
+
+  color: #d8b16a;
+
+  display: block;
+
+  transform: none;
+}
+
+/* Don't let the old bottom rule interfere */
+.ceremony-cinematic .ceremony-rule-bottom {
+  display: none;
+}
+
+/* =========================================================
+   PHONE
+   ========================================================= */
+
+@media (max-width: 600px) {
+  .ceremony-cinematic .ceremony-content {
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    padding-top: 92px;
+
+    transform: none;
+  }
+
+  /*
+   * Push the church visually lower.
+   * This leaves the dark sky available for the information.
+   */
+  .ceremony-cinematic .ceremony-bg {
+    object-position: center center;
+    transform: scale(1.05);
+  }
+
+  .ceremony-cinematic .ceremony-overlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(1, 10, 25, 0.70) 0%,
+        rgba(2, 18, 40, 0.30) 28%,
+        rgba(2, 15, 32, 0.03) 55%,
+        rgba(1, 8, 19, 0.62) 100%
+      );
+  }
+
+  .ceremony-cinematic .ceremony-maps {
+    left: 50%;
+    bottom: 6.5%;
+
+    min-width: 172px;
+
+    padding: 10px 21px;
+
+    font-size: 8px;
+  }
+}
+
+
 
