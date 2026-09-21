@@ -3295,72 +3295,97 @@ img {
 }
 
 /* =========================================================
-   FINAL CEREMONY → RECEPTION HANDOFF FIX
+   FINAL CEREMONY → RECEPTION ARCHITECTURE
+   NO NESTED SCROLLTRIGGER PINS
    ========================================================= */
 
-/* Ceremony always owns the foreground while pinned */
 .ceremony-cinematic {
   position: relative;
   z-index: 20;
 }
 
-/* Reception is a clean full-screen scene */
-.rec-cinematic {
+/*
+ * Reception owns 1100px of scroll progress AFTER
+ * it reaches the top.
+ */
+.rec-scroll {
   position: relative;
+  width: 100%;
+  height: calc(100svh + 1100px);
+  min-height: calc(100svh + 1100px);
+  overflow: visible;
   z-index: 10;
+}
+
+/*
+ * Reception itself is a sticky cinematic viewport.
+ */
+.rec-scroll .rec-cinematic {
+  position: sticky;
+  top: 0;
   width: 100%;
   height: 100svh;
   min-height: 100svh;
+
   overflow: hidden;
   isolation: isolate;
+
   background: #0b1f39;
+
   transform: none !important;
 }
 
-/* Reception image fills the stage */
-.rec-cinematic-image {
+/*
+ * Image is ALWAYS READY underneath Ceremony.
+ */
+.rec-scroll .rec-cinematic-image {
   position: absolute;
   inset: 0;
+
   width: 100%;
   height: 100%;
-  display: block;
+
   object-fit: cover;
   object-position: center center;
+
+  transform: none !important;
+  opacity: 1 !important;
+
+  display: block;
+
   pointer-events: none;
   user-select: none;
-  filter:
-    saturate(0.96)
-    contrast(1.03);
-  transform: none !important;
-  opacity: 1;
+
   will-change: auto;
 }
 
-/* Keep the cinematic wash behind text */
-.rec-image-shade {
+/*
+ * Shade starts hidden and becomes active with the
+ * Reception timeline.
+ */
+.rec-scroll .rec-image-shade {
   position: absolute;
   inset: 0;
-
   z-index: 2;
 
   pointer-events: none;
 
-  background:
-    linear-gradient(
-      180deg,
-      rgba(3, 15, 31, 0.10) 0%,
-      rgba(3, 15, 31, 0.02) 34%,
-      rgba(4, 14, 28, 0.18) 58%,
-      rgba(2, 10, 23, 0.74) 100%
-    );
-
   opacity: 0;
+
+  background: linear-gradient(
+    180deg,
+    rgba(3,15,31,.10) 0%,
+    rgba(3,15,31,.02) 34%,
+    rgba(4,14,28,.18) 58%,
+    rgba(2,10,23,.74) 100%
+  );
 }
 
-/* Reception text always stays centered over the image */
-.rec-cinematic-copy {
+/*
+ * Reception text stays over the image.
+ */
+.rec-scroll .rec-cinematic-copy {
   position: absolute;
-
   z-index: 5;
 
   left: 50%;
@@ -3554,22 +3579,25 @@ img {
 }
 
 @media (max-width: 600px) {
+  .rec-scroll {
+    height: calc(100svh + 1100px);
+    min-height: calc(100svh + 1100px);
+  }
 
-  .rec-cinematic {
+  .rec-scroll .rec-cinematic {
     width: 100%;
     height: 100svh;
     min-height: 100svh;
   }
 
-  .rec-cinematic-image {
+  .rec-scroll .rec-cinematic-image {
     width: 100%;
     height: 100%;
-
     object-fit: cover;
     object-position: center center;
   }
 
-  .rec-cinematic-copy {
+  .rec-scroll .rec-cinematic-copy {
     width: 88vw;
   }
 

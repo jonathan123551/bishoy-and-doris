@@ -33,7 +33,6 @@ export default function ReceptionScene() {
       const note = section.querySelector('.rec-note');
       const maps = section.querySelector('.rec-map-link');
 
-      // The image must be immediately visible behind Ceremony.
       gsap.set(image, {
         opacity: 1,
         scale: 1,
@@ -44,10 +43,6 @@ export default function ReceptionScene() {
         opacity: 0,
       });
 
-      gsap.set(copy, {
-        autoAlpha: 1,
-      });
-
       gsap.set(
         [label, rule, venue, area, note, maps],
         {
@@ -55,49 +50,38 @@ export default function ReceptionScene() {
         }
       );
 
-      // Compute how many pixels we need to wait while Ceremony finishes its 1400px pin
-      const delayPixels = Math.max(0, 1400 - window.innerHeight);
-      const activePixels = 1100;
-      const totalPixels = delayPixels + activePixels;
-      
-      // Let active text animation take roughly 0.86 units of GSAP time.
-      // So delay time should be proportional:
-      const activeDuration = 0.86;
-      const START_DELAY = (delayPixels / activePixels) * activeDuration;
+      const ceremonyDuration = 1400;
+      const viewport = window.innerHeight;
+
+      const overlapPixels = Math.max(
+        0,
+        ceremonyDuration - viewport
+      );
+
+      const START_DELAY = overlapPixels / 1100;
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
           start: 'top top',
-          end: `+=${totalPixels}`,
+          end: '+=1100',
           scrub: 1,
-          pin: true,
-          pinSpacing: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           refreshPriority: 0,
         },
       });
 
-      // Pad the start of the timeline to wait for Ceremony to finish
-      if (START_DELAY > 0) {
-        tl.to({}, { duration: START_DELAY }, 0);
-      }
-
-      /* ======================================================
-         1. CINEMATIC WASH (starts slightly before text)
-         ====================================================== */
-
       tl.fromTo(
         shade,
         { opacity: 0 },
-        { opacity: 0.50, ease: 'none', duration: 0.20 },
-        START_DELAY + 0
+        {
+          opacity: 0.50,
+          ease: 'none',
+          duration: 0.20,
+        },
+        0
       );
-
-      /* ======================================================
-         2. RECEPTION LABEL
-         ====================================================== */
 
       tl.fromTo(
         label,
@@ -108,12 +92,8 @@ export default function ReceptionScene() {
           ease: 'power3.out',
           duration: 0.14,
         },
-        START_DELAY + 0.05
+        START_DELAY
       );
-
-      /* ======================================================
-         3. RULE
-         ====================================================== */
 
       tl.fromTo(
         rule,
@@ -125,12 +105,8 @@ export default function ReceptionScene() {
           ease: 'none',
           duration: 0.12,
         },
-        START_DELAY + 0.11
+        START_DELAY + 0.06
       );
-
-      /* ======================================================
-         4. VENUE
-         ====================================================== */
 
       tl.fromTo(
         venue,
@@ -141,12 +117,8 @@ export default function ReceptionScene() {
           ease: 'power3.out',
           duration: 0.18,
         },
-        START_DELAY + 0.17
+        START_DELAY + 0.12
       );
-
-      /* ======================================================
-         5. AREA
-         ====================================================== */
 
       tl.fromTo(
         area,
@@ -157,12 +129,8 @@ export default function ReceptionScene() {
           ease: 'power2.out',
           duration: 0.13,
         },
-        START_DELAY + 0.29
+        START_DELAY + 0.24
       );
-
-      /* ======================================================
-         6. NOTE
-         ====================================================== */
 
       tl.fromTo(
         note,
@@ -178,12 +146,8 @@ export default function ReceptionScene() {
           ease: 'power2.out',
           duration: 0.14,
         },
-        START_DELAY + 0.37
+        START_DELAY + 0.32
       );
-
-      /* ======================================================
-         7. MAPS — LAST
-         ====================================================== */
 
       tl.fromTo(
         maps,
@@ -199,12 +163,8 @@ export default function ReceptionScene() {
           ease: 'back.out(1.4)',
           duration: 0.16,
         },
-        START_DELAY + 0.47
+        START_DELAY + 0.42
       );
-
-      /* ======================================================
-         8. FINAL HOLD
-         ====================================================== */
 
       tl.to(
         copy,
@@ -219,7 +179,7 @@ export default function ReceptionScene() {
       tl.to(
         {},
         {
-          duration: 0.12,
+          duration: 0.18,
         },
         START_DELAY + 0.74
       );
@@ -229,78 +189,78 @@ export default function ReceptionScene() {
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="rec-cinematic"
-    >
-      <img
-        src={receptionImg}
-        className="rec-cinematic-image"
-        alt=""
-        aria-hidden="true"
-        draggable="false"
-      />
+    <section ref={sectionRef} className="rec-scroll">
+      <div className="rec-cinematic">
 
-      <div
-        className="rec-image-shade"
-        aria-hidden="true"
-      />
+        <img
+          src={receptionImg}
+          className="rec-cinematic-image"
+          alt=""
+          aria-hidden="true"
+          draggable="false"
+        />
 
-      <div className="rec-cinematic-copy">
+        <div
+          className="rec-image-shade"
+          aria-hidden="true"
+        />
 
-        <p className="rec-label">
-          Reception
-        </p>
+        <div className="rec-cinematic-copy">
 
-        <div className="rec-rule rec-rule-top">
-          <span />
-        </div>
+          <p className="rec-label">
+            Reception
+          </p>
 
-        <h2 className="rec-venue-name">
-          {reception.name}
-        </h2>
+          <div className="rec-rule rec-rule-top">
+            <span />
+          </div>
 
-        <p className="rec-venue-sub">
-          {reception.area}
-        </p>
+          <h2 className="rec-venue-name">
+            {reception.name}
+          </h2>
 
-        <p className="rec-note">
-          {reception.note}
-        </p>
+          <p className="rec-venue-sub">
+            {reception.area}
+          </p>
 
-        <a
-          className="rec-map-link"
-          href={reception.mapUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <svg
-            className="rec-map-icon"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
+          <p className="rec-note">
+            {reception.note}
+          </p>
+
+          <a
+            className="rec-map-link"
+            href={reception.mapUrl}
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            <path
-              d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.7"
-            />
+            <svg
+              className="rec-map-icon"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.7"
+              />
 
-            <circle
-              cx="12"
-              cy="9"
-              r="2.3"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.7"
-            />
-          </svg>
+              <circle
+                cx="12"
+                cy="9"
+                r="2.3"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.7"
+              />
+            </svg>
 
-          <span>
-            VIEW ON MAPS
-          </span>
-        </a>
+            <span>
+              VIEW ON MAPS
+            </span>
+          </a>
 
+        </div>
       </div>
     </section>
   );
