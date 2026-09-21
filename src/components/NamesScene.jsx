@@ -21,7 +21,6 @@ export default function NamesScene() {
         },
       });
 
-      // Animate contents as user naturally scrolls
       tl.fromTo('.ns-copy > p, .ns-copy > .lux-rule', { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, stagger: 0.05, ease: 'none', duration: 0.2 }, 0.0)
         .fromTo('.ns-name-a', { xPercent: -10, autoAlpha: 0 }, { xPercent: 0, autoAlpha: 1, ease: 'none', duration: 0.2 }, 0.1)
         .fromTo('.ns-name-b', { xPercent: 10, autoAlpha: 0 }, { xPercent: 0, autoAlpha: 1, ease: 'none', duration: 0.2 }, 0.15)
@@ -32,7 +31,7 @@ export default function NamesScene() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="ns-scene scene-stage">
+    <section ref={sectionRef} className="ns-scene">
       <div className="ns-inner">
         <div className="ns-copy">
           <p className="ns-overline">Together with their families</p>
@@ -46,7 +45,7 @@ export default function NamesScene() {
             </div>
             <h2 className="ns-name-b">{eventConfig.brideName}</h2>
           </div>
-          <p className="ns-subline">Two stories, one vow, and a day we would be honored to share with you.</p>
+          <p className="ns-subline">A love story written in the stars, a day of unending joy. Join us as we begin our forever.</p>
         </div>
       </div>
     </section>

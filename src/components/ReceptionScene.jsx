@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { eventConfig } from '../config/eventConfig';
+import gardeniaImg from '../assets/decor/gardenia.jpg';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -29,26 +30,25 @@ export default function ReceptionScene() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="rec-scene canvas-navy">
-      <div className="rec-copy">
-        <p className="rec-label">Reception</p>
-        <div className="lux-rule" style={{ margin: '0.5rem auto' }} />
-        <h2 className="rec-venue-name">{reception.name}</h2>
-        <p className="rec-venue-sub" style={{ color: 'var(--color-champagne)' }}>{reception.area}</p>
-        
-        <div className="venue-destination venue-destination--reception">
-          <span>{reception.note}</span>
+    <section ref={sectionRef} className="rec-scene">
+      <img src={gardeniaImg} className="rec-botanical" alt="" aria-hidden="true" />
+      <div className="rec-inner">
+        <div className="rec-copy">
+          <p className="rec-label">Reception</p>
+          <div className="lux-rule" style={{ margin: '0 auto' }} />
+          <h2 className="rec-venue-name">{reception.name}</h2>
+          <p className="rec-venue-sub">{reception.area}</p>
+          <p className="rec-note">{reception.note}</p>
+          <a
+            className="rec-map-link"
+            href={reception.mapUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span className="rec-map-icon">📖</span>
+            <span>View on Maps</span>
+          </a>
         </div>
-        
-        <a
-          className="cta-link venue-map venue-map--reception"
-          href={reception.mapUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <span className="venue-map-mark" />
-          <span>View on Maps</span>
-        </a>
       </div>
     </section>
   );

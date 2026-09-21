@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { eventConfig } from '../config/eventConfig';
+import churchImg from '../assets/decor/church.jpg';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -22,35 +23,37 @@ export default function CeremonyScene() {
         },
       });
 
-      // Animate inner content
-      tl.fromTo('.cer-copy > *', { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, stagger: 0.05, ease: 'none', duration: 0.3 }, 0.0);
+      tl.fromTo('.cer-illustration', { y: 15, autoAlpha: 0 }, { y: 0, autoAlpha: 0.65, ease: 'none', duration: 0.2 }, 0.0)
+        .fromTo('.cer-copy > *', { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, stagger: 0.05, ease: 'none', duration: 0.3 }, 0.05);
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={sectionRef} className="cer-scene canvas-navy">
-      <div className="cer-copy">
-        <p className="cer-label">Ceremony</p>
-        <div className="lux-rule" style={{ margin: '0.5rem auto' }} />
-        <h2 className="cer-venue-name">{church.name}</h2>
-        <h2 className="cer-venue-name" dir="rtl" style={{ color: 'var(--color-champagne)' }}>كنيسة رئيس الملائكة ميخائيل</h2>
-        <p className="venue-date" style={{ color: 'var(--color-text-light)' }}>{eventConfig.displayDate} &middot; {eventConfig.displayTime}</p>
-        
-        <div className="venue-destination venue-destination--church">
-          <span>{church.area}, {church.city}</span>
+    <section ref={sectionRef} className="cer-scene">
+      <div className="cer-inner">
+        <div className="cer-illustration">
+          <img src={churchImg} alt="Church of Archangel Michael" />
         </div>
-        
-        <a
-          className="cta-link venue-map venue-map--church"
-          href={church.mapUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <span className="venue-map-mark" />
-          <span>View on Maps</span>
-        </a>
+
+        <div className="cer-copy">
+          <p className="cer-label">The Holy Matrimony</p>
+          <div className="lux-rule" style={{ margin: '0 auto' }} />
+          <h2 className="cer-venue-name">{church.name}</h2>
+          <p className="cer-arabic" dir="rtl">{church.arabicName}</p>
+          <p className="cer-date">{eventConfig.displayDate} &middot; {eventConfig.displayTime}</p>
+          <p className="cer-location">{church.area}, {church.city}</p>
+          <a
+            className="cer-map-link"
+            href={church.mapUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span className="cer-map-icon">📖</span>
+            <span>View on Maps</span>
+          </a>
+        </div>
       </div>
     </section>
   );

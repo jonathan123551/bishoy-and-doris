@@ -394,120 +394,317 @@ img {
    Names Scene: typographic moment on navy
    ─────────────────────────────────────────────── */
 
-.ns-scene { position: relative; z-index: 2; background: var(--color-bg); }
+.ns-scene {
+  position: relative;
+  z-index: 2;
+  background: #fbf8f2;
+  color: #071530;
+}
+
 .ns-inner {
   position: relative;
   min-height: 80vh;
   display: grid;
   place-items: center;
-  padding: 20vh 1.4rem 10vh 1.4rem;
+  padding: 18vh 1.4rem 12vh 1.4rem;
   overflow: hidden;
   isolation: isolate;
-  background: radial-gradient(circle at 50% 50%, var(--color-stage-light) 0%, var(--color-bg) 70%);
+  background: radial-gradient(circle at 50% 45%, #ffffff 0%, #fbf8f2 70%);
 }
 
-.ns-copy { position: relative; z-index: 1; display: grid; justify-items: center; gap: 1rem; text-align: center; }
-.ns-overline { font-family: var(--font-sans); font-size: 0.61rem; font-weight: 600; letter-spacing: 0.39em; text-transform: uppercase; color: var(--color-text-light-muted); }
-.ns-names { display: grid; gap: 0.28rem; width: 100%; }
+.ns-inner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.3'/%3E%3C/svg%3E");
+  opacity: 0.18;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
+.ns-copy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 1.1rem;
+  text-align: center;
+}
+
+.ns-overline {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: #5a6b82;
+}
+
+.ns-names {
+  display: grid;
+  gap: 0.25rem;
+  width: 100%;
+}
+
 .ns-name-a, .ns-name-b {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(3.35rem, 15.8vw, 7.6rem);
-  line-height: 0.82;
-  letter-spacing: 0.075em;
+  font-size: clamp(3.2rem, 15vw, 6.8rem);
+  line-height: 0.86;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--color-text-light);
+  color: #071530;
 }
+
 .ns-amp-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.5rem;
-  margin: 0.5rem 0;
+  gap: 1.2rem;
+  margin: 0.4rem 0;
 }
+
 .ns-amp-line {
   flex: 1;
-  max-width: 60px;
+  max-width: 50px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(197, 159, 81, 0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgba(197, 159, 81, 0.6), transparent);
 }
-.ns-amp { font-family: var(--font-serif); font-style: italic; font-size: clamp(2rem, 8vw, 3.2rem); color: var(--color-champagne); font-weight: 300; }
-.ns-subline { width: min(72vw, 370px); font-family: var(--font-serif); font-style: italic; font-size: clamp(1.04rem, 4vw, 1.28rem); line-height: 1.42; color: var(--color-text-light-muted); }
+
+.ns-amp {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(2.2rem, 9vw, 3.4rem);
+  color: var(--color-champagne);
+  font-weight: 300;
+}
+
+.ns-subline {
+  width: min(78vw, 380px);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.02rem, 3.9vw, 1.22rem);
+  line-height: 1.48;
+  color: #435471;
+}
+
+/* ───────────────────────────────────────────────
+   Ceremony Scene: Warm Ivory Coptic Cathedral
+   ─────────────────────────────────────────────── */
 
 .cer-scene {
-  background: var(--color-bg);
-  color: var(--color-text-light);
-  padding: 10vh 1.5rem 5vh 1.5rem;
-  display: grid;
-  place-items: center;
-}
-
-.rec-scene {
-  background: var(--color-bg);
-  color: var(--color-text-light);
-  padding: 5vh 1.5rem 10vh 1.5rem;
-  display: grid;
-  place-items: center;
-}
-
-.cer-copy, .rec-copy {
   position: relative;
-  width: min(88vw, 520px);
-  z-index: 1;
+  background: #fbf8f2;
+  color: #071530;
+  padding: 12vh 1.5rem 8vh 1.5rem;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-top: 1px solid rgba(197, 159, 81, 0.25);
+}
+
+.cer-inner {
+  position: relative;
+  width: min(88vw, 480px);
+  display: grid;
+  justify-items: center;
+  gap: 1.2rem;
+  text-align: center;
+}
+
+.cer-illustration {
+  width: min(72vw, 260px);
+  margin-bottom: 0.5rem;
+}
+
+.cer-illustration img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  opacity: 0.75;
+}
+
+.cer-copy {
   display: grid;
   justify-items: center;
   gap: 0.85rem;
   text-align: center;
+  width: 100%;
 }
 
-.cer-copy p:first-child, .rec-label {
+.cer-label {
   font-family: var(--font-sans);
-  font-size: 0.64rem;
+  font-size: 0.65rem;
   font-weight: 600;
   letter-spacing: 0.42em;
   text-transform: uppercase;
-  color: var(--color-text-light-muted);
+  color: #5a6b82;
 }
 
-.cer-copy h2, .rec-venue-name {
+.cer-venue-name {
   font-family: var(--font-display);
-  font-weight: 500;
-  font-size: clamp(1.6rem, 6.5vw, 3rem);
-  line-height: 1.1;
-  letter-spacing: 0.03em;
-  color: var(--color-text-light);
+  font-weight: 600;
+  font-size: clamp(1.6rem, 6.2vw, 2.6rem);
+  line-height: 1.15;
+  letter-spacing: 0.04em;
+  color: #071530;
+  text-transform: uppercase;
 }
 
-.cer-copy h2[dir="rtl"] {
+.cer-arabic {
   font-family: var(--font-arabic);
-  font-size: clamp(1.4rem, 5.5vw, 2.2rem);
+  font-size: clamp(1.45rem, 5.8vw, 2.2rem);
   color: var(--color-champagne);
-  letter-spacing: 0;
+  line-height: 1.3;
+  margin-top: -0.2rem;
 }
 
-.venue-date, .venue-time { color: var(--color-text-light-muted); }
+.cer-date {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  color: #435471;
+  font-style: italic;
+}
+
+.cer-location {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #5a6b82;
+}
+
+.cer-map-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  padding: 0.6rem 1.4rem;
+  border: 1px solid rgba(197, 159, 81, 0.45);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #071530;
+  font-family: var(--font-sans);
+  font-size: 0.66rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+.cer-map-link:hover {
+  background: #ffffff;
+  border-color: var(--color-champagne);
+  box-shadow: 0 4px 16px rgba(197, 159, 81, 0.2);
+}
+
+.cer-map-icon {
+  font-size: 0.85rem;
+}
+
+/* ───────────────────────────────────────────────
+   Reception Scene: Soft Powder Blue & Gardenia
+   ─────────────────────────────────────────────── */
+
+.rec-scene {
+  position: relative;
+  background: linear-gradient(180deg, #c4d7e6 0%, #e9f0f5 40%, #fbf8f2 100%);
+  color: #071530;
+  padding: 12vh 1.5rem 12vh 1.5rem;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.rec-botanical {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  mix-blend-mode: multiply;
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.rec-inner {
+  position: relative;
+  z-index: 1;
+  width: min(88vw, 480px);
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.rec-copy {
+  display: grid;
+  justify-items: center;
+  gap: 0.9rem;
+  text-align: center;
+  width: 100%;
+}
+
+.rec-label {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: #435471;
+  letter-spacing: 0.15em;
+}
+
+.rec-venue-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.2rem, 9vw, 3.8rem);
+  line-height: 1.05;
+  letter-spacing: 0.06em;
+  color: #071530;
+  text-transform: uppercase;
+}
 
 .rec-venue-sub {
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: clamp(1.1rem, 4.5vw, 1.5rem);
+  font-size: clamp(1.35rem, 5.5vw, 2rem);
   color: var(--color-champagne);
-  margin-top: -0.25rem;
+  margin-top: -0.3rem;
 }
 
-.venue-destination--church, .venue-destination--reception {
-  border-color: rgba(197, 159, 81, 0.4);
-  background: transparent;
-  color: var(--color-text-light);
+.rec-note {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #5a6b82;
+  margin-top: 0.4rem;
 }
 
-.venue-map--church, .venue-map--reception {
-  border-color: rgba(197, 159, 81, 0.4);
-  color: var(--color-champagne);
-  background: transparent;
+.rec-map-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+  padding: 0.6rem 1.4rem;
+  border: 1px solid rgba(197, 159, 81, 0.45);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  color: #071530;
+  font-family: var(--font-sans);
+  font-size: 0.66rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
 }
-.venue-map--church:hover, .venue-map--reception:hover {
-  background: rgba(197, 159, 81, 0.1);
+
+.rec-map-link:hover {
+  background: #ffffff;
+  border-color: var(--color-champagne);
+  box-shadow: 0 4px 16px rgba(197, 159, 81, 0.2);
+}
+
+.rec-map-icon {
+  font-size: 0.85rem;
 }
 
 
@@ -852,90 +1049,113 @@ img {
    ─────────────────────────────────────────────── */
 
 .ff-scene {
-  background: var(--color-bg);
-  min-height: 90vh;
+  background: #020409;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12vh 1.5rem 8vh 1.5rem;
+  gap: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.ff-card {
+  position: relative;
+  width: min(88vw, 420px);
+  background: #fdfaf6;
+  border-radius: 4px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(197, 159, 81, 0.4);
+  padding: 3.2rem 1.8rem 2.8rem 1.8rem;
   display: grid;
   place-items: center;
-  padding: 10vh 1.5rem;
+  text-align: center;
+}
+
+.ff-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.25'/%3E%3C/svg%3E");
+  opacity: 0.15;
+  pointer-events: none;
+  mix-blend-mode: multiply;
 }
 
 .ff-inner {
+  position: relative;
+  z-index: 1;
   display: grid;
   justify-items: center;
-  gap: 1.5rem;
+  gap: 1.1rem;
   text-align: center;
-  max-width: 520px;
+  width: 100%;
 }
 
 .ff-names {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 7vw, 3.2rem);
-  color: var(--color-text-light);
+  font-size: clamp(2rem, 7.5vw, 3rem);
+  font-weight: 600;
+  color: #071530;
   letter-spacing: 0.05em;
   text-transform: uppercase;
+  line-height: 1.15;
 }
 
 .ff-message {
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: clamp(1.1rem, 4.5vw, 1.4rem);
-  color: var(--color-text-light-muted);
+  font-size: clamp(1.05rem, 4vw, 1.25rem);
+  color: #435471;
+  line-height: 1.45;
+  max-width: 320px;
 }
 
 .ff-rule {
-  margin: 1rem 0;
-  width: 60px;
+  margin: 0.4rem 0;
+  width: 50px;
 }
 
 .ff-date {
   font-family: var(--font-sans);
-  font-size: 0.75rem;
-  font-weight: 500;
+  font-size: 0.72rem;
+  font-weight: 600;
   letter-spacing: 0.4em;
   text-transform: uppercase;
-  color: var(--color-text-light-muted);
+  color: #071530;
 }
 
 .ff-recap {
   font-family: var(--font-sans);
   font-size: 0.65rem;
-  letter-spacing: 0.25em;
+  letter-spacing: 0.22em;
   line-height: 1.8;
   text-transform: uppercase;
-  color: var(--color-text-light-muted);
-  opacity: 0.7;
+  color: #5a6b82;
 }
 
-.ff-seal {
-  margin: 2rem 0;
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  border: 1px solid rgba(197, 159, 81, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-champagne);
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-}
-
-.ff-seal-amp {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 0.8em;
-  margin: 0 0.15rem;
+.ff-seal-img {
+  width: 76px;
+  height: 76px;
+  object-fit: contain;
+  margin: 0.8rem 0;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
 }
 
 .ff-signoff {
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: clamp(1.2rem, 5vw, 1.6rem);
+  font-size: clamp(1.25rem, 5vw, 1.6rem);
   color: var(--color-champagne);
-  margin-bottom: 2rem;
+  margin-top: 0.2rem;
 }
 
 .ff-ctas {
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -948,7 +1168,7 @@ img {
   text-transform: uppercase;
   color: var(--color-text-light);
   text-decoration: none;
-  border-bottom: 1px solid rgba(255,255,255,0.2);
+  border-bottom: 1px solid rgba(255,255,255,0.3);
   padding-bottom: 0.2rem;
   transition: all 0.3s ease;
 }
@@ -961,15 +1181,6 @@ img {
 .ff-dot {
   color: var(--color-champagne);
   opacity: 0.5;
-}
-
-.ff-paper-edge {
-  position: absolute;
-  left: 10%;
-  right: 10%;
-  top: 17%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(207, 173, 107, 0.4), transparent);
 }
 
 /* ───────────────────────────────────────────────
