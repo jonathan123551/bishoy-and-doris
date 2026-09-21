@@ -227,48 +227,46 @@ export default function CeremonyScene() {
 
       tl.fromTo(
         maps,
-        {
-          y: 24,
-          autoAlpha: 0,
-          scale: 0.94,
-          xPercent: -50,
-        },
+        { y: 24, autoAlpha: 0, scale: 0.94, xPercent: -50 },
         {
           y: 0,
           autoAlpha: 1,
           scale: 1,
           xPercent: -50,
           ease: 'back.out(1.4)',
-          duration: 0.2,
+          duration: 0.18,
         },
         0.76
       );
 
       tl.fromTo(
         bottomRule,
-        {
-          scaleX: 0,
-          autoAlpha: 0,
-        },
+        { scaleX: 0, autoAlpha: 0 },
         {
           scaleX: 1,
           autoAlpha: 1,
           transformOrigin: 'center',
           ease: 'none',
-          duration: 0.16,
+          duration: 0.12,
         },
-        0.82
+        0.84
       );
 
-      /*
-       * ======================================================
-       * CEREMONY → RECEPTION TRANSITION
-       *
-       * This is the important new part.
-       * The Ceremony starts leaving while the next scene
-       * is coming from underneath it.
-       * ======================================================
-       */
+      /* =========================
+         HOLD — everything stays visible
+         ========================= */
+
+      tl.to(
+        {},
+        {
+          duration: 0.22,
+        },
+        0.88
+      );
+
+      /* =========================
+         CEREMONY EXIT
+         ========================= */
 
       tl.to(
         content,
@@ -279,7 +277,7 @@ export default function CeremonyScene() {
           ease: 'power2.inOut',
           duration: 0.18,
         },
-        0.72
+        0.90
       );
 
       tl.to(
@@ -291,7 +289,7 @@ export default function CeremonyScene() {
           ease: 'power2.inOut',
           duration: 0.24,
         },
-        0.70
+        0.88
       );
 
       tl.to(
@@ -301,13 +299,9 @@ export default function CeremonyScene() {
           ease: 'power2.inOut',
           duration: 0.20,
         },
-        0.72
+        0.90
       );
 
-      /*
-       * A final slight lift makes the scene feel
-       * like one invitation page moving away.
-       */
       tl.to(
         section,
         {
@@ -315,7 +309,7 @@ export default function CeremonyScene() {
           ease: 'none',
           duration: 0.14,
         },
-        0.86
+        0.96
       );
     }, sectionRef);
 
