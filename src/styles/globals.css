@@ -3294,6 +3294,470 @@ img {
   }
 }
 
+/* =========================================================
+   RECEPTION — CINEMATIC IMAGE REVEAL
+   Image enters from RIGHT
+   Then typography reveals
+   ========================================================= */
+
+.rec-cinematic {
+  position: relative;
+
+  width: 100%;
+  height: 100svh;
+  min-height: 680px;
+
+  overflow: hidden;
+  isolation: isolate;
+
+  background: #061a33;
+
+  color: #f7f2e9;
+}
+
+
+/* =========================================================
+   FULL-SCREEN IMAGE
+   ========================================================= */
+
+.rec-cinematic-image {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center center;
+
+  display: block;
+
+  z-index: -5;
+
+  will-change: transform;
+
+  user-select: none;
+  pointer-events: none;
+  -webkit-user-drag: none;
+
+  /*
+   * Slight enhancement only.
+   * We don't want it to look like a card.
+   */
+  filter:
+    saturate(0.94)
+    contrast(1.02);
+}
+
+
+/* =========================================================
+   CINEMATIC SHADE
+   ========================================================= */
+
+.rec-image-shade {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: -3;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(3, 19, 39, 0.28) 0%,
+      rgba(3, 19, 39, 0.04) 35%,
+      rgba(3, 16, 34, 0.08) 60%,
+      rgba(2, 12, 27, 0.46) 100%
+    );
+
+  opacity: 0;
+}
+
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.rec-cinematic-copy {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  z-index: 10;
+
+  width: min(90vw, 700px);
+
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   RECEPTION LABEL
+   ========================================================= */
+
+.rec-cinematic .rec-label {
+  margin: 0 0 12px;
+
+  color: #d9b16b;
+
+  font-family:
+    "Cormorant Garamond",
+    Georgia,
+    serif;
+
+  font-size: clamp(20px, 3vw, 32px);
+
+  font-style: italic;
+
+  line-height: 1;
+
+  letter-spacing: 0.04em;
+
+  text-shadow:
+    0 2px 16px rgba(0, 0, 0, 0.45);
+}
+
+
+/* =========================================================
+   GOLD RULE
+   ========================================================= */
+
+.rec-cinematic .rec-rule {
+  position: relative;
+
+  width: min(170px, 42vw);
+
+  height: 1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(217, 177, 105, 0.95),
+      transparent
+    );
+}
+
+.rec-cinematic .rec-rule span {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  width: 7px;
+  height: 7px;
+
+  transform:
+    translate(-50%, -50%)
+    rotate(45deg);
+
+  background: #0a294c;
+
+  border: 1px solid #d9b16b;
+
+  box-shadow:
+    0 0 14px rgba(217, 177, 105, 0.28);
+}
+
+
+/* =========================================================
+   LA PENSÉE
+   ========================================================= */
+
+.rec-cinematic .rec-venue-name {
+  margin: 24px 0 0;
+
+  color: #f8f3ea;
+
+  font-family:
+    "Cormorant Garamond",
+    "Bodoni 72",
+    "Didot",
+    "Times New Roman",
+    serif;
+
+  font-size: clamp(48px, 7vw, 82px);
+
+  font-weight: 500;
+
+  line-height: 0.9;
+
+  letter-spacing: 0.055em;
+
+  text-transform: uppercase;
+
+  text-shadow:
+    0 3px 25px rgba(0, 0, 0, 0.58);
+}
+
+
+/* =========================================================
+   GARDENIA
+   ========================================================= */
+
+.rec-cinematic .rec-venue-sub {
+  margin: 17px 0 0;
+
+  color: #d9b16b;
+
+  font-family:
+    "Cormorant Garamond",
+    Georgia,
+    serif;
+
+  font-size: clamp(21px, 3vw, 31px);
+
+  font-style: italic;
+
+  line-height: 1;
+
+  text-shadow:
+    0 2px 16px rgba(0, 0, 0, 0.48);
+}
+
+
+/* =========================================================
+   AFTER THE CEREMONY
+   ========================================================= */
+
+.rec-cinematic .rec-note {
+  margin: 22px 0 0;
+
+  color: rgba(249, 245, 237, 0.86);
+
+  font-family:
+    "Inter",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+
+  font-size: clamp(8px, 1.1vw, 12px);
+
+  font-weight: 500;
+
+  letter-spacing: 0.38em;
+
+  text-transform: uppercase;
+
+  text-shadow:
+    0 2px 14px rgba(0, 0, 0, 0.65);
+}
+
+
+/* =========================================================
+   MAPS BUTTON
+   ========================================================= */
+
+.rec-cinematic .rec-map-link {
+  pointer-events: auto;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  margin-top: 27px;
+
+  min-width: 180px;
+
+  padding: 11px 23px;
+
+  border: 1px solid rgba(217, 177, 105, 0.95);
+
+  border-radius: 999px;
+
+  background:
+    rgba(3, 18, 37, 0.35);
+
+  color: #f8f3ea;
+
+  text-decoration: none;
+
+  font-family:
+    "Inter",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+
+  font-size: 8px;
+
+  font-weight: 500;
+
+  letter-spacing: 0.24em;
+
+  text-transform: uppercase;
+
+  backdrop-filter: blur(4px);
+
+  -webkit-backdrop-filter: blur(4px);
+
+  box-shadow:
+    0 8px 28px rgba(0, 0, 0, 0.25);
+
+  transition:
+    transform 220ms ease,
+    background 220ms ease,
+    border-color 220ms ease;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+.rec-cinematic .rec-map-link:hover {
+  transform: translateY(-2px);
+
+  background:
+    rgba(217, 177, 105, 0.13);
+
+  border-color: #efd08d;
+}
+
+
+/* =========================================================
+   REAL LOCATION PIN
+   ========================================================= */
+
+.rec-cinematic .rec-map-icon {
+  width: 15px;
+  height: 15px;
+
+  flex: 0 0 15px;
+
+  display: block;
+
+  color: #d9b16b;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .rec-cinematic {
+    height: 100svh;
+    min-height: 680px;
+  }
+
+  /*
+   * On mobile we want the artwork to feel like
+   * a real full-screen page.
+   */
+  .rec-cinematic-image {
+    object-position: center center;
+
+    transform-origin: center center;
+  }
+
+  .rec-image-shade {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(3, 19, 39, 0.30) 0%,
+        rgba(3, 19, 39, 0.05) 36%,
+        rgba(2, 12, 27, 0.52) 100%
+      );
+  }
+
+  .rec-cinematic-copy {
+    width: 88vw;
+
+    top: 48%;
+  }
+
+  .rec-cinematic .rec-label {
+    margin-bottom: 10px;
+
+    font-size: 22px;
+  }
+
+  .rec-cinematic .rec-rule {
+    width: 135px;
+  }
+
+  .rec-cinematic .rec-venue-name {
+    margin-top: 20px;
+
+    font-size: 43px;
+
+    letter-spacing: 0.045em;
+  }
+
+  .rec-cinematic .rec-venue-sub {
+    margin-top: 14px;
+
+    font-size: 20px;
+  }
+
+  .rec-cinematic .rec-note {
+    margin-top: 18px;
+
+    font-size: 7px;
+
+    letter-spacing: 0.28em;
+  }
+
+  .rec-cinematic .rec-map-link {
+    margin-top: 21px;
+
+    min-width: 165px;
+
+    padding: 10px 20px;
+
+    font-size: 7px;
+
+    letter-spacing: 0.20em;
+  }
+
+  .rec-cinematic .rec-map-icon {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+
+/* =========================================================
+   SHORT PHONE
+   ========================================================= */
+
+@media (max-width: 600px) and (max-height: 720px) {
+
+  .rec-cinematic .rec-cinematic-copy {
+    top: 47%;
+  }
+
+  .rec-cinematic .rec-venue-name {
+    font-size: 38px;
+  }
+
+  .rec-cinematic .rec-venue-sub {
+    font-size: 18px;
+  }
+
+  .rec-cinematic .rec-note {
+    margin-top: 15px;
+  }
+
+  .rec-cinematic .rec-map-link {
+    margin-top: 17px;
+  }
+}
+
+
 
 
 
