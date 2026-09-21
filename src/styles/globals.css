@@ -282,16 +282,6 @@ img {
   background: radial-gradient(ellipse at 50% 10%, rgba(100, 130, 190, 0.15) 0%, transparent 40%);
 }
 
-/* Reception scene: warm glow from bottom */
-.scene-stage--reception {
-  background: linear-gradient(180deg, var(--color-stage-deep) 0%, var(--color-bg) 50%, var(--color-stage-light) 100%);
-}
-
-.scene-stage--reception::before {
-  inset: 0;
-  background: radial-gradient(ellipse at 50% 90%, rgba(207, 173, 107, 0.1) 0%, transparent 40%);
-}
-
 /* Photo scene: dark backdrop */
 .scene-stage--photo {
   background: #020409;
@@ -506,111 +496,12 @@ img {
   font-size: 0.85rem;
 }
 
-/* ───────────────────────────────────────────────
-   Reception Scene: Soft Powder Blue & Gardenia
-   ─────────────────────────────────────────────── */
-
-.rec-scene {
-  position: relative;
-  background: linear-gradient(180deg, #c4d7e6 0%, #e9f0f5 40%, #fbf8f2 100%);
-  color: #071530;
-  padding: 12vh 1.5rem 12vh 1.5rem;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-}
-
-.rec-botanical {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  mix-blend-mode: multiply;
-  opacity: 0.35;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.rec-inner {
-  position: relative;
-  z-index: 1;
-  width: min(88vw, 480px);
-  display: grid;
-  justify-items: center;
-  text-align: center;
-}
-
-.rec-copy {
-  display: grid;
-  justify-items: center;
-  gap: 0.9rem;
-  text-align: center;
-  width: 100%;
-}
-
-.rec-label {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 1.05rem;
-  color: #435471;
-  letter-spacing: 0.15em;
-}
-
-.rec-venue-name {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(2.2rem, 9vw, 3.8rem);
-  line-height: 1.05;
-  letter-spacing: 0.06em;
-  color: #071530;
-  text-transform: uppercase;
-}
-
-.rec-venue-sub {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: clamp(1.35rem, 5.5vw, 2rem);
-  color: var(--color-champagne);
-  margin-top: -0.3rem;
-}
-
-.rec-note {
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: #5a6b82;
-  margin-top: 0.4rem;
-}
-
-.rec-map-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.8rem;
-  padding: 0.6rem 1.4rem;
-  border: 1px solid rgba(197, 159, 81, 0.45);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.85);
-  color: #071530;
-  font-family: var(--font-sans);
-  font-size: 0.66rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  transition: all 0.3s ease;
-}
-
-.rec-map-link:hover {
-  background: #ffffff;
-  border-color: var(--color-champagne);
-  box-shadow: 0 4px 16px rgba(197, 159, 81, 0.2);
-}
-
-.rec-map-icon {
-  font-size: 0.85rem;
-}
-
+/* Reception Scene styling lives in the "FINAL CEREMONY → RECEPTION
+   ARCHITECTURE" block near the end of this file (.rec-scroll /
+   .rec-cinematic and children) -- this is the single source of truth for
+   Reception layout and typography. An earlier, unpinned .rec-scene/.rec-inner
+   layout used to live here; it's gone because nothing in the current markup
+   renders those classes. */
 
 /* ───────────────────────────────────────────────
    Date Sequence: Classical Clock Timepiece
@@ -2184,6 +2075,10 @@ img {
 
   background: #03152c;
   color: #f7f1e7;
+
+  /* Must stack above Reception's sticky viewport (z-index: 10, below) while
+     Ceremony is pinned on top of it during the hand-off. */
+  z-index: 20;
 }
 
 /* ---------------------------------------------------------
@@ -3297,12 +3192,9 @@ img {
 /* =========================================================
    FINAL CEREMONY → RECEPTION ARCHITECTURE
    NO NESTED SCROLLTRIGGER PINS
+   (.ceremony-cinematic's rules, incl. z-index, live with its other base
+   styles above -- see the "BACKGROUND ART" section)
    ========================================================= */
-
-.ceremony-cinematic {
-  position: relative;
-  z-index: 20;
-}
 
 /*
  * Reception owns 1100px of scroll progress AFTER

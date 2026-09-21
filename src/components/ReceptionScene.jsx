@@ -50,12 +50,23 @@ export default function ReceptionScene() {
         }
       );
 
-      const ceremonyDuration = 1400;
-      const viewport = window.innerHeight;
+      // Reception's natural (un-pinned) top sits right after Ceremony's own
+      // rendered height, since Ceremony pins with pinSpacing:false (no
+      // spacer inserted). That gap must be measured from the actual DOM,
+      // not assumed to equal window.innerHeight -- on mobile Safari the
+      // Ceremony section is sized with 100svh (small viewport height,
+      // shrinks when the address bar is showing), which is frequently a
+      // different pixel value than window.innerHeight (which mobile Safari
+      // usually reports at the large/chrome-hidden size). Using the wrong
+      // number here made Reception's text timeline start out of sync with
+      // when Ceremony's pin actually releases.
+      const ceremonySection = document.querySelector('.ceremony-cinematic');
+      const ceremonyDuration = 1400; // must match CeremonyScene's ScrollTrigger end: '+=1400'
+      const ceremonyNaturalHeight = ceremonySection?.offsetHeight || window.innerHeight;
 
       const overlapPixels = Math.max(
         0,
-        ceremonyDuration - viewport
+        ceremonyDuration - ceremonyNaturalHeight
       );
 
       const START_DELAY = overlapPixels / 1100;
