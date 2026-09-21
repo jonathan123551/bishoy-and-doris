@@ -3233,22 +3233,19 @@ img {
 .rec-scroll .rec-cinematic-image {
   position: absolute;
   inset: 0;
-
   width: 100%;
   height: 100%;
-
   object-fit: cover;
   object-position: center center;
 
-  transform: none !important;
-  opacity: 1 !important;
+  transform: none;
+  opacity: 0;
 
   display: block;
-
   pointer-events: none;
   user-select: none;
 
-  will-change: auto;
+  will-change: opacity;
 }
 
 /*

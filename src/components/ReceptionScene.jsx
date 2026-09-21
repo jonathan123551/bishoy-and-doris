@@ -11,286 +11,366 @@ export default function ReceptionScene() {
   const { reception } = eventConfig;
 
   useLayoutEffect(() => {
-  if (
-    window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches
-  ) {
-    return undefined;
-  }
+    if (
+      window.matchMedia(
+        '(prefers-reduced-motion: reduce)'
+      ).matches
+    ) {
+      return undefined;
+    }
 
-  const ctx = gsap.context(() => {
-    const section = sectionRef.current;
+    const ctx = gsap.context(() => {
+      const section = sectionRef.current;
 
-    const image = section.querySelector('.rec-cinematic-image');
-    const shade = section.querySelector('.rec-image-shade');
-    const copy = section.querySelector('.rec-cinematic-copy');
+      const image = section.querySelector(
+        '.rec-cinematic-image'
+      );
 
-    const label = section.querySelector('.rec-label');
-    const rule = section.querySelector('.rec-rule-top');
-    const venue = section.querySelector('.rec-venue-name');
-    const area = section.querySelector('.rec-venue-sub');
-    const note = section.querySelector('.rec-note');
-    const maps = section.querySelector('.rec-map-link');
+      const shade = section.querySelector(
+        '.rec-image-shade'
+      );
 
-    const isMobile = window.matchMedia(
-      '(max-width: 600px)'
-    ).matches;
+      const copy = section.querySelector(
+        '.rec-cinematic-copy'
+      );
 
-    /*
-     * Ceremony:
-     * pinned for 1400px.
-     *
-     * Reception wrapper is intentionally 2500px:
-     *
-     * 1400px = Ceremony cinematic phase
-     * 1100px = Reception cinematic phase
-     *
-     * Reception itself starts underneath Ceremony because
-     * Ceremony uses pinSpacing:false.
-     */
-    const CEREMONY_PIN = 1400;
-    const RECEPTION_PHASE = isMobile ? 1000 : 1100;
-    const TOTAL_RECEPTION_WRAPPER =
-      CEREMONY_PIN + RECEPTION_PHASE;
+      const label = section.querySelector(
+        '.rec-label'
+      );
 
-    /*
-     * The actual Reception trigger starts after the normal
-     * viewport-height portion of Ceremony.
-     *
-     * Therefore we calculate how much of the Reception phase
-     * is still hidden underneath the pinned Ceremony.
-     */
-    const viewportHeight =
-      window.visualViewport?.height ||
-      window.innerHeight;
+      const rule = section.querySelector(
+        '.rec-rule-top'
+      );
 
-    const overlap =
-      Math.max(0, CEREMONY_PIN - viewportHeight);
+      const venue = section.querySelector(
+        '.rec-venue-name'
+      );
 
-    const activeReceptionScroll =
-      TOTAL_RECEPTION_WRAPPER - viewportHeight;
+      const area = section.querySelector(
+        '.rec-venue-sub'
+      );
 
-    const startProgress =
-      activeReceptionScroll > 0
-        ? overlap / activeReceptionScroll
-        : 0;
+      const note = section.querySelector(
+        '.rec-note'
+      );
 
-    /*
-     * Reception image is present immediately.
-     * No image fade-in and no image fade-out.
-     *
-     * This is important for the cinematic handoff:
-     *
-     * Ceremony
-     *    ↓
-     * Reception image underneath
-     *    ↓
-     * Ceremony disappears
-     *    ↓
-     * Reception text begins
-     */
-    gsap.set(image, {
-      opacity: 1,
-      scale: 1,
-      xPercent: 0,
-    });
+      const maps = section.querySelector(
+        '.rec-map-link'
+      );
 
-    gsap.set(shade, {
-      opacity: 0,
-    });
+      const isMobile = window.matchMedia(
+        '(max-width: 600px)'
+      ).matches;
 
-    gsap.set(
-      [label, rule, venue, area, note, maps],
-      {
-        autoAlpha: 0,
-      }
-    );
+      /*
+       * Ceremony has:
+       *
+       * start: top top
+       * end: +=1400
+       * pin: true
+       * pinSpacing: false
+       *
+       * Reception naturally starts after the rendered
+       * Ceremony section height.
+       *
+       * Therefore this is the exact amount of scroll
+       * during which Reception is underneath the pinned
+       * Ceremony.
+       */
+      const CEREMONY_PIN = 1400;
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: 'top top',
+      const RECEPTION_DURATION = isMobile
+        ? 1000
+        : 1100;
 
-        /*
-         * IMPORTANT:
-         * Do NOT use +=2500 here.
-         *
-         * Reception trigger starts at the Reception wrapper's
-         * top, so +=2500 would overshoot the wrapper.
-         *
-         * bottom top means:
-         * "finish when the bottom of the wrapper reaches
-         * the top of the viewport."
-         */
-        end: 'bottom top',
+      const ceremonySection = document.querySelector(
+        '.ceremony-cinematic'
+      );
 
-        scrub: 1,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-        refreshPriority: 0,
-      },
-    });
+      /*
+       * Use the actual rendered Ceremony height.
+       * This is much more reliable than visualViewport /
+       * innerHeight for this handoff.
+       */
+      const ceremonyHeight =
+        ceremonySection?.offsetHeight ||
+        window.innerHeight;
 
-    /*
-     * Dark cinematic shade.
-     *
-     * It begins immediately but remains subtle while the
-     * Ceremony is still covering the Reception.
-     */
-    tl.fromTo(
-      shade,
-      { opacity: 0 },
-      {
-        opacity: 0.50,
-        ease: 'none',
-        duration: 0.20,
-      },
-      0
-    );
+      /*
+       * Example on mobile:
+       *
+       * Ceremony height = 844
+       * Ceremony pin = 1400
+       *
+       * Reception is underneath for:
+       *
+       * 1400 - 844 = 556px
+       *
+       * So Reception must NOT visually reveal itself
+       * during those 556px.
+       */
+      const handoffOffset = Math.max(
+        0,
+        CEREMONY_PIN - ceremonyHeight
+      );
 
-    /*
-     * Reception
-     */
-    tl.fromTo(
-      label,
-      {
-        y: 28,
-        autoAlpha: 0,
-      },
-      {
-        y: 0,
-        autoAlpha: 1,
-        ease: 'power3.out',
-        duration: 0.14,
-      },
-      startProgress + 0.06
-    );
-
-    /*
-     * Gold rule
-     */
-    tl.fromTo(
-      rule,
-      {
-        scaleX: 0,
-        autoAlpha: 0,
-      },
-      {
-        scaleX: 1,
-        autoAlpha: 1,
-        transformOrigin: 'center',
-        ease: 'none',
-        duration: 0.10,
-      },
-      startProgress + 0.14
-    );
-
-    /*
-     * LA PENSÉE
-     */
-    tl.fromTo(
-      venue,
-      {
-        y: 38,
-        autoAlpha: 0,
-      },
-      {
-        y: 0,
-        autoAlpha: 1,
-        ease: 'power3.out',
-        duration: 0.16,
-      },
-      startProgress + 0.22
-    );
-
-    /*
-     * Gardenia
-     */
-    tl.fromTo(
-      area,
-      {
-        y: 20,
-        autoAlpha: 0,
-      },
-      {
-        y: 0,
-        autoAlpha: 1,
-        ease: 'power2.out',
-        duration: 0.12,
-      },
-      startProgress + 0.31
-    );
-
-    /*
-     * AFTER THE CEREMONY
-     */
-    tl.fromTo(
-      note,
-      {
-        y: 18,
-        autoAlpha: 0,
-        filter: 'blur(4px)',
-      },
-      {
-        y: 0,
-        autoAlpha: 1,
-        filter: 'blur(0px)',
-        ease: 'power2.out',
-        duration: 0.12,
-      },
-      startProgress + 0.40
-    );
-
-    /*
-     * Maps — last
-     */
-    tl.fromTo(
-      maps,
-      {
-        y: 24,
-        autoAlpha: 0,
-        scale: 0.92,
-      },
-      {
-        y: 0,
-        autoAlpha: 1,
+      /*
+       * Initial state.
+       *
+       * Reception exists in the DOM, but its visual image
+       * stays hidden until the exact Ceremony handoff.
+       *
+       * This removes the ugly mobile "bottom quarter"
+       * reveal.
+       */
+      gsap.set(image, {
+        opacity: 0,
         scale: 1,
-        ease: 'back.out(1.4)',
-        duration: 0.14,
-      },
-      startProgress + 0.50
-    );
+        xPercent: 0,
+      });
 
-    /*
-     * Small cinematic movement after the content is complete.
-     */
-    tl.to(
-      copy,
-      {
-        yPercent: -2,
-        ease: 'none',
-        duration: 0.12,
-      },
-      startProgress + 0.68
-    );
+      gsap.set(shade, {
+        opacity: 0,
+      });
 
-    /*
-     * Hold.
-     *
-     * No fade-out.
-     */
-    tl.to(
-      {},
-      {
-        duration: 0.20,
-      },
-      startProgress + 0.80
-    );
-  }, sectionRef);
+      gsap.set(
+        [
+          label,
+          rule,
+          venue,
+          area,
+          note,
+          maps,
+        ],
+        {
+          autoAlpha: 0,
+        }
+      );
 
-  return () => ctx.revert();
-}, []);
+      /*
+       * IMPORTANT:
+       *
+       * The ScrollTrigger does NOT start when Reception
+       * first reaches the top of the viewport.
+       *
+       * It starts exactly when Ceremony's 1400px pin
+       * has finished.
+       *
+       * This is the key fix.
+       */
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+
+          start: () =>
+            `top+=${handoffOffset}px top`,
+
+          end: () =>
+            `top+=${handoffOffset + RECEPTION_DURATION}px top`,
+
+          scrub: 1,
+
+          anticipatePin: 1,
+
+          invalidateOnRefresh: true,
+
+          refreshPriority: 0,
+        },
+      });
+
+      /*
+       * =====================================================
+       * 1. IMAGE
+       * =====================================================
+       *
+       * Image becomes visible immediately at handoff.
+       */
+      tl.to(
+        image,
+        {
+          opacity: 1,
+          scale: 1,
+          xPercent: 0,
+          ease: 'none',
+          duration: 0.06,
+        },
+        0
+      );
+
+      /*
+       * =====================================================
+       * 2. CINEMATIC SHADE
+       * =====================================================
+       */
+      tl.to(
+        shade,
+        {
+          opacity: 0.50,
+          ease: 'none',
+          duration: 0.14,
+        },
+        0.02
+      );
+
+      /*
+       * =====================================================
+       * 3. RECEPTION
+       * =====================================================
+       */
+      tl.fromTo(
+        label,
+        {
+          y: 28,
+          autoAlpha: 0,
+        },
+        {
+          y: 0,
+          autoAlpha: 1,
+          ease: 'power3.out',
+          duration: 0.12,
+        },
+        0.12
+      );
+
+      /*
+       * =====================================================
+       * 4. GOLD RULE
+       * =====================================================
+       */
+      tl.fromTo(
+        rule,
+        {
+          scaleX: 0,
+          autoAlpha: 0,
+        },
+        {
+          scaleX: 1,
+          autoAlpha: 1,
+          transformOrigin: 'center',
+          ease: 'none',
+          duration: 0.10,
+        },
+        0.20
+      );
+
+      /*
+       * =====================================================
+       * 5. LA PENSÉE
+       * =====================================================
+       */
+      tl.fromTo(
+        venue,
+        {
+          y: 38,
+          autoAlpha: 0,
+        },
+        {
+          y: 0,
+          autoAlpha: 1,
+          ease: 'power3.out',
+          duration: 0.16,
+        },
+        0.28
+      );
+
+      /*
+       * =====================================================
+       * 6. GARDENIA
+       * =====================================================
+       */
+      tl.fromTo(
+        area,
+        {
+          y: 20,
+          autoAlpha: 0,
+        },
+        {
+          y: 0,
+          autoAlpha: 1,
+          ease: 'power2.out',
+          duration: 0.12,
+        },
+        0.38
+      );
+
+      /*
+       * =====================================================
+       * 7. AFTER THE CEREMONY
+       * =====================================================
+       */
+      tl.fromTo(
+        note,
+        {
+          y: 18,
+          autoAlpha: 0,
+          filter: 'blur(4px)',
+        },
+        {
+          y: 0,
+          autoAlpha: 1,
+          filter: 'blur(0px)',
+          ease: 'power2.out',
+          duration: 0.12,
+        },
+        0.48
+      );
+
+      /*
+       * =====================================================
+       * 8. MAPS — LAST
+       * =====================================================
+       */
+      tl.fromTo(
+        maps,
+        {
+          y: 24,
+          autoAlpha: 0,
+          scale: 0.92,
+        },
+        {
+          y: 0,
+          autoAlpha: 1,
+          scale: 1,
+          ease: 'back.out(1.4)',
+          duration: 0.14,
+        },
+        0.58
+      );
+
+      /*
+       * =====================================================
+       * 9. SMALL CINEMATIC MOVEMENT
+       * =====================================================
+       */
+      tl.to(
+        copy,
+        {
+          yPercent: -2,
+          ease: 'none',
+          duration: 0.12,
+        },
+        0.70
+      );
+
+      /*
+       * =====================================================
+       * 10. HOLD
+       * =====================================================
+       *
+       * Reception stays fully visible.
+       * No fade-out.
+       */
+      tl.to(
+        {},
+        {
+          duration: 0.22,
+        },
+        0.78
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section
