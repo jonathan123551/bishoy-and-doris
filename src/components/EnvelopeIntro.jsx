@@ -20,23 +20,30 @@ import f14 from '../assets/envelope/frames/frame_14.jpg';
 
 const frames = [f00, f01, f02, f03, f04, f05, f06, f07, f08, f09, f10, f11, f12, f13, f14];
 
-// The envelope artwork is a square (1024x1024) photo. Verified by sampling
-// every one of frame_05..frame_14 (the envelope BODY's own left/right pixel
-// bounds, independent of the flap): the body is pixel-identical in position
-// and size across all ten of those frames -- only the flap itself moves.
-// The front pocket's top edge sits at a flat 38.5% of the image height.
+// The envelope artwork is a square (1024x1024) photo. The front pocket's top
+// edge sits at a flat 38.5% of the image height (verified pixel-by-pixel
+// across every one of frame_05..frame_14). Above that line is open air;
+// below it the paper is physically behind the front panel.
 const POCKET_LINE_FRACTION = 0.385;
 const HERO_SCALE = 1.15;
 
-// Exactly two visual layers exist in this component: the envelope <img>
-// (the single physical envelope surface) and the letter <div>. The letter
-// is clipped by ONE invisible overflow:hidden window sized to the pocket
-// line measured off that one image -- the window itself paints nothing
-// (no background, no border), so there is no second "pocket" or "envelope"
-// shape anywhere in the DOM. Structure:
-//   envelope <img>              (the physical envelope, z-index 1)
-//   letter-window (invisible)   (z-index 2, overflow:hidden, height = pocket line)
-//     letter <div>               (the paper, clipped by its parent as it rises)
+// IMPORTANT, read before touching this file:
+// All 15 source JPEGs are byte-identical to each other in a horizontal band
+// around y=0.80 of the image (verified: identical pixel means across every
+// frame). That band contains a second, separate envelope/pocket-bottom
+// shape baked into the photography itself -- it is not something this
+// component renders or layers; it is present in the source asset in every
+// single frame. Since we can't regenerate the art, .env-bottom-patch papers
+// over exactly that band with a colour-matched gradient (sampled from the
+// image's own surrounding tones) so only one envelope silhouette reads.
+// It is intentionally NOT tied to currentFrame/opacity logic -- the thing
+// it's covering never changes, so neither does it.
+//
+// Visual layers, back to front, and nothing else:
+//   1. envelope <img>            the one physical envelope surface
+//   2. .env-bottom-patch          static colour-matched cover, see above
+//   3. .env-letter-window         invisible overflow:hidden clip aperture
+//        .env-asset-letter          the paper, clipped by its parent (2)
 
 const EnvDivider = () => (
   <div className="env-divider">
@@ -55,17 +62,18 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
   const openTimelineRef = useRef(null);
   const geometryRef = useRef({ pocketLineY: 0, hiddenY: 0, revealedY: 0, emergeScale: 0.35, wrapperHeight: 0, naturalHeight: 0 });
   const hasStartedRef = useRef(false);
+  // Current frame index lives here, NOT in React state -- the GSAP onUpdate
+  // below writes straight to the <img> element's .src every tick. Nothing
+  // about the 15-frame flap sequence triggers a React re-render.
+  const frameIndexRef = useRef(0);
 
   const [hasStarted, setHasStarted] = useState(false);
   const [framesDecoded, setFramesDecoded] = useState(false);
   const [introDone, setIntroDone] = useState(false);
-  const [currentFrame, setCurrentFrame] = useState(0);
   const isReady = framesDecoded && introDone;
 
-  // Preload AND fully decode every frame up front, so the very last src swap
-  // (frame_13 -> frame_14, right before the paper appears) never has to
-  // decode on the fly -- avoids any chance of a stale/incoming frame both
-  // being paintable at once during that swap.
+  // Preload AND fully decode every frame up front, so no src swap during
+  // the animation ever has to decode on the fly on the main thread.
   useEffect(() => {
     let cancelled = false;
     Promise.all(frames.map((src) => {
@@ -78,11 +86,9 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
     return () => { cancelled = true; };
   }, []);
 
-  // Measure the (single) envelope image and derive the pocket line, plus the
-  // letter's "hidden inside the envelope" / "just cleared the pocket" resting
-  // spots. Runs before paint (useLayoutEffect) so the letter is positioned
-  // correctly on the very first frame -- never relying on a GSAP tween's
-  // fromTo() to establish the rest state.
+  // Measure the envelope image and derive the pocket line, plus the letter's
+  // "hidden inside the envelope" / "just cleared the pocket" resting spots.
+  // Called once up front (and on resize) -- NEVER inside the animation loop.
   const measureGeometry = useCallback(() => {
     const wrapper = wrapperRef.current;
     const envImg = envImgRef.current;
@@ -94,11 +100,6 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
     const envRect = envImg.getBoundingClientRect();
     const pocketLineY = (envRect.top - wrapperRect.top) + envRect.height * POCKET_LINE_FRACTION;
 
-    // The window's own box IS the visible aperture: 0 -> pocketLineY, and
-    // overflow:hidden clips the letter on both edges as it moves through
-    // it, natively, every frame -- no per-frame JS math needed for the
-    // clip itself, which is cheap for the browser to composite (it's a
-    // plain transform animation underneath).
     win.style.height = `${pocketLineY}px`;
 
     const naturalHeight = letter.offsetHeight; // layout size, unaffected by transform
@@ -158,8 +159,8 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
     setHasStarted(true);
     hasStartedRef.current = true;
 
-    // Re-measure right before we animate, in case of a resize/orientation
-    // change while the envelope was sitting idle.
+    // Re-measure right before we animate (cheap, one-off), in case of a
+    // resize/orientation change while the envelope was sitting idle.
     measureGeometry();
     const geo = geometryRef.current;
 
@@ -178,23 +179,31 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
 
       // 2. PHASE 2 -- the flap physically lifts open on the ONE envelope
       // image (a real stepped frame sequence, never a two-image crossfade).
-      // The wax seal releases as part of this sequence. The letter stays
-      // fully hidden behind the (zero-height) window for the whole phase.
+      // frameObj is a plain proxy object, not React state: onUpdate writes
+      // directly to the <img>'s .src via envImgRef, so the 15-step sequence
+      // never touches React's render cycle.
       const frameObj = { frame: 0 };
       tl.to(frameObj, {
         frame: frames.length - 1,
         snap: 'frame',
         duration: 0.85,
         ease: 'power1.inOut',
-        onUpdate: () => setCurrentFrame(frameObj.frame),
+        onUpdate: () => {
+          const next = frameObj.frame;
+          if (next !== frameIndexRef.current) {
+            frameIndexRef.current = next;
+            envImgRef.current.src = frames[next];
+          }
+        },
       }, 0.15);
 
       tl.call(() => playMusic(true), null, 0.4);
 
-      // 3. PHASE 3 -- only once the flap sequence has FULLY finished (no
-      // overlap with phase 2 -- this starts a beat after the frame tween's
-      // own end at 1.0) does the paper rise out of the pocket, through the
-      // fixed window.
+      // 3. PHASE 3 -- only once the flap sequence has fully finished (no
+      // overlap with phase 2) does the paper rise out of the pocket,
+      // through the fixed window. Pure transform (y + scale, set once at
+      // rest and tweened here) -- cheap to composite, nothing recalculated
+      // per frame.
       tl.to(letterRef.current, {
         y: () => geometryRef.current.revealedY,
         duration: 1.0,
@@ -202,12 +211,12 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
       }, 1.05);
 
       // 4. PHASE 4 -- the paper has fully cleared the pocket. Release the
-      // window (nothing left to occlude), let the hero shadow settle in,
-      // and only now does the envelope fall away while the letter scales
-      // and recenters into its final resting position.
+      // window, let the hero shadow settle in, and only now does the
+      // envelope fall away while the letter scales/recenters into its
+      // final resting position.
       tl.set(windowRef.current, { overflow: 'visible' }, 2.05)
         .call(() => letterRef.current.classList.add('is-hero'), null, 2.05)
-        .to('.env-envelope-seq', { y: 150, autoAlpha: 0, duration: 1.0, ease: 'power2.in' }, 2.05)
+        .to('.env-envelope-seq, .env-bottom-patch', { y: 150, autoAlpha: 0, duration: 1.0, ease: 'power2.in' }, 2.05)
         .to(letterRef.current, {
           y: () => (geo.wrapperHeight - geo.naturalHeight * HERO_SCALE) / 2,
           scale: HERO_SCALE,
@@ -237,13 +246,16 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
 
         <div className="env-asset-wrapper" ref={wrapperRef} onClick={handleOpen}>
 
-          {/* Layer 1 of 2, and the ONLY envelope surface: */}
-          <img ref={envImgRef} src={frames[currentFrame]} className="env-envelope-seq" alt="Envelope Animation" />
+          {/* The ONE envelope surface. src is set once (frame 0) and from
+              then on mutated directly via ref inside GSAP's onUpdate --
+              never re-rendered by React. */}
+          <img ref={envImgRef} src={frames[0]} className="env-envelope-seq" alt="Envelope Animation" />
 
-          {/* An invisible clipping window (no fill, no border, no image) --
-              purely an overflow:hidden aperture sized to the pocket line
-              measured off the image above. Layer 2 of 2 is its child, the
-              letter; nothing else renders here. */}
+          {/* Static colour-matched cover for the duplicate-looking band
+              baked into the source photography -- see the note above the
+              component for why this exists. Always on; not frame-dependent. */}
+          <div className="env-bottom-patch" aria-hidden="true" />
+
           <div className="env-letter-window" ref={windowRef}>
             <div className="env-asset-letter" ref={letterRef}>
               <div className="env-letter-copy">
@@ -252,8 +264,6 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
                 <div className="lux-rule" style={{ margin: '1.2rem auto' }} />
                 <p className="env-letter-text">Two stories, one vow, and a day we would be honored to share with you.</p>
               </div>
-              {/* Static soft shadow at the card's own bottom edge -- reads as
-                  the paper receding under the pocket fold, not pasted on top. */}
               <div className="env-letter-tuck-shadow" aria-hidden="true" />
             </div>
           </div>

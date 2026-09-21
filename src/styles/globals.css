@@ -748,6 +748,37 @@ img {
   object-fit: contain;
   pointer-events: none;
   z-index: 1; /* Envelope sequence is the base */
+  will-change: transform, opacity; /* only animated in phase 4 (fall-away); cheap compositor hint */
+  backface-visibility: hidden; /* avoids a repaint flash on some mobile Safari versions during src swaps */
+}
+
+/*
+  Every one of the 15 source frames is pixel-identical in a band around
+  y=0.68-0.89 of the image -- a second envelope/pocket-bottom shape baked
+  into the photography itself, present in the asset regardless of flap
+  state. This is a static, colour-matched cover for exactly that band
+  (colours sampled from the image's own surrounding tones), not a toggled
+  overlay -- since the thing underneath never changes frame to frame,
+  neither does this.
+*/
+.env-bottom-patch {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(88vw, 400px);
+  height: min(88vw, 400px);
+  pointer-events: none;
+  z-index: 1; /* same level as the envelope image; comes after it in the DOM so it paints on top */
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 68%,
+    rgba(16, 28, 48, 0.98) 70%,
+    rgba(11, 20, 38, 0.98) 78%,
+    rgba(5, 12, 25, 0.96) 86%,
+    transparent 89%,
+    transparent 100%
+  );
 }
 
 /*
