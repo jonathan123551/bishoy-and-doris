@@ -37,7 +37,7 @@ export default function NamesScene() {
         scrollTrigger: {
           trigger: section,
           start: 'top top',
-          end: '+=1100',
+          end: window.innerWidth <= 600 ? '+=780' : '+=1100',
           scrub: 1,
           pin: true,
           anticipatePin: 1,
@@ -236,13 +236,7 @@ export default function NamesScene() {
       /*
        * Clean exit before Ceremony
        */
-      tl.set(
-        section,
-        {
-          autoAlpha: 0,
-        },
-        0.96
-      );
+      
     }, sectionRef);
 
     return () => ctx.revert();
