@@ -5,8 +5,7 @@ import { playMusic } from '../utils/audioManager';
 import flapCutout from '../assets/envelope/flap_cutout.png';
 import pocketClean from '../assets/envelope/pocket_clean.png';
 
-const POCKET_LINE_FRACTION = 0.385;
-const HERO_SCALE = 1.15;
+const POCKET_LINE_FRACTION = 0.3853;
 
 const EnvDivider = () => (
   <div className="env-divider">
@@ -27,7 +26,9 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
     pocketLineY: 0,
     hiddenY: 0,
     revealedY: 0,
-    emergeScale: 0.35,
+    heroY: 0,
+    emergeScale: 1.0,
+    heroScale: 1.8,
     wrapperHeight: 0,
     naturalHeight: 0,
   });
@@ -35,40 +36,74 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
   const hasStartedRef = useRef(false);
 
   const [hasStarted, setHasStarted] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
   const [introDone, setIntroDone] = useState(false);
 
-  // We no longer need to preload 15 frames, so it's ready immediately after intro
-  const isReady = introDone;
+  const isReady = imagesLoaded && introDone;
 
   /*
-   * Measure the paper/pocket geometry once.
+   * Preload both envelope artwork assets before tap is enabled.
+   */
+  useEffect(() => {
+    let cancelled = false;
+    const p1 = new Image();
+    p1.src = pocketClean;
+    const p2 = new Image();
+    p2.src = flapCutout;
+
+    Promise.all([
+      p1.decode ? p1.decode().catch(() => {}) : Promise.resolve(),
+      p2.decode ? p2.decode().catch(() => {}) : Promise.resolve(),
+    ]).then(() => {
+      if (!cancelled) {
+        setImagesLoaded(true);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  /*
+   * Measure the physical paper/pocket geometry accurately.
    */
   const measureGeometry = useCallback(() => {
     const wrapper = wrapperRef.current;
     const win = windowRef.current;
     const letter = letterRef.current;
+    const pocket = wrapper?.querySelector('.env-pocket');
 
-    if (!wrapper || !win || !letter) return;
+    if (!wrapper || !win || !letter || !pocket) return;
 
     const wrapperRect = wrapper.getBoundingClientRect();
-    // In the old code, envRect was used. Since pocketClean fills the wrapper width:
-    const envRect = wrapper.querySelector('.env-pocket').getBoundingClientRect();
+    const pocketRect = pocket.getBoundingClientRect();
 
-    const pocketLineY = (envRect.top - wrapperRect.top) + envRect.height * POCKET_LINE_FRACTION;
+    // The pocket mouth line where lower folds meet inside pocket_clean.png
+    const pocketLineY = (pocketRect.top - wrapperRect.top) + pocketRect.height * POCKET_LINE_FRACTION;
 
     win.style.height = `${pocketLineY}px`;
 
-    const naturalHeight = letter.offsetHeight;
-    const emergeScale = Math.min(
-      0.6,
-      (pocketLineY * 0.92) / Math.max(naturalHeight, 1)
-    );
+    const naturalHeight = letter.offsetHeight || 220;
+
+    // While tucked inside pocket
+    const emergeScale = 1.0;
+
+    // As paper rises out of pocket, top reaches ~10% of envelope box
+    const revealedY = Math.max(12, (pocketRect.top - wrapperRect.top) + pocketRect.height * 0.10);
+
+    // Hero invitation scale and centering
+    const isMobile = window.innerWidth <= 600;
+    const heroScale = isMobile ? 1.75 : 1.85;
+    const heroY = (wrapperRect.height - naturalHeight * heroScale) / 2;
 
     geometryRef.current = {
       pocketLineY,
-      hiddenY: pocketLineY + 6,
-      revealedY: Math.max(0, pocketLineY - naturalHeight * emergeScale),
+      hiddenY: pocketLineY + 4,
+      revealedY,
+      heroY,
       emergeScale,
+      heroScale,
       wrapperHeight: wrapperRect.height,
       naturalHeight,
     };
@@ -87,11 +122,6 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
   useLayoutEffect(() => {
     measureGeometry();
 
-    // Re-measure after images load to ensure correct geometry
-    const img = new Image();
-    img.src = pocketClean;
-    img.onload = measureGeometry;
-
     window.addEventListener('resize', measureGeometry);
     window.addEventListener('orientationchange', measureGeometry);
 
@@ -99,7 +129,7 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
       window.removeEventListener('resize', measureGeometry);
       window.removeEventListener('orientationchange', measureGeometry);
     };
-  }, [measureGeometry]);
+  }, [measureGeometry, imagesLoaded]);
 
   /*
    * Lock scroll and clean up.
@@ -113,7 +143,7 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
   }, []);
 
   /*
-   * Initial entrance.
+   * Initial entrance timeline.
    */
   useEffect(() => {
     if (hasStarted) return;
@@ -125,19 +155,22 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
         .fromTo(
           '.env-asset-wrapper',
           { autoAlpha: 0, scale: 0.97 },
-          { autoAlpha: 1, scale: 1, duration: 1.0 }
+          { autoAlpha: 1, scale: 1, duration: 0.9 }
         )
         .fromTo(
           '.env-top-text, .env-bottom-text',
-          { autoAlpha: 0, y: 10 },
+          { autoAlpha: 0, y: 8 },
           { autoAlpha: 1, y: 0, stagger: 0.1, duration: 0.7 },
-          0.35
+          0.25
         )
-        .call(() => setIntroDone(true), null, 1.35);
+        .call(() => {
+          setIntroDone(true);
+          measureGeometry();
+        }, null, 1.0);
     }, containerRef);
 
     return () => ctx.revert();
-  }, [hasStarted]);
+  }, [hasStarted, measureGeometry]);
 
   const handleOpen = () => {
     if (hasStarted || !isReady) return;
@@ -145,8 +178,10 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
     setHasStarted(true);
     hasStartedRef.current = true;
 
+    // Start music synchronously from the user tap interaction (required for iOS Safari)
+    playMusic(true);
+
     measureGeometry();
-    const geo = geometryRef.current;
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
@@ -158,65 +193,68 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
 
       openTimelineRef.current = tl;
 
-      // 1. Fade out tap text
-      tl.to('.env-bottom-text, .env-top-text', { autoAlpha: 0, duration: 0.3 }, 0);
+      // 1. Fade out tap prompt text immediately
+      tl.to('.env-bottom-text, .env-top-text', { autoAlpha: 0, duration: 0.35, ease: 'power2.out' }, 0);
 
-      // Music starts from the user interaction.
-      tl.call(() => playMusic(true), null, 0.1);
-
-      // 2. 3D Flap opens natively
+      // 2. Physical 3D Flap rotates open naturally along its real top hinge
       tl.to(
         '.env-flap',
         {
-          rotateX: 180,
-          duration: 0.85,
+          rotateX: 175,
+          duration: 0.95,
           ease: 'power2.inOut',
         },
-        0.1
+        0.05
       );
 
-      // 3. Paper emerges from the pocket
+      // As the flap flips past 90 degrees, place it behind the emerging paper
+      tl.set('.env-flap-container', { zIndex: 1 }, 0.5);
+
+      // 3. Paper emerges upward from inside the envelope pocket
       tl.to(
         letterRef.current,
         {
           y: () => geometryRef.current.revealedY,
-          duration: 1.0,
+          duration: 1.1,
           ease: 'power2.out',
         },
-        0.9 // Start just before flap finishes opening
+        0.85
       );
 
-      // 4. Paper clears the pocket & envelope disappears
-      tl.set(windowRef.current, { overflow: 'visible' }, 2.0);
-      tl.call(() => letterRef.current?.classList.add('is-hero'), null, 2.0);
+      // 4. Paper clears the pocket & expands to hero invitation
+      tl.set(windowRef.current, { overflow: 'visible' }, 1.95);
+      tl.call(() => letterRef.current?.classList.add('is-hero'), null, 1.95);
 
+      // Envelope body fades and drops away gracefully
       tl.to(
-        '.env-pocket-wrapper',
+        '.env-pocket, .env-flap-container',
         {
-          y: 150,
+          y: 70,
           autoAlpha: 0,
           duration: 1.0,
           ease: 'power2.in',
         },
-        2.0
+        1.95
       );
 
+      // Paper moves to hero center and scales up
       tl.to(
         letterRef.current,
         {
-          y: () => (geo.wrapperHeight - geo.naturalHeight * HERO_SCALE) / 2,
-          scale: HERO_SCALE,
-          duration: 1.2,
+          y: () => geometryRef.current.heroY,
+          scale: () => geometryRef.current.heroScale,
+          duration: 1.25,
           ease: 'power2.inOut',
         },
-        2.0
+        1.95
       );
 
-      // 5. Give the invitation a moment to breathe.
-      tl.to({}, { duration: 2.0 });
+      // 5. Brief reading beat for the guest
+      tl.to({}, { duration: 1.8 });
 
-      // 6. Reveal the real website.
+      // 6. Seamless transition into the main website
       tl.call(() => onReveal?.());
+
       tl.to(containerRef.current, {
         autoAlpha: 0,
         duration: 1.2,
@@ -248,61 +286,42 @@ export default function EnvelopeIntro({ onReveal, onComplete }) {
               handleOpen();
             }
           }}
-          style={{ position: 'relative' }}
         >
-          {/* Base Envelope (Pocket & Inner Back) */}
-          <div className="env-pocket-wrapper" style={{ position: 'relative', width: '100%', height: 'auto' }}>
+          <div className="env-envelope-box">
+            {/* Base Envelope (Pocket & Stage Artwork) */}
             <img
               src={pocketClean}
               className="env-pocket"
               alt="Bishoy and Doris wedding invitation"
               draggable="false"
-              style={{ display: 'block', width: '100%', height: 'auto' }}
             />
-            
-            {/* The Flap that rotates */}
-            <div
-              className="env-flap-container"
-              style={{
-                position: 'absolute',
-                inset: 0,
-                perspective: '1500px',
-                pointerEvents: 'none',
-              }}
-            >
+
+            {/* The Flap that rotates open in 3D */}
+            <div className="env-flap-container">
               <img
                 src={flapCutout}
                 className="env-flap"
                 alt=""
                 aria-hidden="true"
                 draggable="false"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  transformOrigin: '50% 14.89%',
-                  transformStyle: 'preserve-3d',
-                  // Ensure it doesn't flicker when rotated
-                  backfaceVisibility: 'visible',
-                }}
               />
             </div>
-          </div>
 
-          {/* INVITATION PAPER */}
-          <div className="env-letter-window" ref={windowRef} style={{ position: 'absolute', top: 0, left: 0, width: '100%', overflow: 'hidden' }}>
-            <div className="env-asset-letter" ref={letterRef}>
-              <div className="env-letter-copy">
-                <p className="env-letter-title">BISHOY &amp; DORIS</p>
-                <p className="env-letter-subtitle">INVITATION</p>
-                <div className="lux-rule" style={{ margin: '1.2rem auto' }} />
-                <p className="env-letter-text">
-                  Two stories, one vow, and a day we would be honored to share with you.
-                </p>
+            {/* The Invitation Paper Window (Clips lower part of paper while in pocket) */}
+            <div className="env-letter-window" ref={windowRef}>
+              <div className="env-asset-letter" ref={letterRef}>
+                <div className="env-letter-copy">
+                  <p className="env-letter-title">BISHOY &amp; DORIS</p>
+                  <p className="env-letter-subtitle">INVITATION</p>
+                  <div className="lux-rule" style={{ margin: '0.8rem auto' }} />
+                  <p className="env-letter-text">
+                    Two stories, one vow, and a day we would be honored to share with you.
+                  </p>
+                </div>
+                <div className="env-letter-tuck-shadow" aria-hidden="true" />
               </div>
-              <div className="env-letter-tuck-shadow" aria-hidden="true" />
             </div>
           </div>
-
         </div>
 
         <div className="env-bottom-text">
