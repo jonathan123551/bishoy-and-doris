@@ -33,11 +33,16 @@ export default function ReceptionScene() {
       const note = section.querySelector('.rec-note');
       const maps = section.querySelector('.rec-map-link');
 
+      const vh = window.innerHeight;
       const ceremonyPinDuration = 1400;
-      const totalSticky = Math.max(1, section.offsetHeight - window.innerHeight);
-      const overlapPixels = Math.max(0, ceremonyPinDuration - window.innerHeight);
-      const startT = Math.min(0.85, overlapPixels / totalSticky);
-      const activeSpan = 1 - startT;
+      const overlapPixels = Math.max(0, ceremonyPinDuration - vh);
+
+      const totalScroll = section.offsetHeight;
+      const stickyScroll = Math.max(1, section.offsetHeight - vh);
+
+      const startT = Math.min(0.5, overlapPixels / totalScroll);
+      const stickyEndT = stickyScroll / totalScroll;
+      const availableSpan = Math.max(0.1, stickyEndT - startT);
 
       /*
        * IMPORTANT:
@@ -71,7 +76,7 @@ export default function ReceptionScene() {
         scrollTrigger: {
           trigger: section,
           start: 'top top',
-          end: () => `+=${section.offsetHeight - window.innerHeight}`,
+          end: () => `+=${section.offsetHeight}`,
           scrub: 1,
           anticipatePin: 1,
           invalidateOnRefresh: true,
@@ -80,22 +85,21 @@ export default function ReceptionScene() {
       });
 
       /*
-       * Once Reception becomes the active scene,
-       * bring in the cinematic shade.
+       * 1. Cinematic shade starts as Reception becomes active scene
        */
       tl.fromTo(
         shade,
         { opacity: 0 },
         {
-          opacity: 0.50,
-          ease: 'none',
-          duration: activeSpan * 0.20,
+          opacity: 0.52,
+          ease: 'power2.out',
+          duration: availableSpan * 0.25,
         },
         startT
       );
 
       /*
-       * Reception
+       * 2. "Reception" eyebrow appears
        */
       tl.fromTo(
         label,
@@ -106,14 +110,14 @@ export default function ReceptionScene() {
         {
           y: 0,
           autoAlpha: 1,
-          ease: 'power3.out',
-          duration: activeSpan * 0.14,
+          ease: 'power2.out',
+          duration: availableSpan * 0.18,
         },
-        startT
+        startT + availableSpan * 0.03
       );
 
       /*
-       * Gold rule
+       * 3. Gold rule expands
        */
       tl.fromTo(
         rule,
@@ -126,54 +130,54 @@ export default function ReceptionScene() {
           autoAlpha: 1,
           transformOrigin: 'center',
           ease: 'none',
-          duration: activeSpan * 0.12,
+          duration: availableSpan * 0.16,
         },
-        startT + activeSpan * 0.07
+        startT + availableSpan * 0.14
       );
 
       /*
-       * LA PENSÉE
+       * 4. "LA PENSÉE" venue title
        */
       tl.fromTo(
         venue,
         {
-          y: 38,
-          autoAlpha: 0,
-        },
-        {
-          y: 0,
-          autoAlpha: 1,
-          ease: 'power3.out',
-          duration: activeSpan * 0.18,
-        },
-        startT + activeSpan * 0.14
-      );
-
-      /*
-       * Gardenia
-       */
-      tl.fromTo(
-        area,
-        {
-          y: 20,
+          y: 36,
           autoAlpha: 0,
         },
         {
           y: 0,
           autoAlpha: 1,
           ease: 'power2.out',
-          duration: activeSpan * 0.13,
+          duration: availableSpan * 0.22,
         },
-        startT + activeSpan * 0.28
+        startT + availableSpan * 0.25
       );
 
       /*
-       * AFTER THE CEREMONY
+       * 5. "Gardenia" area subtitle
+       */
+      tl.fromTo(
+        area,
+        {
+          y: 22,
+          autoAlpha: 0,
+        },
+        {
+          y: 0,
+          autoAlpha: 1,
+          ease: 'power2.out',
+          duration: availableSpan * 0.18,
+        },
+        startT + availableSpan * 0.38
+      );
+
+      /*
+       * 6. "AFTER THE CEREMONY" note
        */
       tl.fromTo(
         note,
         {
-          y: 18,
+          y: 20,
           autoAlpha: 0,
           filter: 'blur(4px)',
         },
@@ -182,56 +186,42 @@ export default function ReceptionScene() {
           autoAlpha: 1,
           filter: 'blur(0px)',
           ease: 'power2.out',
-          duration: activeSpan * 0.14,
+          duration: availableSpan * 0.18,
         },
-        startT + activeSpan * 0.38
+        startT + availableSpan * 0.50
       );
 
       /*
-       * Maps — last
+       * 7. "VIEW ON MAPS" link - last
        */
       tl.fromTo(
         maps,
         {
           y: 24,
           autoAlpha: 0,
-          scale: 0.92,
+          scale: 0.94,
         },
         {
           y: 0,
           autoAlpha: 1,
           scale: 1,
           ease: 'back.out(1.4)',
-          duration: activeSpan * 0.16,
+          duration: availableSpan * 0.20,
         },
-        startT + activeSpan * 0.50
+        startT + availableSpan * 0.64
       );
 
       /*
-       * Small cinematic movement after the content is complete.
-       */
-      tl.to(
-        copy,
-        {
-          yPercent: -2,
-          ease: 'none',
-          duration: activeSpan * 0.12,
-        },
-        startT + activeSpan * 0.70
-      );
-
-      /*
-       * Hold the finished Reception scene.
-       *
-       * DO NOT fade the image out here.
-       * The next section should naturally take over.
+       * 8. Hold the complete Reception scene until the sticky scroll ends.
+       * At stickyEndT, the completed Reception scene begins scrolling up
+       * as DateSequence enters, meeting DateSequence seamlessly at 1.0.
        */
       tl.to(
         {},
         {
-          duration: activeSpan * 0.18,
+          duration: Math.max(0.01, stickyEndT - (startT + availableSpan * 0.84)),
         },
-        startT + activeSpan * 0.82
+        startT + availableSpan * 0.84
       );
     }, sectionRef);
 
