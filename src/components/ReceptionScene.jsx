@@ -67,7 +67,7 @@ export default function ReceptionScene() {
       });
 
       const isMobile = window.innerWidth <= 600;
-      const startDelay = isMobile ? 0.16 : 0.18;
+      const startDelay = isMobile ? 0.04 : 0.06;
 
       /*
        * 1. Cinematic shade gently fades in to prepare contrast for text
