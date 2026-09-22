@@ -33,14 +33,6 @@ export default function ReceptionScene() {
       const note = section.querySelector('.rec-note');
       const maps = section.querySelector('.rec-map-link');
 
-      const vh = window.innerHeight;
-      const ceremonyPinDuration = 1400;
-      const overlapPixels = Math.max(0, ceremonyPinDuration - vh);
-
-      const totalScroll = Math.max(1, section.offsetHeight - vh);
-      const startT = Math.min(0.85, overlapPixels / totalScroll);
-      const activeSpan = 1 - startT;
-
       /*
        * IMPORTANT:
        * The Reception image is visible from the beginning.
@@ -62,18 +54,11 @@ export default function ReceptionScene() {
         opacity: 0,
       });
 
-      gsap.set(
-        [label, rule, venue, area, note, maps],
-        {
-          autoAlpha: 0,
-        }
-      );
-
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-          start: 'top top',
-          end: () => `+=${section.offsetHeight - window.innerHeight}`,
+          start: () => `top top-=${Math.max(0, 1400 - window.innerHeight)}px`,
+          end: () => 'bottom bottom',
           scrub: 1,
           anticipatePin: 1,
           invalidateOnRefresh: true,
@@ -90,9 +75,9 @@ export default function ReceptionScene() {
         {
           opacity: 0.52,
           ease: 'none',
-          duration: activeSpan * 0.22,
+          duration: 0.30,
         },
-        startT
+        0
       );
 
       /*
@@ -108,9 +93,9 @@ export default function ReceptionScene() {
           y: 0,
           autoAlpha: 1,
           ease: 'power2.out',
-          duration: activeSpan * 0.16,
+          duration: 0.18,
         },
-        startT + activeSpan * 0.04
+        0.04
       );
 
       /*
@@ -127,9 +112,9 @@ export default function ReceptionScene() {
           autoAlpha: 1,
           transformOrigin: 'center',
           ease: 'none',
-          duration: activeSpan * 0.14,
+          duration: 0.16,
         },
-        startT + activeSpan * 0.15
+        0.16
       );
 
       /*
@@ -145,9 +130,9 @@ export default function ReceptionScene() {
           y: 0,
           autoAlpha: 1,
           ease: 'power2.out',
-          duration: activeSpan * 0.18,
+          duration: 0.20,
         },
-        startT + activeSpan * 0.26
+        0.28
       );
 
       /*
@@ -163,9 +148,9 @@ export default function ReceptionScene() {
           y: 0,
           autoAlpha: 1,
           ease: 'power2.out',
-          duration: activeSpan * 0.15,
+          duration: 0.16,
         },
-        startT + activeSpan * 0.40
+        0.42
       );
 
       /*
@@ -183,9 +168,9 @@ export default function ReceptionScene() {
           autoAlpha: 1,
           filter: 'blur(0px)',
           ease: 'power2.out',
-          duration: activeSpan * 0.15,
+          duration: 0.16,
         },
-        startT + activeSpan * 0.52
+        0.55
       );
 
       /*
@@ -203,9 +188,9 @@ export default function ReceptionScene() {
           autoAlpha: 1,
           scale: 1,
           ease: 'back.out(1.4)',
-          duration: activeSpan * 0.18,
+          duration: 0.18,
         },
-        startT + activeSpan * 0.65
+        0.68
       );
 
       /*
@@ -216,9 +201,9 @@ export default function ReceptionScene() {
       tl.to(
         {},
         {
-          duration: activeSpan * 0.17,
+          duration: 0.14,
         },
-        startT + activeSpan * 0.83
+        0.86
       );
     }, sectionRef);
 
