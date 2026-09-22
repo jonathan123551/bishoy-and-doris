@@ -24,6 +24,7 @@ export const eventConfig = {
   church: {
     name: 'Church of Archangel Michael',
     arabicName: 'كنيسة رئيس الملائكة ميخائيل',
+    arabicFullName: 'كنيسة رئيس الملائكة ميخائيل بالشيراتون',
     area: 'Sheraton',
     city: 'Cairo',
     mapLabel: 'View on Google Maps',
@@ -35,6 +36,7 @@ export const eventConfig = {
     name: 'La Pensée',
     area: 'Gardenia',
     note: 'After the ceremony',
+    childrenNote: 'We kindly request that children remain seated with their parents',
     mapLabel: 'View on Google Maps',
     mapUrl: 'https://maps.app.goo.gl/SMVCau5jSZhje6fh7?g_st=ic',
   },

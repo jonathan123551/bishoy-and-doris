@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import churchBg from '../assets/church-bg.png';
+import { eventConfig } from '../config/eventConfig';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -374,7 +375,7 @@ pinSpacing: false,          anticipatePin: 1,
           className="ceremony-arabic"
           dir="rtl"
         >
-          كنيسة رئيس الملائكة ميخائيل
+          {eventConfig.church.arabicFullName}
         </div>
 
         <div className="ceremony-date">

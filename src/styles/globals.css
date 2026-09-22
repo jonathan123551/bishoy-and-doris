@@ -2905,7 +2905,8 @@ img {
 
 .ceremony-cinematic .ceremony-arabic {
   margin-top: 11px;
-  font-size: 19px;
+  font-size: clamp(15px, 4.2vw, 19px);
+  white-space: nowrap;
 }
 
 .ceremony-cinematic .ceremony-date {
@@ -3634,7 +3635,7 @@ img {
 }
 
 .rec-note {
-  margin: 1rem 0 0;
+  margin: 0.85rem 0 0;
 
   font-family: var(--font-sans);
 
@@ -3657,6 +3658,27 @@ img {
     0 2px 12px rgba(0, 0, 0, 0.55);
 }
 
+.rec-children-note {
+  margin: 0.65rem auto 0;
+
+  max-width: min(88vw, 360px);
+
+  font-family: var(--font-serif);
+
+  font-style: italic;
+
+  font-size: clamp(0.72rem, 2.2vw, 0.86rem);
+
+  font-weight: 400;
+
+  line-height: 1.45;
+
+  color: rgba(241, 217, 167, 0.92);
+
+  text-shadow:
+    0 2px 14px rgba(0, 0, 0, 0.65);
+}
+
 .rec-map-link {
   display: inline-flex;
 
@@ -3665,7 +3687,7 @@ img {
 
   gap: 0.55rem;
 
-  margin-top: 1.25rem;
+  margin-top: 1rem;
 
   min-height: 48px;
 

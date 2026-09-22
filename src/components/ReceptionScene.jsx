@@ -31,6 +31,7 @@ export default function ReceptionScene() {
       const venue = section.querySelector('.rec-venue-name');
       const area = section.querySelector('.rec-venue-sub');
       const note = section.querySelector('.rec-note');
+      const childrenNote = section.querySelector('.rec-children-note');
       const maps = section.querySelector('.rec-map-link');
 
       /*
@@ -198,8 +199,30 @@ export default function ReceptionScene() {
           ease: 'power2.out',
           duration: 0.14,
         },
-        startDelay + 0.45
+        startDelay + 0.44
       );
+
+      /*
+       * 6b. Children etiquette note.
+       */
+      if (childrenNote) {
+        tl.fromTo(
+          childrenNote,
+          {
+            y: 18,
+            autoAlpha: 0,
+            filter: 'blur(4px)',
+          },
+          {
+            y: 0,
+            autoAlpha: 1,
+            filter: 'blur(0px)',
+            ease: 'power2.out',
+            duration: 0.14,
+          },
+          startDelay + 0.53
+        );
+      }
 
       /*
        * 7. "VIEW ON MAPS" link - last.
@@ -218,7 +241,7 @@ export default function ReceptionScene() {
           ease: 'back.out(1.4)',
           duration: 0.15,
         },
-        startDelay + 0.57
+        startDelay + 0.63
       );
 
       /*
@@ -232,7 +255,7 @@ export default function ReceptionScene() {
         {
           duration: 0.06,
         },
-        startDelay + 0.72
+        startDelay + 0.77
       );
     }, sectionRef);
 
@@ -280,6 +303,12 @@ export default function ReceptionScene() {
           <p className="rec-note">
             {reception.note}
           </p>
+
+          {reception.childrenNote && (
+            <p className="rec-children-note">
+              {reception.childrenNote}
+            </p>
+          )}
 
           <a
             className="rec-map-link"
