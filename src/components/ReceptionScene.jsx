@@ -67,7 +67,7 @@ export default function ReceptionScene() {
       });
 
       /*
-       * 1. Cinematic shade starts as Reception becomes active scene
+       * 1. Cinematic shade gently fades in to prepare contrast for text
        */
       tl.fromTo(
         shade,
@@ -75,13 +75,13 @@ export default function ReceptionScene() {
         {
           opacity: 0.52,
           ease: 'none',
-          duration: 0.30,
+          duration: 0.26,
         },
-        0
+        0.12
       );
 
       /*
-       * 2. "Reception" eyebrow appears
+       * 2. "Reception" eyebrow appears after the breathing room
        */
       tl.fromTo(
         label,
@@ -93,9 +93,9 @@ export default function ReceptionScene() {
           y: 0,
           autoAlpha: 1,
           ease: 'power2.out',
-          duration: 0.18,
+          duration: 0.16,
         },
-        0.04
+        0.22
       );
 
       /*
@@ -112,9 +112,9 @@ export default function ReceptionScene() {
           autoAlpha: 1,
           transformOrigin: 'center',
           ease: 'none',
-          duration: 0.16,
+          duration: 0.14,
         },
-        0.16
+        0.34
       );
 
       /*
@@ -130,9 +130,9 @@ export default function ReceptionScene() {
           y: 0,
           autoAlpha: 1,
           ease: 'power2.out',
-          duration: 0.20,
+          duration: 0.18,
         },
-        0.28
+        0.44
       );
 
       /*
@@ -148,9 +148,9 @@ export default function ReceptionScene() {
           y: 0,
           autoAlpha: 1,
           ease: 'power2.out',
-          duration: 0.16,
+          duration: 0.15,
         },
-        0.42
+        0.56
       );
 
       /*
@@ -168,9 +168,9 @@ export default function ReceptionScene() {
           autoAlpha: 1,
           filter: 'blur(0px)',
           ease: 'power2.out',
-          duration: 0.16,
+          duration: 0.15,
         },
-        0.55
+        0.67
       );
 
       /*
@@ -188,22 +188,20 @@ export default function ReceptionScene() {
           autoAlpha: 1,
           scale: 1,
           ease: 'back.out(1.4)',
-          duration: 0.18,
+          duration: 0.16,
         },
-        0.68
+        0.78
       );
 
       /*
-       * 8. Hold the complete Reception scene until the sticky scroll ends.
-       * Exactly at 1.0, Reception's sticky scroll ends, and DateSequence
-       * pins and begins immediately at top: 0 with zero dead scroll.
+       * 8. Hold the complete Reception scene
        */
       tl.to(
         {},
         {
-          duration: 0.14,
+          duration: 0.08,
         },
-        0.86
+        0.92
       );
     }, sectionRef);
 
