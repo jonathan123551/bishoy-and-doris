@@ -66,6 +66,9 @@ export default function ReceptionScene() {
         },
       });
 
+      const isMobile = window.innerWidth <= 600;
+      const startDelay = isMobile ? 0.16 : 0.18;
+
       /*
        * 1. Cinematic shade gently fades in to prepare contrast for text
        */
@@ -75,9 +78,9 @@ export default function ReceptionScene() {
         {
           opacity: 0.52,
           ease: 'none',
-          duration: 0.26,
+          duration: 0.22,
         },
-        0.12
+        startDelay * 0.5
       );
 
       /*
@@ -93,9 +96,9 @@ export default function ReceptionScene() {
           y: 0,
           autoAlpha: 1,
           ease: 'power2.out',
-          duration: 0.16,
+          duration: 0.15,
         },
-        0.22
+        startDelay
       );
 
       /*
@@ -112,9 +115,9 @@ export default function ReceptionScene() {
           autoAlpha: 1,
           transformOrigin: 'center',
           ease: 'none',
-          duration: 0.14,
+          duration: 0.13,
         },
-        0.34
+        startDelay + 0.11
       );
 
       /*
@@ -130,9 +133,9 @@ export default function ReceptionScene() {
           y: 0,
           autoAlpha: 1,
           ease: 'power2.out',
-          duration: 0.18,
+          duration: 0.17,
         },
-        0.44
+        startDelay + 0.22
       );
 
       /*
@@ -148,9 +151,9 @@ export default function ReceptionScene() {
           y: 0,
           autoAlpha: 1,
           ease: 'power2.out',
-          duration: 0.15,
+          duration: 0.14,
         },
-        0.56
+        startDelay + 0.34
       );
 
       /*
@@ -168,9 +171,9 @@ export default function ReceptionScene() {
           autoAlpha: 1,
           filter: 'blur(0px)',
           ease: 'power2.out',
-          duration: 0.15,
+          duration: 0.14,
         },
-        0.67
+        startDelay + 0.45
       );
 
       /*
@@ -188,20 +191,20 @@ export default function ReceptionScene() {
           autoAlpha: 1,
           scale: 1,
           ease: 'back.out(1.4)',
-          duration: 0.16,
+          duration: 0.15,
         },
-        0.78
+        startDelay + 0.57
       );
 
       /*
-       * 8. Hold the complete Reception scene
+       * 8. Hold the complete Reception scene briefly before releasing
        */
       tl.to(
         {},
         {
-          duration: 0.08,
+          duration: 0.06,
         },
-        0.92
+        startDelay + 0.72
       );
     }, sectionRef);
 

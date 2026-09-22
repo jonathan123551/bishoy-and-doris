@@ -3482,8 +3482,8 @@ img {
   .rec-scroll {
     position: relative !important;
     width: 100% !important;
-    height: 2250px !important;
-    min-height: 2250px !important;
+    height: 2050px !important;
+    min-height: 2050px !important;
     overflow: visible !important;
     z-index: 10 !important;
   }
