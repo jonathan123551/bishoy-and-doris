@@ -307,6 +307,16 @@ pinSpacing: false,          anticipatePin: 1,
   0.985
 );
 
+      tl.to(
+        section,
+        {
+          autoAlpha: 0,
+          ease: 'power2.inOut',
+          duration: 0.20,
+        },
+        0.88
+      );
+
       /*
        * IMPORTANT:
        * No yPercent transform on the whole section.

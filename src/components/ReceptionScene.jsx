@@ -22,101 +22,33 @@ export default function ReceptionScene() {
     const ctx = gsap.context(() => {
       const section = sectionRef.current;
 
-      const image = section.querySelector(
-        '.rec-cinematic-image'
-      );
+      const image = section.querySelector('.rec-cinematic-image');
+      const shade = section.querySelector('.rec-image-shade');
+      const copy = section.querySelector('.rec-cinematic-copy');
 
-      const shade = section.querySelector(
-        '.rec-image-shade'
-      );
+      const label = section.querySelector('.rec-label');
+      const rule = section.querySelector('.rec-rule-top');
+      const venue = section.querySelector('.rec-venue-name');
+      const area = section.querySelector('.rec-venue-sub');
+      const note = section.querySelector('.rec-note');
+      const maps = section.querySelector('.rec-map-link');
 
-      const copy = section.querySelector(
-        '.rec-cinematic-copy'
-      );
-
-      const label = section.querySelector(
-        '.rec-label'
-      );
-
-      const rule = section.querySelector(
-        '.rec-rule-top'
-      );
-
-      const venue = section.querySelector(
-        '.rec-venue-name'
-      );
-
-      const area = section.querySelector(
-        '.rec-venue-sub'
-      );
-
-      const note = section.querySelector(
-        '.rec-note'
-      );
-
-      const maps = section.querySelector(
-        '.rec-map-link'
-      );
-
-      const isMobile = window.matchMedia(
-        '(max-width: 600px)'
-      ).matches;
-
-      const CEREMONY_PIN = 1400;
-
-      const RECEPTION_DURATION = isMobile
-        ? 1000
-        : 1100;
-
-      /*
-       * Ceremony is:
-       *
-       * height: 100svh
-       * pin: true
-       * pinSpacing: false
-       * end: +=1400
-       *
-       * Because pinSpacing is false, Reception's natural
-       * document position is only one viewport below the
-       * previous content.
-       *
-       * At the exact moment Ceremony releases, Reception's
-       * top may already be above the viewport.
-       *
-       * Therefore the Reception timeline must start at:
-       *
-       *     top - handoffOffset
-       *
-       * NOT:
-       *
-       *     top + handoffOffset
-       *
-       * The previous + value was the reason the Reception
-       * animation was happening too early.
-       */
-
-      const ceremonySection = document.querySelector(
-        '.ceremony-cinematic'
-      );
-
-      const ceremonyHeight =
-        ceremonySection?.offsetHeight ||
-        window.innerHeight;
-
-      const handoffOffset = Math.max(
-        0,
-        CEREMONY_PIN - ceremonyHeight
-      );
+      const ceremonyPinDuration = 1400;
+      const totalSticky = Math.max(1, section.offsetHeight - window.innerHeight);
+      const overlapPixels = Math.max(0, ceremonyPinDuration - window.innerHeight);
+      const startT = Math.min(0.85, overlapPixels / totalSticky);
+      const activeSpan = 1 - startT;
 
       /*
        * IMPORTANT:
+       * The Reception image is visible from the beginning.
        *
-       * The image exists from the beginning.
+       * This is what allows it to sit underneath Ceremony while
+       * Ceremony is pinned/fading out.
        *
-       * It is supposed to sit underneath Ceremony.
-       * Ceremony must cover it until Ceremony disappears.
-       *
-       * DO NOT animate image opacity from 0 here.
+       * We do NOT fade the image out at the end.
+       * It should remain visible until DateSequence naturally
+       * takes over after this section.
        */
       gsap.set(image, {
         opacity: 1,
@@ -124,106 +56,46 @@ export default function ReceptionScene() {
         xPercent: 0,
       });
 
-      /*
-       * Shade starts invisible.
-       * It comes in only when Reception becomes active.
-       */
       gsap.set(shade, {
         opacity: 0,
       });
 
-      /*
-       * Reception text starts hidden.
-       */
       gsap.set(
-        [
-          label,
-          rule,
-          venue,
-          area,
-          note,
-          maps,
-        ],
+        [label, rule, venue, area, note, maps],
         {
           autoAlpha: 0,
         }
       );
 
-      /*
-       * =====================================================
-       * RECEPTION SCROLL TIMELINE
-       * =====================================================
-       *
-       * The IMPORTANT correction is the minus sign:
-       *
-       *     top -= handoffOffset
-       *
-       * This means the timeline begins exactly when the
-       * Ceremony pin reaches its release point.
-       */
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-
-          start: () =>
-            `top-=${handoffOffset}px top`,
-
-          end: () =>
-            `top-=${
-              handoffOffset + RECEPTION_DURATION
-            }px top`,
-
+          start: 'top top',
+          end: () => `+=${section.offsetHeight - window.innerHeight}`,
           scrub: 1,
-
           anticipatePin: 1,
-
           invalidateOnRefresh: true,
-
           refreshPriority: 0,
         },
       });
 
       /*
-       * =====================================================
-       * 1. RECEPTION IMAGE
-       * =====================================================
-       *
-       * Already visible underneath Ceremony.
-       *
-       * No opacity animation here.
-       */
-      tl.set(
-        image,
-        {
-          opacity: 1,
-          scale: 1,
-          xPercent: 0,
-        },
-        0
-      );
-
-      /*
-       * =====================================================
-       * 2. SHADE
-       * =====================================================
+       * Once Reception becomes the active scene,
+       * bring in the cinematic shade.
        */
       tl.fromTo(
         shade,
-        {
-          opacity: 0,
-        },
+        { opacity: 0 },
         {
           opacity: 0.50,
           ease: 'none',
-          duration: 0.14,
+          duration: activeSpan * 0.20,
         },
-        0
+        startT
       );
 
       /*
-       * =====================================================
-       * 3. RECEPTION
-       * =====================================================
+       * Reception
        */
       tl.fromTo(
         label,
@@ -235,15 +107,13 @@ export default function ReceptionScene() {
           y: 0,
           autoAlpha: 1,
           ease: 'power3.out',
-          duration: 0.12,
+          duration: activeSpan * 0.14,
         },
-        0.12
+        startT
       );
 
       /*
-       * =====================================================
-       * 4. GOLD RULE
-       * =====================================================
+       * Gold rule
        */
       tl.fromTo(
         rule,
@@ -256,15 +126,13 @@ export default function ReceptionScene() {
           autoAlpha: 1,
           transformOrigin: 'center',
           ease: 'none',
-          duration: 0.10,
+          duration: activeSpan * 0.12,
         },
-        0.20
+        startT + activeSpan * 0.07
       );
 
       /*
-       * =====================================================
-       * 5. LA PENSÉE
-       * =====================================================
+       * LA PENSÉE
        */
       tl.fromTo(
         venue,
@@ -276,15 +144,13 @@ export default function ReceptionScene() {
           y: 0,
           autoAlpha: 1,
           ease: 'power3.out',
-          duration: 0.16,
+          duration: activeSpan * 0.18,
         },
-        0.28
+        startT + activeSpan * 0.14
       );
 
       /*
-       * =====================================================
-       * 6. GARDENIA
-       * =====================================================
+       * Gardenia
        */
       tl.fromTo(
         area,
@@ -296,15 +162,13 @@ export default function ReceptionScene() {
           y: 0,
           autoAlpha: 1,
           ease: 'power2.out',
-          duration: 0.12,
+          duration: activeSpan * 0.13,
         },
-        0.38
+        startT + activeSpan * 0.28
       );
 
       /*
-       * =====================================================
-       * 7. AFTER THE CEREMONY
-       * =====================================================
+       * AFTER THE CEREMONY
        */
       tl.fromTo(
         note,
@@ -318,15 +182,13 @@ export default function ReceptionScene() {
           autoAlpha: 1,
           filter: 'blur(0px)',
           ease: 'power2.out',
-          duration: 0.12,
+          duration: activeSpan * 0.14,
         },
-        0.48
+        startT + activeSpan * 0.38
       );
 
       /*
-       * =====================================================
-       * 8. MAPS — LAST
-       * =====================================================
+       * Maps — last
        */
       tl.fromTo(
         maps,
@@ -340,40 +202,36 @@ export default function ReceptionScene() {
           autoAlpha: 1,
           scale: 1,
           ease: 'back.out(1.4)',
-          duration: 0.14,
+          duration: activeSpan * 0.16,
         },
-        0.58
+        startT + activeSpan * 0.50
       );
 
       /*
-       * =====================================================
-       * 9. SMALL CINEMATIC MOVEMENT
-       * =====================================================
+       * Small cinematic movement after the content is complete.
        */
       tl.to(
         copy,
         {
           yPercent: -2,
           ease: 'none',
-          duration: 0.12,
+          duration: activeSpan * 0.12,
         },
-        0.70
+        startT + activeSpan * 0.70
       );
 
       /*
-       * =====================================================
-       * 10. HOLD
-       * =====================================================
+       * Hold the finished Reception scene.
        *
-       * Reception remains visible.
-       * No fade-out.
+       * DO NOT fade the image out here.
+       * The next section should naturally take over.
        */
       tl.to(
         {},
         {
-          duration: 0.22,
+          duration: activeSpan * 0.18,
         },
-        0.78
+        startT + activeSpan * 0.82
       );
     }, sectionRef);
 
