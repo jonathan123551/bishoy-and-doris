@@ -37,12 +37,11 @@ export default function ReceptionScene() {
        * IMPORTANT:
        * The Reception image is visible from the beginning.
        *
-       * This is what allows it to sit underneath Ceremony while
-       * Ceremony is pinned/fading out.
+       * This allows the image to sit underneath Ceremony while
+       * Ceremony is leaving the viewport.
        *
-       * We do NOT fade the image out at the end.
-       * It should remain visible until DateSequence naturally
-       * takes over after this section.
+       * The image does NOT fade out at the end.
+       * It remains visible until DateSequence naturally takes over.
        */
       gsap.set(image, {
         opacity: 1,
@@ -57,8 +56,24 @@ export default function ReceptionScene() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-          start: () => `top top-=${Math.max(0, 1400 - window.innerHeight)}px`,
+
+          /*
+           * IMPORTANT:
+           * Start the Reception timeline when Reception itself
+           * reaches the top of the viewport.
+           *
+           * The previous calculation:
+           *
+           * top top-=1400-window.innerHeight
+           *
+           * caused the Reception timeline to start too early
+           * on mobile, which made the text appear before the
+           * Reception image had properly settled full-screen.
+           */
+          start: 'top top',
+
           end: () => 'bottom bottom',
+
           scrub: 1,
           anticipatePin: 1,
           invalidateOnRefresh: true,
@@ -66,15 +81,24 @@ export default function ReceptionScene() {
         },
       });
 
+      /*
+       * Small image-only breathing period on mobile.
+       *
+       * This is intentionally NOT zero.
+       * The Reception image should become full-screen first,
+       * then the text should begin shortly afterward.
+       */
       const isMobile = window.innerWidth <= 600;
-      const startDelay = isMobile ? 0.04 : 0.06;
+      const startDelay = isMobile ? 0.10 : 0.06;
 
       /*
-       * 1. Cinematic shade gently fades in to prepare contrast for text
+       * 1. Cinematic shade gently fades in to prepare contrast for text.
        */
       tl.fromTo(
         shade,
-        { opacity: 0 },
+        {
+          opacity: 0,
+        },
         {
           opacity: 0.52,
           ease: 'none',
@@ -84,7 +108,8 @@ export default function ReceptionScene() {
       );
 
       /*
-       * 2. "Reception" eyebrow appears after the breathing room
+       * 2. "Reception" eyebrow appears after the short
+       * image-only breathing period.
        */
       tl.fromTo(
         label,
@@ -102,7 +127,7 @@ export default function ReceptionScene() {
       );
 
       /*
-       * 3. Gold rule expands
+       * 3. Gold rule expands.
        */
       tl.fromTo(
         rule,
@@ -121,7 +146,7 @@ export default function ReceptionScene() {
       );
 
       /*
-       * 4. "LA PENSÉE" venue title
+       * 4. "LA PENSÉE" venue title.
        */
       tl.fromTo(
         venue,
@@ -139,7 +164,7 @@ export default function ReceptionScene() {
       );
 
       /*
-       * 5. "Gardenia" area subtitle
+       * 5. "Gardenia" area subtitle.
        */
       tl.fromTo(
         area,
@@ -157,7 +182,7 @@ export default function ReceptionScene() {
       );
 
       /*
-       * 6. "AFTER THE CEREMONY" note
+       * 6. "AFTER THE CEREMONY" note.
        */
       tl.fromTo(
         note,
@@ -177,7 +202,7 @@ export default function ReceptionScene() {
       );
 
       /*
-       * 7. "VIEW ON MAPS" link - last
+       * 7. "VIEW ON MAPS" link - last.
        */
       tl.fromTo(
         maps,
@@ -197,7 +222,10 @@ export default function ReceptionScene() {
       );
 
       /*
-       * 8. Hold the complete Reception scene briefly before releasing
+       * 8. Very short hold after the complete Reception
+       * scene before Date takes over.
+       *
+       * Keep this short so there is no unnecessary dead scroll.
        */
       tl.to(
         {},
