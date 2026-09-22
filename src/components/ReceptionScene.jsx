@@ -37,12 +37,9 @@ export default function ReceptionScene() {
       const ceremonyPinDuration = 1400;
       const overlapPixels = Math.max(0, ceremonyPinDuration - vh);
 
-      const totalScroll = section.offsetHeight;
-      const stickyScroll = Math.max(1, section.offsetHeight - vh);
-
-      const startT = Math.min(0.5, overlapPixels / totalScroll);
-      const stickyEndT = stickyScroll / totalScroll;
-      const availableSpan = Math.max(0.1, stickyEndT - startT);
+      const totalScroll = Math.max(1, section.offsetHeight - vh);
+      const startT = Math.min(0.85, overlapPixels / totalScroll);
+      const activeSpan = 1 - startT;
 
       /*
        * IMPORTANT:
@@ -76,7 +73,7 @@ export default function ReceptionScene() {
         scrollTrigger: {
           trigger: section,
           start: 'top top',
-          end: () => `+=${section.offsetHeight}`,
+          end: () => `+=${section.offsetHeight - window.innerHeight}`,
           scrub: 1,
           anticipatePin: 1,
           invalidateOnRefresh: true,
@@ -92,8 +89,8 @@ export default function ReceptionScene() {
         { opacity: 0 },
         {
           opacity: 0.52,
-          ease: 'power2.out',
-          duration: availableSpan * 0.25,
+          ease: 'none',
+          duration: activeSpan * 0.22,
         },
         startT
       );
@@ -111,9 +108,9 @@ export default function ReceptionScene() {
           y: 0,
           autoAlpha: 1,
           ease: 'power2.out',
-          duration: availableSpan * 0.18,
+          duration: activeSpan * 0.16,
         },
-        startT + availableSpan * 0.03
+        startT + activeSpan * 0.04
       );
 
       /*
@@ -130,9 +127,9 @@ export default function ReceptionScene() {
           autoAlpha: 1,
           transformOrigin: 'center',
           ease: 'none',
-          duration: availableSpan * 0.16,
+          duration: activeSpan * 0.14,
         },
-        startT + availableSpan * 0.14
+        startT + activeSpan * 0.15
       );
 
       /*
@@ -148,9 +145,9 @@ export default function ReceptionScene() {
           y: 0,
           autoAlpha: 1,
           ease: 'power2.out',
-          duration: availableSpan * 0.22,
+          duration: activeSpan * 0.18,
         },
-        startT + availableSpan * 0.25
+        startT + activeSpan * 0.26
       );
 
       /*
@@ -166,9 +163,9 @@ export default function ReceptionScene() {
           y: 0,
           autoAlpha: 1,
           ease: 'power2.out',
-          duration: availableSpan * 0.18,
+          duration: activeSpan * 0.15,
         },
-        startT + availableSpan * 0.38
+        startT + activeSpan * 0.40
       );
 
       /*
@@ -186,9 +183,9 @@ export default function ReceptionScene() {
           autoAlpha: 1,
           filter: 'blur(0px)',
           ease: 'power2.out',
-          duration: availableSpan * 0.18,
+          duration: activeSpan * 0.15,
         },
-        startT + availableSpan * 0.50
+        startT + activeSpan * 0.52
       );
 
       /*
@@ -206,22 +203,22 @@ export default function ReceptionScene() {
           autoAlpha: 1,
           scale: 1,
           ease: 'back.out(1.4)',
-          duration: availableSpan * 0.20,
+          duration: activeSpan * 0.18,
         },
-        startT + availableSpan * 0.64
+        startT + activeSpan * 0.65
       );
 
       /*
        * 8. Hold the complete Reception scene until the sticky scroll ends.
-       * At stickyEndT, the completed Reception scene begins scrolling up
-       * as DateSequence enters, meeting DateSequence seamlessly at 1.0.
+       * Exactly at 1.0, Reception's sticky scroll ends, and DateSequence
+       * pins and begins immediately at top: 0 with zero dead scroll.
        */
       tl.to(
         {},
         {
-          duration: Math.max(0.01, stickyEndT - (startT + availableSpan * 0.84)),
+          duration: activeSpan * 0.17,
         },
-        startT + availableSpan * 0.84
+        startT + activeSpan * 0.83
       );
     }, sectionRef);
 
