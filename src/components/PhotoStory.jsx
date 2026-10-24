@@ -24,17 +24,25 @@ export default function PhotoStory() {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
+          id: 'scene:photo',
           trigger: sectionRef.current,
-          start: 'top 80%',
-          end: 'center center',
-          scrub: true,
+          start: 'top top',
+          end: '+=85%',
+          pin: true,
+          scrub: 0.5,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
         },
       });
 
       // Animate contents
-      tl.fromTo('.ps-photo--primary', { scale: 1.05 }, { scale: 1, ease: 'none', duration: 0.1 }, 0.0)
-        .fromTo('.ps-photo--secondary', { yPercent: 10, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, ease: 'none', duration: 0.15 }, 0.05)
-        .fromTo('.ps-caption > *', { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, stagger: 0.05, ease: 'none', duration: 0.15 }, 0.1);
+      tl.fromTo('.ps-photo--primary', { scale: 1.06 }, { scale: 1, ease: 'none', duration: 0.5 }, 0.0)
+        .fromTo('.ps-photo--secondary', { yPercent: 12, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, ease: 'power2.out', duration: 0.38 }, 0.12)
+        .fromTo('.ps-caption > *', { y: 18, autoAlpha: 0 }, { y: 0, autoAlpha: 1, stagger: 0.08, ease: 'power2.out', duration: 0.34 }, 0.24)
+        .to({}, { duration: 0.25 }, 0.75);
+
+      // Scene Director stop: both portraits and caption fully composed.
+      tl.addLabel('complete', 0.72);
     }, sectionRef);
 
     return () => ctx.revert();

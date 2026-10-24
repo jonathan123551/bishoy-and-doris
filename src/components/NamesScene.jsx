@@ -35,10 +35,11 @@ export default function NamesScene() {
 
       const tl = gsap.timeline({
         scrollTrigger: {
+          id: 'scene:names',
           trigger: section,
           start: 'top top',
           end: window.innerWidth <= 600 ? '+=780' : '+=1100',
-          scrub: 1,
+          scrub: 0.5,
           pin: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
@@ -219,6 +220,11 @@ export default function NamesScene() {
         },
         0.64
       );
+
+      /*
+       * Scene Director stop: every name element is fully revealed here.
+       */
+      tl.addLabel('complete', 0.86);
 
       /*
        * Tiny cinematic hold.

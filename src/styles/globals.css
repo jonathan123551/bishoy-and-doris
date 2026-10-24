@@ -71,6 +71,13 @@ body {
   min-height: 100dvh;
 }
 
+/* Scene Director: gestures navigate between cinematic scenes, so native
+   overscroll / pull-to-refresh bounce must not fight the scene tween. */
+html.scene-director,
+html.scene-director body {
+  overscroll-behavior: none;
+}
+
 body.lock-scroll {
   overflow: hidden;
   position: fixed;
@@ -630,7 +637,30 @@ img {
    Photo Story: editorial photographic scene
    ─────────────────────────────────────────────── */
 
-.ps-scene { background: #020409; }
+.ps-scene {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: #020409;
+}
+
+.ps-inner {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+}
+
+.ps-composition {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
 
 .ps-matte {
   position: absolute;
@@ -642,9 +672,9 @@ img {
 
 .ps-side-type {
   position: absolute;
-  z-index: 3;
+  z-index: 4;
   top: 12%;
-  right: 0.2rem;
+  right: 0.6rem;
   transform: rotate(90deg);
   transform-origin: top right;
   font-family: var(--font-sans);
@@ -652,17 +682,43 @@ img {
   font-weight: 600;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: rgba(250, 247, 242, 0.4);
+  color: rgba(250, 247, 242, 0.55);
 }
 
-.ps-photo { position: relative; }
-.ps-photo::after { content: ''; position: absolute; inset: 9px; border: 1px solid rgba(207, 173, 107, 0.4); pointer-events: none; }
+.ps-photo {
+  position: relative;
+  overflow: hidden;
+}
 
-.ps-photo--primary { clip-path: none; }
+.ps-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 34%;
+  display: block;
+}
+
+.ps-photo::after {
+  content: '';
+  position: absolute;
+  inset: 9px;
+  border: 1px solid rgba(207, 173, 107, 0.4);
+  pointer-events: none;
+}
+
+.ps-photo--primary {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  clip-path: none;
+}
+
 .ps-photo--primary::after {
   inset: 0;
   border: 0;
-  background: linear-gradient(180deg, rgba(2, 4, 9, 0.1) 0%, transparent 40%, rgba(2, 4, 9, 0.8) 100%);
+  background: linear-gradient(180deg, rgba(2, 4, 9, 0.14) 0%, transparent 42%, rgba(2, 4, 9, 0.84) 100%);
 }
 
 .ps-photo--primary::before {
@@ -680,24 +736,61 @@ img {
 }
 
 .ps-photo--secondary {
+  position: absolute;
+  left: max(4%, 0.95rem);
+  bottom: 9%;
+  width: min(44vw, 220px);
+  height: min(34vh, 290px);
+  z-index: 3;
   clip-path: none;
   background: #040a17;
   padding: 6px;
-  border: 1px solid rgba(207, 173, 107, 0.4);
+  border: 1px solid rgba(207, 173, 107, 0.58);
+  box-shadow: 0 24px 50px rgba(0, 4, 18, 0.62);
   transform-origin: center bottom;
 }
 
 .ps-caption {
-  background: linear-gradient(90deg, rgba(2, 4, 9, 0.8), transparent);
-  padding: 0.65rem 0.75rem;
+  position: absolute;
+  left: min(50%, 260px);
+  right: 1.05rem;
+  bottom: 10%;
+  z-index: 4;
+  display: grid;
+  gap: 0.35rem;
+  background: linear-gradient(90deg, rgba(2, 4, 9, 0.82), rgba(2, 4, 9, 0.18));
+  padding: 0.7rem 0.85rem;
   border-left: 1px solid var(--color-champagne);
+  backdrop-filter: blur(4px);
 }
 
-.ps-caption p:first-child { color: var(--color-champagne); }
-.ps-caption p:last-child { color: var(--color-text-light); }
+.ps-caption p:first-child {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-champagne);
+}
+
+.ps-caption p:last-child {
+  margin: 0;
+  max-width: 320px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.05rem, 3.6vw, 1.45rem);
+  line-height: 1.3;
+  color: var(--color-text-light);
+  text-shadow: 0 3px 16px rgba(0, 4, 18, 0.72);
+}
 
 .ps-veil {
-  background: linear-gradient(180deg, transparent 0%, rgba(2, 4, 9, 0.2) 50%, rgba(2, 4, 9, 1) 100%);
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 0%, rgba(2, 4, 9, 0.16) 55%, rgba(2, 4, 9, 0.85) 100%);
 }
 
 /* ───────────────────────────────────────────────

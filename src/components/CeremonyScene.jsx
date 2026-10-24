@@ -40,10 +40,11 @@ export default function CeremonyScene() {
 
       const tl = gsap.timeline({
         scrollTrigger: {
+          id: 'scene:ceremony',
           trigger: section,
           start: 'top top',
           end: '+=1400',
-          scrub: 1,
+          scrub: 0.5,
 
           /*
            * IMPORTANT:
@@ -252,6 +253,12 @@ pinSpacing: false,          anticipatePin: 1,
       /* ======================================================
          HOLD
          ====================================================== */
+
+      /*
+       * Scene Director stop: Ceremony is fully composed, right before
+       * its exit hands off to Reception.
+       */
+      tl.addLabel('complete', 0.88);
 
       tl.to(
         {},

@@ -56,6 +56,7 @@ export default function ReceptionScene() {
 
       const tl = gsap.timeline({
         scrollTrigger: {
+          id: 'scene:reception',
           trigger: section,
 
           /*
@@ -75,7 +76,7 @@ export default function ReceptionScene() {
 
           end: () => 'bottom bottom',
 
-          scrub: 1,
+          scrub: 0.5,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           refreshPriority: 0,
@@ -243,6 +244,11 @@ export default function ReceptionScene() {
         },
         startDelay + 0.63
       );
+
+      /*
+       * Scene Director stop: all Reception copy + map button revealed.
+       */
+      tl.addLabel('complete', startDelay + 0.78);
 
       /*
        * 8. Very short hold after the complete Reception

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import useLenis from './hooks/useLenis';
+import useSceneDirector from './hooks/useSceneDirector';
 import EnvelopeIntro from './components/EnvelopeIntro';
 import OpeningScene from './components/OpeningScene';
 import NamesScene from './components/NamesScene';
@@ -14,6 +15,8 @@ export default function App() {
   const [experienceVisible, setExperienceVisible] = useState(false);
   const [introComplete, setIntroComplete] = useState(false);
   useLenis();
+  // One intentional gesture = one cinematic scene (enabled after the envelope).
+  useSceneDirector(introComplete);
 
   return (
     <>

@@ -127,11 +127,12 @@ export default function FinalInvitation() {
 
       const tl = gsap.timeline({
         scrollTrigger: {
+          id: 'scene:final',
           trigger: section,
           start: 'top top',
-          end: '+=220%',
+          end: '+=150%',
           pin: true,
-          scrub: 0.7,
+          scrub: 0.5,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },

@@ -20,9 +20,10 @@ export default function DateSequence() {
 
       const tl = gsap.timeline({
         scrollTrigger: {
+          id: 'scene:date',
           trigger: sectionRef.current,
           start: 'top top',
-          end: '+=120%',
+          end: '+=100%',
           scrub: true,
           pin: true,
         },
@@ -51,6 +52,9 @@ export default function DateSequence() {
 
       // 0.65 - 0.75: Details fade in
       tl.to('.ds-details', { autoAlpha: 1, y: 0, duration: 0.1, ease: 'none' }, 0.65);
+
+      // Scene Director stop: date + details fully revealed.
+      tl.addLabel('complete', 0.76);
 
       // 0.75 - 1.0: Reading buffer
       tl.to({}, { duration: 0.25 });
