@@ -29,7 +29,7 @@ export default function PhotoStory() {
           start: 'top top',
           end: '+=85%',
           pin: true,
-          scrub: 0.5,
+          scrub: 0.25,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },

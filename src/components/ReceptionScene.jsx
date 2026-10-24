@@ -76,7 +76,7 @@ export default function ReceptionScene() {
 
           end: () => 'bottom bottom',
 
-          scrub: 0.5,
+          scrub: 0.25,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           refreshPriority: 0,

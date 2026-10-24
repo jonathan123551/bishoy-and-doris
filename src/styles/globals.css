@@ -550,7 +550,8 @@ img {
   border: 1px dashed rgba(207, 173, 107, 0.2);
 }
 
-.ds-clock-hands {
+.ds-clock-hands,
+.ds-clock-hour {
   position: absolute;
   inset: 0;
   border-radius: 50%;
@@ -559,16 +560,37 @@ img {
 .ds-clock-hands::after {
   content: '';
   position: absolute;
-  top: 15%;
+  top: 12%;
   bottom: 50%;
   left: calc(50% - 1px);
   width: 2px;
-  background: linear-gradient(180deg, var(--color-champagne), transparent);
+  background: linear-gradient(180deg, var(--color-champagne), rgba(207, 173, 107, 0.15));
+}
+
+.ds-clock-hour::after {
+  content: '';
+  position: absolute;
+  top: 25%;
+  bottom: 50%;
+  left: calc(50% - 1px);
+  width: 2px;
+  background: linear-gradient(180deg, rgba(207, 173, 107, 0.85), rgba(207, 173, 107, 0.1));
+}
+
+.ds-clock-pivot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(207, 173, 107, 0.4);
 }
 
 .ds-kicker {
   position: absolute;
-  top: 30%;
+  top: 34%;
   left: 50%;
   z-index: 4;
   transform: translate(-50%, 0);
@@ -587,26 +609,42 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(1rem, 4vw, 2.5rem);
+  gap: clamp(0.6rem, 2.4vw, 1.35rem);
+}
+
+.ds-unit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .ds-glyph {
   position: relative;
-  font-family: var(--font-display);
-  font-size: clamp(3rem, 12vw, 6.5rem);
-  font-weight: 400;
-  letter-spacing: 0.04em;
+  display: inline-block;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  font-size: clamp(2.15rem, 8.2vw, 4.4rem);
+  font-weight: 300;
+  letter-spacing: 0.06em;
   color: var(--color-text-light);
-  text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+  min-width: 2.2ch;
 }
 
-.ds-glyph--2 { font-size: clamp(2.4rem, 9vw, 5rem); }
+.ds-glyph--2 {
+  font-size: clamp(2.15rem, 8.2vw, 4.4rem);
+  min-width: 4.3ch;
+}
 
 .ds-dot {
-  font-family: var(--font-serif);
-  font-size: 1rem;
+  font-family: var(--font-sans);
+  font-size: clamp(1.5rem, 5vw, 2.6rem);
+  font-weight: 300;
   color: var(--color-champagne);
-  margin: 0 -0.5rem;
+  line-height: 1;
+  opacity: 0.9;
 }
 
 .ds-details {

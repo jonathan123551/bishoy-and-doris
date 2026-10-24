@@ -8,33 +8,23 @@ gsap.registerPlugin(ScrollTrigger);
 /**
  * Scene Director
  * ==============
- * Turns the long scroll-driven page into a sequence of cinematic scenes.
- *
- * Every major scene keeps its own pinned + scrubbed ScrollTrigger timeline
- * (so all existing animations, reverse scrolling and Lenis sync keep working).
- * The director only decides WHERE the scroll position should travel to:
+ * Turns the scroll-driven wedding film into a sequence of deliberate
+ * cinematic scenes where each element takes its time to compose on screen:
  *
  *   one intentional gesture (wheel / trackpad / swipe / key)
  *     -> input is captured (locked)
- *     -> the real scroll position is tweened to the next scene's
- *        "complete" point, so the scene's scrubbed timeline plays like
- *        a short film
+ *     -> the real scroll position is tweened smoothly (~3.8s - 4.8s, sine.inOut)
+ *        to the next scene's "complete" point so every element in the scene's
+ *        scrubbed GSAP timeline enters sequentially at a unhurried pace
  *     -> scene reaches 100% -> input is released
- *     -> next gesture plays the next scene
- *
- * Scenes opt in by giving their ScrollTrigger an id starting with "scene:".
- * A scene may add a timeline label named "complete" to mark the exact moment
- * its content has finished revealing; otherwise the trigger end is used.
- *
- * Stops are computed lazily on every gesture from live ScrollTrigger data,
- * so resizes, refreshes and manual scrollbar drags are always respected.
+ *     -> next gesture enters the next scene
  */
 
 const SCENE_PREFIX = 'scene:';
 const STOP_EPSILON = 4; // px tolerance when comparing scroll to a stop
-const MIN_DURATION = 1.1; // seconds
-const MAX_DURATION = 2.8; // seconds
-const RELEASE_SETTLE = 0.28; // seconds to let scrubbed timelines settle
+const MIN_DURATION = 3.8; // seconds — gives every scene's elements time to breathe
+const MAX_DURATION = 4.8; // seconds
+const RELEASE_SETTLE = 0.25; // seconds to let scrubbed timelines settle
 const SWIPE_THRESHOLD = 28; // px of finger travel that counts as intent
 const WHEEL_THRESHOLD = 6; // ignore micro wheel noise
 const WHEEL_IDLE_GAP = 180; // ms of wheel silence that ends a gesture
@@ -47,7 +37,7 @@ function getMaxScroll() {
 }
 
 function getStops() {
-  const stops = [0];
+  const stops = [];
 
   ScrollTrigger.getAll().forEach((st) => {
     const id = st.vars && st.vars.id;
@@ -99,11 +89,12 @@ export default function useSceneDirector(enabled) {
     // interprets raw wheel input; the director owns navigation.
     if (lenis) lenis.stop();
 
-    const ease = gsap.parseEase('power2.inOut');
+    const ease = gsap.parseEase('sine.inOut');
     const proxy = { y: window.scrollY };
 
     let animating = false;
     let releaseTimer = null;
+    let introTimer = null;
     let activeTween = null;
 
     // Wheel gesture bookkeeping (handles trackpad inertia).
@@ -123,17 +114,19 @@ export default function useSceneDirector(enabled) {
       }
     };
 
-    const playTo = (target) => {
+    const playTo = (target, customDuration) => {
       const current = window.scrollY;
       if (Math.abs(target - current) <= STOP_EPSILON) return;
 
       const distance = Math.abs(target - current);
       const vh = Math.max(window.innerHeight, 1);
-      const duration = gsap.utils.clamp(
-        MIN_DURATION,
-        MAX_DURATION,
-        0.75 + 0.55 * (distance / vh)
-      );
+      const duration =
+        customDuration ||
+        gsap.utils.clamp(
+          MIN_DURATION,
+          MAX_DURATION,
+          2.6 + 0.85 * (distance / vh)
+        );
 
       animating = true;
       root.classList.add('scene-director--playing');
@@ -153,8 +146,6 @@ export default function useSceneDirector(enabled) {
           releaseTimer = window.setTimeout(() => {
             animating = false;
             root.classList.remove('scene-director--playing');
-            // A wheel stream still running from the last gesture must
-            // not immediately trigger the following scene.
             wheelGestureConsumed = true;
           }, RELEASE_SETTLE * 1000);
         },
@@ -198,8 +189,6 @@ export default function useSceneDirector(enabled) {
       const gap = now - lastWheelTime;
       lastWheelTime = now;
 
-      // A new gesture starts after a pause, or when the delta clearly
-      // accelerates again (a fresh flick during decaying inertia).
       const isNewGesture =
         gap > WHEEL_IDLE_GAP ||
         (magnitude > 24 && magnitude > lastWheelMagnitude * 1.8);
@@ -225,7 +214,6 @@ export default function useSceneDirector(enabled) {
 
     const onTouchMove = (event) => {
       if (touchStartY == null) return;
-      // Native scrolling is replaced by scene navigation.
       if (event.cancelable) event.preventDefault();
       if (touchFired || animating) return;
 
@@ -286,8 +274,15 @@ export default function useSceneDirector(enabled) {
     window.addEventListener('touchcancel', onTouchEnd, { passive: true });
     window.addEventListener('keydown', onKeyDown);
 
-    // Pins / pin-spacers are final once the intro is gone.
+    // Refresh ScrollTrigger pins and immediately play Scene 01 (NamesScene)
+    // so it composes gracefully right after the envelope opens.
     ScrollTrigger.refresh();
+    introTimer = window.setTimeout(() => {
+      const stops = getStops();
+      if (stops.length > 0 && window.scrollY < stops[0] - STOP_EPSILON) {
+        playTo(stops[0], 3.8);
+      }
+    }, 80);
 
     return () => {
       window.removeEventListener('wheel', onWheel);
@@ -298,6 +293,7 @@ export default function useSceneDirector(enabled) {
       window.removeEventListener('keydown', onKeyDown);
       if (activeTween) activeTween.kill();
       if (releaseTimer) window.clearTimeout(releaseTimer);
+      if (introTimer) window.clearTimeout(introTimer);
       root.classList.remove('scene-director', 'scene-director--playing');
       if (lenis) lenis.start();
     };

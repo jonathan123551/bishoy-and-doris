@@ -39,7 +39,7 @@ export default function NamesScene() {
           trigger: section,
           start: 'top top',
           end: window.innerWidth <= 600 ? '+=780' : '+=1100',
-          scrub: 0.5,
+          scrub: 0.25,
           pin: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,

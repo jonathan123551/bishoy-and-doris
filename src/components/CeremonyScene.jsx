@@ -44,7 +44,7 @@ export default function CeremonyScene() {
           trigger: section,
           start: 'top top',
           end: '+=1400',
-          scrub: 0.5,
+          scrub: 0.25,
 
           /*
            * IMPORTANT:

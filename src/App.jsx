@@ -2,7 +2,6 @@ import { useState } from 'react';
 import useLenis from './hooks/useLenis';
 import useSceneDirector from './hooks/useSceneDirector';
 import EnvelopeIntro from './components/EnvelopeIntro';
-import OpeningScene from './components/OpeningScene';
 import NamesScene from './components/NamesScene';
 import CeremonyScene from './components/CeremonyScene';
 import ReceptionScene from './components/ReceptionScene';
@@ -39,7 +38,6 @@ export default function App() {
           transition: 'opacity 1.4s cubic-bezier(0.22, 1, 0.36, 1)',
         }}
       >
-        <OpeningScene isActive={introComplete} />
         <NamesScene />
         <CeremonyScene />
         <ReceptionScene />
