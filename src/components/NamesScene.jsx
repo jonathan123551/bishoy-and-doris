@@ -39,7 +39,7 @@ export default function NamesScene() {
           trigger: section,
           start: 'top top',
           end: window.innerWidth <= 600 ? '+=780' : '+=1100',
-          scrub: 0.25,
+          scrub: true,
           pin: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
@@ -208,14 +208,10 @@ export default function NamesScene() {
         subline,
         {
           y: 25,
-          autoAlpha: 0,
-          filter: 'blur(4px)',
-        },
+          autoAlpha: 0,        },
         {
           y: 0,
-          autoAlpha: 1,
-          filter: 'blur(0px)',
-          ease: 'power2.out',
+          autoAlpha: 1,          ease: 'power2.out',
           duration: 0.20,
         },
         0.64

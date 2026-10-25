@@ -132,7 +132,7 @@ export default function FinalInvitation() {
           start: 'top top',
           end: '+=150%',
           pin: true,
-          scrub: 0.25,
+          scrub: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },

@@ -33,7 +33,7 @@ export default function PhotoStory() {
           start: 'top top',
           end: '+=85%',
           pin: true,
-          scrub: 0.25,
+          scrub: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },
@@ -63,13 +63,13 @@ export default function PhotoStory() {
             className="ps-photo--primary"
             src={primaryPhoto.src}
             alt="Bishoy and Doris portrait"
-            objectPosition={primaryPhoto.objectPositionMobile || '50% 28%'}
+            objectPosition={primaryPhoto.objectPositionMobile || '66% 42%'}
           />
           <PhotoImage
             className="ps-photo--secondary"
             src={secondaryPhoto.src}
             alt="Bishoy and Doris candid"
-            objectPosition={secondaryPhoto.objectPositionMobile || '66% 42%'}
+            objectPosition={secondaryPhoto.objectPositionMobile || '50% 28%'}
           />
         </div>
 

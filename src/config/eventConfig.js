@@ -44,21 +44,21 @@ export const eventConfig = {
   // Add an authentic Bishoy and Doris video here when it is available.
   introVideo: null,
 
-  // Couple Photos
+  // Couple Photos (primary outer background = photo02 pier rail; secondary inner frame = photo01 rocky shore)
   couplePhotos: [
-    {
-      src: photo01,
-      alt: 'Bishoy and Doris',
-      orientation: 'portrait',
-      objectPositionMobile: '50% 28%',
-      objectPositionDesktop: '50% 32%',
-    },
     {
       src: photo02,
       alt: 'Bishoy and Doris',
       orientation: 'portrait',
       objectPositionMobile: '66% 42%',
-      objectPositionDesktop: '66% 42%',
+      objectPositionDesktop: '62% 42%',
+    },
+    {
+      src: photo01,
+      alt: 'Bishoy and Doris',
+      orientation: 'portrait',
+      objectPositionMobile: '50% 28%',
+      objectPositionDesktop: '50% 30%',
     },
   ],
 

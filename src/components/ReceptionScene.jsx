@@ -23,9 +23,7 @@ export default function ReceptionScene() {
       const section = sectionRef.current;
 
       const image = section.querySelector('.rec-cinematic-image');
-      const shade = section.querySelector('.rec-image-shade');
-      const copy = section.querySelector('.rec-cinematic-copy');
-
+      const shade = section.querySelector('.rec-image-shade');
       const label = section.querySelector('.rec-label');
       const rule = section.querySelector('.rec-rule-top');
       const venue = section.querySelector('.rec-venue-name');
@@ -72,11 +70,11 @@ export default function ReceptionScene() {
            * on mobile, which made the text appear before the
            * Reception image had properly settled full-screen.
            */
-          start: 'top top',
+          start: () => `top+=${Math.max(0, 1400 - window.innerHeight)} top`,
 
           end: () => 'bottom bottom',
 
-          scrub: 0.25,
+          scrub: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           refreshPriority: 0,
@@ -190,14 +188,10 @@ export default function ReceptionScene() {
         note,
         {
           y: 20,
-          autoAlpha: 0,
-          filter: 'blur(4px)',
-        },
+          autoAlpha: 0,        },
         {
           y: 0,
-          autoAlpha: 1,
-          filter: 'blur(0px)',
-          ease: 'power2.out',
+          autoAlpha: 1,          ease: 'power2.out',
           duration: 0.14,
         },
         startDelay + 0.44
@@ -211,14 +205,10 @@ export default function ReceptionScene() {
           childrenNote,
           {
             y: 18,
-            autoAlpha: 0,
-            filter: 'blur(4px)',
-          },
+            autoAlpha: 0,          },
           {
             y: 0,
-            autoAlpha: 1,
-            filter: 'blur(0px)',
-            ease: 'power2.out',
+            autoAlpha: 1,            ease: 'power2.out',
             duration: 0.14,
           },
           startDelay + 0.53

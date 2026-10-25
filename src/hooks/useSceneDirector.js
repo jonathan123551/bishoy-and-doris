@@ -8,26 +8,30 @@ gsap.registerPlugin(ScrollTrigger);
 /**
  * Scene Director
  * ==============
- * Turns the scroll-driven wedding film into a sequence of deliberate
- * cinematic scenes where each element takes its time to compose on screen:
+ * Drives the scroll-based wedding film as smooth, responsive cinematic scenes:
  *
- *   one intentional gesture (wheel / trackpad / swipe / key)
- *     -> input is captured (locked)
- *     -> the real scroll position is tweened smoothly (~3.8s - 4.8s, sine.inOut)
- *        to the next scene's "complete" point so every element in the scene's
- *        scrubbed GSAP timeline enters sequentially at a unhurried pace
- *     -> scene reaches 100% -> input is released
- *     -> next gesture enters the next scene
+ * - Forward gesture:
+ *   1. Brisk, silky handoff (`~0.48s`, `power2.inOut`) across the inter-section
+ *      scroll gap until the next section is pinned full-screen (`scene.start`).
+ *   2. Graceful in-scene timeline playback (`~2.35s - 2.75s`, `power1.out`)
+ *      from `scene.start` to `scene.complete` so every element inside the
+ *      section composes smoothly and sequentially.
+ *
+ * - Backward gesture:
+ *   Fast, feather-light glide (`~0.68s`, `power3.out`) directly back to the
+ *   previous section's completed state, with instant swipe-chaining if the
+ *   user swipes backward multiple times in a row on mobile.
  */
 
 const SCENE_PREFIX = 'scene:';
 const STOP_EPSILON = 4; // px tolerance when comparing scroll to a stop
-const MIN_DURATION = 3.8; // seconds — gives every scene's elements time to breathe
-const MAX_DURATION = 4.8; // seconds
-const RELEASE_SETTLE = 0.25; // seconds to let scrubbed timelines settle
-const SWIPE_THRESHOLD = 28; // px of finger travel that counts as intent
-const WHEEL_THRESHOLD = 6; // ignore micro wheel noise
-const WHEEL_IDLE_GAP = 180; // ms of wheel silence that ends a gesture
+const HANDOFF_DURATION = 0.48; // seconds to cross inter-section gap into next pin
+const SCENE_PLAY_DURATION = 2.35; // seconds to play a pinned scene's internal timeline
+const BACKWARD_DURATION = 0.68; // seconds for fast, silky reverse navigation
+const RELEASE_SETTLE = 0.04; // seconds settle buffer after tween completes
+const SWIPE_THRESHOLD = 16; // px of finger travel that triggers a mobile swipe
+const WHEEL_THRESHOLD = 5; // ignore micro wheel noise
+const WHEEL_IDLE_GAP = 140; // ms of wheel silence that starts a fresh gesture
 
 function getMaxScroll() {
   return Math.max(
@@ -36,8 +40,9 @@ function getMaxScroll() {
   );
 }
 
-function getStops() {
-  const stops = [];
+function getScenes() {
+  const max = getMaxScroll();
+  const scenes = [];
 
   ScrollTrigger.getAll().forEach((st) => {
     const id = st.vars && st.vars.id;
@@ -51,16 +56,36 @@ function getStops() {
       if (total > 0) progress = Math.min(1, anim.labels.complete / total);
     }
 
-    stops.push(Math.round(st.start + (st.end - st.start) * progress));
+    const start = Math.max(0, Math.min(max, Math.round(st.start)));
+    const complete = Math.max(
+      0,
+      Math.min(max, Math.round(st.start + (st.end - st.start) * progress))
+    );
+    const end = Math.max(0, Math.min(max, Math.round(st.end)));
+
+    scenes.push({ id, start, complete, end });
   });
 
-  const max = getMaxScroll();
-  stops.push(max);
+  scenes.sort((a, b) => a.complete - b.complete);
 
-  return stops
-    .map((s) => Math.max(0, Math.min(max, s)))
-    .sort((a, b) => a - b)
-    .filter((s, i, arr) => i === 0 || s - arr[i - 1] > 40);
+  const filtered = [];
+  for (let i = 0; i < scenes.length; i += 1) {
+    if (
+      filtered.length === 0 ||
+      scenes[i].complete - filtered[filtered.length - 1].complete > 40
+    ) {
+      filtered.push(scenes[i]);
+    }
+  }
+
+  return filtered;
+}
+
+function getSceneDuration(id) {
+  if (id === 'scene:date') return 2.8;
+  if (id === 'scene:final') return 2.75;
+  if (id === 'scene:photo') return 2.15;
+  return SCENE_PLAY_DURATION;
 }
 
 function isEditableTarget(target) {
@@ -85,14 +110,15 @@ export default function useSceneDirector(enabled) {
     }
 
     const lenis = getLenis();
-    // Lenis stays alive (ticker + ScrollTrigger sync) but no longer
-    // interprets raw wheel input; the director owns navigation.
+    // Lenis stays alive (ticker + ScrollTrigger sync) while Scene Director
+    // controls scroll position directly at 60fps.
     if (lenis) lenis.stop();
 
-    const ease = gsap.parseEase('sine.inOut');
     const proxy = { y: window.scrollY };
 
     let animating = false;
+    let activeDirection = 0;
+    let activeTargetY = null;
     let releaseTimer = null;
     let introTimer = null;
     let activeTween = null;
@@ -114,69 +140,152 @@ export default function useSceneDirector(enabled) {
       }
     };
 
-    const playTo = (target, customDuration) => {
+    const finishAnimation = (finalY) => {
+      setScroll(finalY);
+      ScrollTrigger.update();
+      activeTween = null;
+      if (releaseTimer) window.clearTimeout(releaseTimer);
+      releaseTimer = window.setTimeout(() => {
+        animating = false;
+        activeDirection = 0;
+        activeTargetY = null;
+        root.classList.remove('scene-director--playing');
+      }, RELEASE_SETTLE * 1000);
+    };
+
+    const killActive = () => {
+      if (activeTween) {
+        activeTween.kill();
+        activeTween = null;
+      }
+      if (releaseTimer) {
+        window.clearTimeout(releaseTimer);
+        releaseTimer = null;
+      }
+    };
+
+    const playForward = (scene, customDuration) => {
       const current = window.scrollY;
+      const target = scene.complete;
       if (Math.abs(target - current) <= STOP_EPSILON) return;
 
-      const distance = Math.abs(target - current);
-      const vh = Math.max(window.innerHeight, 1);
-      const duration =
-        customDuration ||
-        gsap.utils.clamp(
-          MIN_DURATION,
-          MAX_DURATION,
-          2.6 + 0.85 * (distance / vh)
-        );
-
+      killActive();
       animating = true;
+      activeDirection = 1;
+      activeTargetY = target;
+      root.classList.add('scene-director--playing');
+      proxy.y = current;
+
+      const entryY = Math.max(current, Math.min(target, scene.start));
+      const handoffDist = entryY - current;
+      const playDist = target - entryY;
+      const playDuration = customDuration || getSceneDuration(scene.id);
+
+      const tl = gsap.timeline({
+        onComplete: () => finishAnimation(target),
+      });
+
+      if (handoffDist > 24 && playDist > 24) {
+        // Phase 1: Brisk, smooth section-to-section handoff into the new pin
+        tl.to(proxy, {
+          y: entryY,
+          duration: HANDOFF_DURATION,
+          ease: 'power2.inOut',
+          onUpdate: () => setScroll(proxy.y),
+        });
+        // Phase 2: Unhurried in-section animation while pinned
+        tl.to(proxy, {
+          y: target,
+          duration: playDuration,
+          ease: 'power1.out',
+          onUpdate: () => setScroll(proxy.y),
+        });
+      } else {
+        tl.to(proxy, {
+          y: target,
+          duration: playDuration,
+          ease: 'power1.out',
+          onUpdate: () => setScroll(proxy.y),
+        });
+      }
+
+      activeTween = tl;
+    };
+
+    const playBackward = (scene, customDuration) => {
+      const current = window.scrollY;
+      const target = scene.complete;
+      if (Math.abs(target - current) <= STOP_EPSILON) return;
+
+      killActive();
+      animating = true;
+      activeDirection = -1;
+      activeTargetY = target;
       root.classList.add('scene-director--playing');
       proxy.y = current;
 
       activeTween = gsap.to(proxy, {
         y: target,
-        duration,
-        ease,
+        duration: customDuration || BACKWARD_DURATION,
+        ease: 'power3.out',
         overwrite: true,
         onUpdate: () => setScroll(proxy.y),
-        onComplete: () => {
-          setScroll(target);
-          ScrollTrigger.update();
-          activeTween = null;
-          // Let scrubbed timelines finish catching up before releasing.
-          releaseTimer = window.setTimeout(() => {
-            animating = false;
-            root.classList.remove('scene-director--playing');
-            wheelGestureConsumed = true;
-          }, RELEASE_SETTLE * 1000);
-        },
+        onComplete: () => finishAnimation(target),
       });
     };
 
+    const canInterrupt = (direction) => {
+      if (!animating) return true;
+      // Always allow interrupting or chaining when scrolling backward, or
+      // when reversing direction mid-flight.
+      if (direction < 0 || direction !== activeDirection) return true;
+      // Allow chaining forward swipes when current scene is nearly complete (>80%).
+      if (activeTween && typeof activeTween.progress === 'function') {
+        return activeTween.progress() > 0.8;
+      }
+      return false;
+    };
+
     const go = (direction) => {
-      if (animating) return;
+      if (!canInterrupt(direction)) return;
 
-      const current = window.scrollY;
-      const stops = getStops();
+      const scenes = getScenes();
+      if (scenes.length === 0) return;
 
-      let target = null;
+      const referenceY =
+        animating && activeTargetY != null && direction === activeDirection
+          ? activeTargetY
+          : window.scrollY;
+
       if (direction > 0) {
-        target = stops.find((s) => s > current + STOP_EPSILON);
+        const nextScene = scenes.find(
+          (s) => s.complete > referenceY + STOP_EPSILON
+        );
+        if (nextScene) playForward(nextScene);
       } else {
-        for (let i = stops.length - 1; i >= 0; i -= 1) {
-          if (stops[i] < current - STOP_EPSILON) {
-            target = stops[i];
+        let prevScene = null;
+        for (let i = scenes.length - 1; i >= 0; i -= 1) {
+          if (scenes[i].complete < referenceY - STOP_EPSILON) {
+            prevScene = scenes[i];
             break;
           }
         }
+        if (prevScene) {
+          playBackward(prevScene);
+        } else if (window.scrollY > STOP_EPSILON) {
+          playBackward({ id: 'scene:top', start: 0, complete: 0, end: 0 }, 0.55);
+        }
       }
-
-      if (target != null) playTo(target);
     };
 
     const goTo = (edge) => {
-      if (animating) return;
-      const stops = getStops();
-      playTo(edge === 'start' ? stops[0] : stops[stops.length - 1]);
+      const scenes = getScenes();
+      if (scenes.length === 0) return;
+      if (edge === 'start') {
+        playBackward(scenes[0], 0.8);
+      } else {
+        playForward(scenes[scenes.length - 1], 1.6);
+      }
     };
 
     /* ---------------- Wheel / trackpad ---------------- */
@@ -191,15 +300,18 @@ export default function useSceneDirector(enabled) {
 
       const isNewGesture =
         gap > WHEEL_IDLE_GAP ||
-        (magnitude > 24 && magnitude > lastWheelMagnitude * 1.8);
+        (magnitude > 20 && magnitude > lastWheelMagnitude * 1.6);
       lastWheelMagnitude = magnitude;
 
       if (isNewGesture) wheelGestureConsumed = false;
-      if (animating || wheelGestureConsumed) return;
+      if (wheelGestureConsumed) return;
       if (magnitude < WHEEL_THRESHOLD) return;
 
+      const direction = event.deltaY > 0 ? 1 : -1;
+      if (!canInterrupt(direction)) return;
+
       wheelGestureConsumed = true;
-      go(event.deltaY > 0 ? 1 : -1);
+      go(direction);
     };
 
     /* ---------------- Touch ---------------- */
@@ -215,13 +327,16 @@ export default function useSceneDirector(enabled) {
     const onTouchMove = (event) => {
       if (touchStartY == null) return;
       if (event.cancelable) event.preventDefault();
-      if (touchFired || animating) return;
+      if (touchFired) return;
 
       const dy = touchStartY - event.touches[0].clientY;
       if (Math.abs(dy) < SWIPE_THRESHOLD) return;
 
+      const direction = dy > 0 ? 1 : -1;
+      if (!canInterrupt(direction)) return;
+
       touchFired = true;
-      go(dy > 0 ? 1 : -1);
+      go(direction);
     };
 
     const onTouchEnd = () => {
@@ -278,11 +393,11 @@ export default function useSceneDirector(enabled) {
     // so it composes gracefully right after the envelope opens.
     ScrollTrigger.refresh();
     introTimer = window.setTimeout(() => {
-      const stops = getStops();
-      if (stops.length > 0 && window.scrollY < stops[0] - STOP_EPSILON) {
-        playTo(stops[0], 3.8);
+      const scenes = getScenes();
+      if (scenes.length > 0 && window.scrollY < scenes[0].complete - STOP_EPSILON) {
+        playForward(scenes[0], 2.5);
       }
-    }, 80);
+    }, 60);
 
     return () => {
       window.removeEventListener('wheel', onWheel);
@@ -291,8 +406,7 @@ export default function useSceneDirector(enabled) {
       window.removeEventListener('touchend', onTouchEnd);
       window.removeEventListener('touchcancel', onTouchEnd);
       window.removeEventListener('keydown', onKeyDown);
-      if (activeTween) activeTween.kill();
-      if (releaseTimer) window.clearTimeout(releaseTimer);
+      killActive();
       if (introTimer) window.clearTimeout(introTimer);
       root.classList.remove('scene-director', 'scene-director--playing');
       if (lenis) lenis.start();

@@ -44,7 +44,7 @@ export default function CeremonyScene() {
           trigger: section,
           start: 'top top',
           end: '+=1400',
-          scrub: 0.25,
+          scrub: true,
 
           /*
            * IMPORTANT:
@@ -172,14 +172,10 @@ pinSpacing: false,          anticipatePin: 1,
         arabic,
         {
           y: 25,
-          autoAlpha: 0,
-          filter: 'blur(5px)',
-        },
+          autoAlpha: 0,        },
         {
           y: 0,
-          autoAlpha: 1,
-          filter: 'blur(0px)',
-          ease: 'power2.out',
+          autoAlpha: 1,          ease: 'power2.out',
           duration: 0.2,
         },
         0.49

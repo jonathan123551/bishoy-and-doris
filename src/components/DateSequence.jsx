@@ -4,172 +4,164 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const TARGET_DAY = 14;
-const TARGET_MONTH = 11;
-const START_YEAR = 2020;
-const TARGET_YEAR = 2026;
+const DAYS = Array.from({ length: 14 }, (_, i) => String(i + 1).padStart(2, '0'));
+const MONTHS = Array.from({ length: 11 }, (_, i) => String(i + 1).padStart(2, '0'));
+const YEARS = ['2020', '2021', '2022', '2023', '2024', '2025', '2026'];
+const HOUR_TICKS = Array.from({ length: 12 }, (_, i) => i * 30);
 
 export default function DateSequence() {
   const sectionRef = useRef(null);
-  const dayRef = useRef(null);
-  const monthRef = useRef(null);
-  const yearRef = useRef(null);
 
   useLayoutEffect(() => {
+    const dayFinalY = -((DAYS.length - 1) * 100) / DAYS.length;
+    const monthFinalY = -((MONTHS.length - 1) * 100) / MONTHS.length;
+    const yearFinalY = -((YEARS.length - 1) * 100) / YEARS.length;
+
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      if (dayRef.current) dayRef.current.textContent = String(TARGET_DAY).padStart(2, '0');
-      if (monthRef.current) monthRef.current.textContent = String(TARGET_MONTH).padStart(2, '0');
-      if (yearRef.current) yearRef.current.textContent = String(TARGET_YEAR);
+      gsap.set('.ds-reel-track--day', { yPercent: dayFinalY });
+      gsap.set('.ds-reel-track--month', { yPercent: monthFinalY });
+      gsap.set('.ds-reel-track--year', { yPercent: yearFinalY });
       return undefined;
     }
 
     const ctx = gsap.context(() => {
-      const counter = {
-        day: 1,
-        month: 1,
-        year: START_YEAR,
-      };
-
-      const renderDigits = () => {
-        if (dayRef.current) {
-          dayRef.current.textContent = String(Math.round(counter.day)).padStart(2, '0');
-        }
-        if (monthRef.current) {
-          monthRef.current.textContent = String(Math.round(counter.month)).padStart(2, '0');
-        }
-        if (yearRef.current) {
-          yearRef.current.textContent = String(Math.round(counter.year));
-        }
-      };
-
-      renderDigits();
-
-      gsap.set('.ds-clock', { autoAlpha: 0, scale: 0.92 });
-      gsap.set('.ds-kicker', { autoAlpha: 0, y: 14 });
-      gsap.set('.ds-unit', { autoAlpha: 0, y: 24, scale: 0.94 });
-      gsap.set('.ds-dot', { autoAlpha: 0, scale: 0.5 });
-      gsap.set('.ds-details', { autoAlpha: 0, y: 18 });
-      gsap.set('.ds-clock-hands', { rotation: -210 });
+      gsap.set('.ds-clock', { autoAlpha: 0, scale: 0.88 });
+      gsap.set('.ds-clock-ticks', { rotation: -45, autoAlpha: 0 });
+      gsap.set('.ds-clock-hands', { rotation: -360 });
       gsap.set('.ds-clock-hour', { rotation: -90 });
+      gsap.set('.ds-kicker', { autoAlpha: 0, y: 10 });
+      gsap.set('.ds-glyphs', { autoAlpha: 0, scale: 0.95 });
+      gsap.set('.ds-unit--year', { autoAlpha: 0.45 });
+      gsap.set('.ds-unit--month', { autoAlpha: 0.45 });
+      gsap.set('.ds-unit--day', { autoAlpha: 0.45 });
+      gsap.set('.ds-reel-track--year', { yPercent: 0 });
+      gsap.set('.ds-reel-track--month', { yPercent: 0 });
+      gsap.set('.ds-reel-track--day', { yPercent: 0 });
+      gsap.set('.ds-details', { autoAlpha: 0, y: 12 });
 
       const tl = gsap.timeline({
         scrollTrigger: {
           id: 'scene:date',
           trigger: sectionRef.current,
           start: 'top top',
-          end: '+=110%',
-          scrub: 0.25,
+          end: '+=115%',
+          scrub: true,
           pin: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },
       });
 
-      // 1. Clock dial & "Save the Date" header materialize (0.00 -> 0.16)
+      // 1. Center Clock appears and spins first (0.00 -> 0.26)
       tl.to(
         '.ds-clock',
         { autoAlpha: 1, scale: 1, duration: 0.14, ease: 'power2.out' },
         0.0
       );
       tl.to(
-        '.ds-kicker',
-        { autoAlpha: 1, y: 0, duration: 0.14, ease: 'power2.out' },
-        0.05
+        '.ds-clock-ticks',
+        { rotation: 0, autoAlpha: 1, duration: 0.24, ease: 'power2.out' },
+        0.02
       );
-
-      // 2. Counter columns & gold separators enter sequentially (0.12 -> 0.28)
-      tl.to(
-        '.ds-unit',
-        {
-          autoAlpha: 1,
-          y: 0,
-          scale: 1,
-          stagger: 0.05,
-          duration: 0.14,
-          ease: 'power2.out',
-        },
-        0.12
-      );
-      tl.to(
-        '.ds-dot',
-        {
-          autoAlpha: 1,
-          scale: 1,
-          stagger: 0.05,
-          duration: 0.12,
-          ease: 'back.out(1.6)',
-        },
-        0.16
-      );
-
-      // 3. Clock hands sweep while Day (01->14), Month (01->11), Year (2020->2026) roll
       tl.to(
         '.ds-clock-hands',
-        { rotation: 0, duration: 0.58, ease: 'power2.inOut' },
-        0.18
+        { rotation: -30, duration: 0.26, ease: 'power2.inOut' },
+        0.02
       );
       tl.to(
         '.ds-clock-hour',
-        { rotation: 150, duration: 0.58, ease: 'power2.inOut' },
-        0.18
+        { rotation: 120, duration: 0.26, ease: 'power2.inOut' },
+        0.02
+      );
+      tl.to(
+        '.ds-kicker',
+        { autoAlpha: 1, y: 0, duration: 0.12, ease: 'power2.out' },
+        0.10
+      );
+      tl.to(
+        '.ds-glyphs',
+        { autoAlpha: 1, scale: 1, duration: 0.12, ease: 'power2.out' },
+        0.14
       );
 
+      // 2. YEAR scrolls on its own to 2026 (0.26 -> 0.46)
       tl.to(
-        counter,
-        {
-          day: TARGET_DAY,
-          duration: 0.44,
-          ease: 'power1.inOut',
-          onUpdate: renderDigits,
-        },
-        0.20
+        '.ds-unit--year',
+        { autoAlpha: 1, duration: 0.04, ease: 'none' },
+        0.26
       );
-
       tl.to(
-        counter,
-        {
-          month: TARGET_MONTH,
-          duration: 0.46,
-          ease: 'power1.inOut',
-          onUpdate: renderDigits,
-        },
-        0.24
+        '.ds-reel-track--year',
+        { yPercent: yearFinalY, duration: 0.20, ease: 'power2.inOut' },
+        0.26
       );
-
       tl.to(
-        counter,
-        {
-          year: TARGET_YEAR,
-          duration: 0.48,
-          ease: 'none',
-          onUpdate: renderDigits,
-        },
+        '.ds-clock-hands',
+        { rotation: -18, duration: 0.20, ease: 'none' },
         0.26
       );
 
-      // 4. Subtle lock-in pulse once 14 · 11 · 2026 settles (0.72 -> 0.80)
+      // 3. MONTH scrolls on its own to 11 (0.46 -> 0.66)
       tl.to(
-        '.ds-glyphs',
-        { scale: 1.045, duration: 0.05, ease: 'power2.out' },
-        0.73
-      ).to(
-        '.ds-glyphs',
-        { scale: 1, duration: 0.06, ease: 'power2.inOut' },
-        0.78
+        '.ds-unit--month',
+        { autoAlpha: 1, duration: 0.04, ease: 'none' },
+        0.46
+      );
+      tl.to(
+        '.ds-reel-track--month',
+        { yPercent: monthFinalY, duration: 0.20, ease: 'power2.inOut' },
+        0.46
+      );
+      tl.to(
+        '.ds-clock-hands',
+        { rotation: -8, duration: 0.20, ease: 'none' },
+        0.46
       );
 
-      // 5. "Saturday · 5:00 PM" rises in beneath the locked date (0.76 -> 0.88)
+      // 4. DAY scrolls on its own to 14 (0.66 -> 0.86)
+      tl.to(
+        '.ds-unit--day',
+        { autoAlpha: 1, duration: 0.04, ease: 'none' },
+        0.66
+      );
+      tl.to(
+        '.ds-reel-track--day',
+        { yPercent: dayFinalY, duration: 0.20, ease: 'power2.inOut' },
+        0.66
+      );
+      tl.to(
+        '.ds-clock-hands',
+        { rotation: 0, duration: 0.20, ease: 'power2.out' },
+        0.66
+      );
+      tl.to(
+        '.ds-clock-hour',
+        { rotation: 150, duration: 0.20, ease: 'power2.out' },
+        0.66
+      );
+
+      // 5. Subtle lock-in settle & "Saturday · 5:00 PM" centered inside clock (0.86 -> 0.95)
+      tl.to(
+        '.ds-glyphs',
+        { scale: 1.04, duration: 0.04, ease: 'power2.out' },
+        0.86
+      ).to(
+        '.ds-glyphs',
+        { scale: 1, duration: 0.05, ease: 'power2.inOut' },
+        0.90
+      );
+
       tl.to(
         '.ds-details',
-        { autoAlpha: 1, y: 0, duration: 0.12, ease: 'power2.out' },
-        0.76
+        { autoAlpha: 1, y: 0, duration: 0.10, ease: 'power2.out' },
+        0.86
       );
 
       // Scene Director stop: date locked at 14 · 11 · 2026 and details visible.
-      tl.addLabel('complete', 0.90);
+      tl.addLabel('complete', 0.96);
 
-      // Reading hold
-      tl.to({}, { duration: 0.12 }, 0.88);
+      // Short reading hold
+      tl.to({}, { duration: 0.05 }, 0.95);
     }, sectionRef);
 
     return () => ctx.revert();
@@ -178,35 +170,99 @@ export default function DateSequence() {
   return (
     <section ref={sectionRef} className="ds-scene scene-stage">
       <div className="ds-inner">
-        <div className="ds-clock" aria-hidden="true">
-          <div className="ds-clock-hour" />
-          <div className="ds-clock-hands" />
-          <div className="ds-clock-pivot" />
-        </div>
+        <div className="ds-centerpiece">
+          {/* Primary Centerpiece: Luxury Horological Clock Dial */}
+          <div className="ds-clock" aria-hidden="true">
+            <div className="ds-clock-glow" />
+            <div className="ds-clock-ring-outer" />
+            <div className="ds-clock-ring-inner" />
 
-        <p className="ds-kicker">Save the Date</p>
+            <svg
+              className="ds-clock-ticks"
+              viewBox="0 0 200 200"
+              fill="none"
+            >
+              {HOUR_TICKS.map((deg) => {
+                const isCardinal = deg % 90 === 0;
+                return (
+                  <line
+                    key={deg}
+                    x1="100"
+                    y1={isCardinal ? '8' : '11'}
+                    x2="100"
+                    y2={isCardinal ? '19' : '16'}
+                    stroke="rgba(218, 181, 109, 0.72)"
+                    strokeWidth={isCardinal ? '1.6' : '1'}
+                    strokeLinecap="round"
+                    transform={`rotate(${deg} 100 100)`}
+                  />
+                );
+              })}
+            </svg>
 
-        <div className="ds-glyphs" aria-label="14 November 2026">
-          <div className="ds-unit">
-            <span ref={dayRef} className="ds-glyph ds-glyph--0">01</span>
+            <div className="ds-clock-hour" />
+            <div className="ds-clock-hands" />
+            <div className="ds-clock-pivot" />
           </div>
 
-          <span className="ds-dot ds-dot--0" aria-hidden="true">&middot;</span>
+          {/* All text centered inside the middle of the clock */}
+          <div className="ds-content">
+            <p className="ds-kicker">Save the Date</p>
 
-          <div className="ds-unit">
-            <span ref={monthRef} className="ds-glyph ds-glyph--1">01</span>
+            <div className="ds-glyphs" aria-label="14 November 2026">
+              {/* Day Reel (01 -> 14) */}
+              <div className="ds-unit ds-unit--day">
+                <div className="ds-reel-window ds-reel-window--2ch">
+                  <div className="ds-reel-track ds-reel-track--day">
+                    {DAYS.map((d) => (
+                      <span key={d} className="ds-glyph">
+                        {d}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <span className="ds-dot" aria-hidden="true">
+                &middot;
+              </span>
+
+              {/* Month Reel (01 -> 11) */}
+              <div className="ds-unit ds-unit--month">
+                <div className="ds-reel-window ds-reel-window--2ch">
+                  <div className="ds-reel-track ds-reel-track--month">
+                    {MONTHS.map((m) => (
+                      <span key={m} className="ds-glyph">
+                        {m}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <span className="ds-dot" aria-hidden="true">
+                &middot;
+              </span>
+
+              {/* Year Reel (2020 -> 2026) */}
+              <div className="ds-unit ds-unit--year">
+                <div className="ds-reel-window ds-reel-window--4ch">
+                  <div className="ds-reel-track ds-reel-track--year">
+                    {YEARS.map((y) => (
+                      <span key={y} className="ds-glyph ds-glyph--year">
+                        {y}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="ds-details">
+              <p>Saturday</p>
+              <span>5:00 PM</span>
+            </div>
           </div>
-
-          <span className="ds-dot ds-dot--1" aria-hidden="true">&middot;</span>
-
-          <div className="ds-unit">
-            <span ref={yearRef} className="ds-glyph ds-glyph--2">2020</span>
-          </div>
-        </div>
-
-        <div className="ds-details">
-          <p>Saturday</p>
-          <span>5:00 PM</span>
         </div>
       </div>
     </section>
