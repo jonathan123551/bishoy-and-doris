@@ -52,7 +52,6 @@ export default function ReceptionScene() {
           scrub: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
-          refreshPriority: 0,
         },
       });
 

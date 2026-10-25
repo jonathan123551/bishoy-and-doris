@@ -52,9 +52,9 @@ export default function CeremonyScene() {
            * Reception will move underneath it.
            */
           pin: true,
-pinSpacing: false,          anticipatePin: 1,
+pinSpacing: false,
+          anticipatePin: 1,
           invalidateOnRefresh: true,
-          refreshPriority: 10,
         },
       });
 
@@ -172,10 +172,12 @@ pinSpacing: false,          anticipatePin: 1,
         arabic,
         {
           y: 25,
-          autoAlpha: 0,        },
+          autoAlpha: 0,
+        },
         {
           y: 0,
-          autoAlpha: 1,          ease: 'power2.out',
+          autoAlpha: 1,
+          ease: 'power2.out',
           duration: 0.2,
         },
         0.49
