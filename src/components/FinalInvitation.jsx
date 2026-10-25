@@ -112,25 +112,26 @@ export default function FinalInvitation() {
 
     const ctx = gsap.context(() => {
       // Initialize progressive elements
+      gsap.set('.fi-card', { y: 18, scale: 0.985 });
       gsap.set('.fi-border-outer, .fi-border-inner, .fi-corner', { autoAlpha: 0, scale: 0.98 });
-      gsap.set('.fi-frame-header', { autoAlpha: 0, y: 10 });
-      gsap.set('.fi-frame-names', { autoAlpha: 0, y: 14, scale: 0.96 });
-      gsap.set('.fi-frame-message', { autoAlpha: 0, y: 8 });
-      gsap.set('.fi-event-date', { autoAlpha: 0, y: 12, scale: 0.96 });
-      gsap.set('.fi-event-ceremony', { autoAlpha: 0, y: 12, scale: 0.96 });
-      gsap.set('.fi-event-reception', { autoAlpha: 0, y: 12, scale: 0.96 });
+      gsap.set('.fi-frame-header', { autoAlpha: 0, y: 12 });
+      gsap.set('.fi-frame-names', { autoAlpha: 0, y: 16, scale: 0.96 });
+      gsap.set('.fi-frame-message', { autoAlpha: 0, y: 10 });
+      gsap.set('.fi-event-date', { autoAlpha: 0, y: 14, scale: 0.96 });
+      gsap.set('.fi-event-ceremony', { autoAlpha: 0, y: 14, scale: 0.96 });
+      gsap.set('.fi-event-reception', { autoAlpha: 0, y: 14, scale: 0.96 });
       gsap.set('.fi-col-divider', { scaleY: 0 });
       gsap.set('.fi-botanical-foliage', { autoAlpha: 0, scaleX: 0.9 });
-      gsap.set('.fi-wax-seal', { autoAlpha: 0, scale: 1.25, y: -14 });
-      gsap.set('.fi-frame-signoff', { autoAlpha: 0, y: 8 });
-      gsap.set('.fi-frame-actions', { autoAlpha: 0, y: 10 });
+      gsap.set('.fi-wax-seal', { autoAlpha: 0, scale: 1.22, y: -14 });
+      gsap.set('.fi-frame-signoff', { autoAlpha: 0, y: 10 });
+      gsap.set('.fi-frame-actions', { autoAlpha: 0, y: 12 });
 
       const tl = gsap.timeline({
         scrollTrigger: {
           id: 'scene:final',
           trigger: section,
           start: 'top top',
-          end: '+=150%',
+          end: '+=160%',
           pin: true,
           scrub: true,
           anticipatePin: 1,
@@ -138,55 +139,62 @@ export default function FinalInvitation() {
         },
       });
 
-      // 0.00 -> 0.08: Paper borders & corner filigrees materialize
-      tl.to('.fi-border-outer, .fi-border-inner, .fi-corner', {
-        autoAlpha: 1,
+      // 0.00 -> 0.12: Card settles onto the velvet stage & borders materialize
+      tl.to('.fi-card', {
+        y: 0,
         scale: 1,
-        stagger: 0.015,
-        duration: 0.08,
+        duration: 0.14,
         ease: 'power2.out',
       }, 0.0);
 
-      // 0.08 -> 0.20: FRAME 1 — Top Proclamation & B & D
+      tl.to('.fi-border-outer, .fi-border-inner, .fi-corner', {
+        autoAlpha: 1,
+        scale: 1,
+        stagger: 0.02,
+        duration: 0.12,
+        ease: 'power2.out',
+      }, 0.02);
+
+      // 0.10 -> 0.24: FRAME 1 — Top Proclamation & B & D
       tl.to('.fi-frame-header', {
         autoAlpha: 1,
         y: 0,
-        duration: 0.12,
+        duration: 0.14,
         ease: 'power2.out',
-      }, 0.08);
+      }, 0.10);
 
-      // 0.20 -> 0.32: FRAME 2 — BISHOY & DORIS with wedding rings
+      // 0.22 -> 0.36: FRAME 2 — BISHOY & DORIS with wedding rings
       tl.to('.fi-frame-names', {
         autoAlpha: 1,
         y: 0,
         scale: 1,
-        duration: 0.12,
+        duration: 0.14,
         ease: 'power2.out',
-      }, 0.20);
+      }, 0.22);
 
-      // 0.32 -> 0.44: FRAME 3 — Emotional Invitation Message
+      // 0.34 -> 0.47: FRAME 3 — Emotional Invitation Message
       tl.to('.fi-frame-message', {
         autoAlpha: 1,
         y: 0,
-        duration: 0.12,
+        duration: 0.13,
         ease: 'power2.out',
-      }, 0.32);
+      }, 0.34);
 
-      // 0.44 -> 0.58: FRAME 4 — Date & Time Column
+      // 0.45 -> 0.59: FRAME 4 — Date & Time Column
       tl.to('.fi-event-date', {
         autoAlpha: 1,
         y: 0,
         scale: 1,
         duration: 0.14,
         ease: 'power2.out',
-      }, 0.44);
+      }, 0.45);
 
-      // 0.54 -> 0.68: FRAME 5 — Ceremony Column
+      // 0.55 -> 0.70: FRAME 5 — Ceremony Column
       tl.to('.fi-col-divider', {
         scaleY: 1,
-        duration: 0.10,
+        duration: 0.12,
         ease: 'power1.inOut',
-      }, 0.54);
+      }, 0.55);
 
       tl.to('.fi-event-ceremony', {
         autoAlpha: 1,
@@ -194,9 +202,9 @@ export default function FinalInvitation() {
         scale: 1,
         duration: 0.14,
         ease: 'power2.out',
-      }, 0.56);
+      }, 0.57);
 
-      // 0.68 -> 0.80: FRAME 6 — Reception Column
+      // 0.68 -> 0.82: FRAME 6 — Reception Column
       tl.to('.fi-event-reception', {
         autoAlpha: 1,
         y: 0,
@@ -205,37 +213,39 @@ export default function FinalInvitation() {
         ease: 'power2.out',
       }, 0.68);
 
-      // 0.80 -> 0.90: FRAME 7 — Wax Seal & Botanical Foliage
+      // 0.79 -> 0.91: FRAME 7 — Wax Seal & Botanical Foliage
       tl.to('.fi-botanical-foliage', {
         autoAlpha: 1,
         scaleX: 1,
-        duration: 0.10,
+        duration: 0.12,
         ease: 'power2.out',
-      }, 0.80);
+      }, 0.79);
 
       tl.to('.fi-wax-seal', {
         autoAlpha: 1,
         scale: 1.0,
         y: 0,
-        duration: 0.12,
+        duration: 0.13,
         ease: 'power2.out',
-      }, 0.82);
+      }, 0.81);
 
-      // 0.90 -> 0.96: FRAME 8 — "See you there." & Finial
+      // 0.89 -> 0.97: FRAME 8 — "See you there." & Finial
       tl.to('.fi-frame-signoff', {
         autoAlpha: 1,
         y: 0,
-        duration: 0.08,
+        duration: 0.10,
         ease: 'power2.out',
-      }, 0.90);
+      }, 0.89);
 
-      // 0.96 -> 1.00: FRAME 9 — Action Buttons (Add to Calendar & View Map)
+      // 0.94 -> 1.00: FRAME 9 — Action Buttons (Add to Calendar & View Map)
       tl.to('.fi-frame-actions', {
         autoAlpha: 1,
         y: 0,
-        duration: 0.08,
+        duration: 0.10,
         ease: 'power2.out',
-      }, 0.96);
+      }, 0.94);
+
+      tl.addLabel('complete', 1.0);
     }, section);
 
     return () => ctx.revert();

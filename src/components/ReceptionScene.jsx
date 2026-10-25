@@ -23,7 +23,9 @@ export default function ReceptionScene() {
       const section = sectionRef.current;
 
       const image = section.querySelector('.rec-cinematic-image');
-      const shade = section.querySelector('.rec-image-shade');
+      const shade = section.querySelector('.rec-image-shade');
+      const copy = section.querySelector('.rec-cinematic-copy');
+
       const label = section.querySelector('.rec-label');
       const rule = section.querySelector('.rec-rule-top');
       const venue = section.querySelector('.rec-venue-name');
@@ -35,12 +37,8 @@ export default function ReceptionScene() {
       /*
        * IMPORTANT:
        * The Reception image is visible from the beginning.
-       *
        * This allows the image to sit underneath Ceremony while
        * Ceremony is leaving the viewport.
-       *
-       * The image does NOT fade out at the end.
-       * It remains visible until DateSequence naturally takes over.
        */
       gsap.set(image, {
         opacity: 1,
@@ -56,24 +54,8 @@ export default function ReceptionScene() {
         scrollTrigger: {
           id: 'scene:reception',
           trigger: section,
-
-          /*
-           * IMPORTANT:
-           * Start the Reception timeline when Reception itself
-           * reaches the top of the viewport.
-           *
-           * The previous calculation:
-           *
-           * top top-=1400-window.innerHeight
-           *
-           * caused the Reception timeline to start too early
-           * on mobile, which made the text appear before the
-           * Reception image had properly settled full-screen.
-           */
           start: () => `top+=${Math.max(0, 1400 - window.innerHeight)} top`,
-
           end: () => 'bottom bottom',
-
           scrub: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
@@ -82,14 +64,10 @@ export default function ReceptionScene() {
       });
 
       /*
-       * Small image-only breathing period on mobile.
-       *
-       * This is intentionally NOT zero.
-       * The Reception image should become full-screen first,
-       * then the text should begin shortly afterward.
+       * Image-only establishment period so the Reception venue settles
+       * full-screen before typography begins.
        */
-      const isMobile = window.innerWidth <= 600;
-      const startDelay = isMobile ? 0.10 : 0.06;
+      const startDelay = 0.14;
 
       /*
        * 1. Cinematic shade gently fades in to prepare contrast for text.
@@ -102,19 +80,18 @@ export default function ReceptionScene() {
         {
           opacity: 0.52,
           ease: 'none',
-          duration: 0.22,
+          duration: 0.24,
         },
-        startDelay * 0.5
+        0.04
       );
 
       /*
-       * 2. "Reception" eyebrow appears after the short
-       * image-only breathing period.
+       * 2. "Reception" eyebrow appears after the establishment beat.
        */
       tl.fromTo(
         label,
         {
-          y: 28,
+          y: 26,
           autoAlpha: 0,
         },
         {
@@ -139,10 +116,10 @@ export default function ReceptionScene() {
           scaleX: 1,
           autoAlpha: 1,
           transformOrigin: 'center',
-          ease: 'none',
+          ease: 'power1.inOut',
           duration: 0.13,
         },
-        startDelay + 0.11
+        startDelay + 0.10
       );
 
       /*
@@ -151,7 +128,7 @@ export default function ReceptionScene() {
       tl.fromTo(
         venue,
         {
-          y: 36,
+          y: 30,
           autoAlpha: 0,
         },
         {
@@ -160,7 +137,7 @@ export default function ReceptionScene() {
           ease: 'power2.out',
           duration: 0.17,
         },
-        startDelay + 0.22
+        startDelay + 0.19
       );
 
       /*
@@ -176,9 +153,9 @@ export default function ReceptionScene() {
           y: 0,
           autoAlpha: 1,
           ease: 'power2.out',
-          duration: 0.14,
+          duration: 0.15,
         },
-        startDelay + 0.34
+        startDelay + 0.30
       );
 
       /*
@@ -188,13 +165,15 @@ export default function ReceptionScene() {
         note,
         {
           y: 20,
-          autoAlpha: 0,        },
+          autoAlpha: 0,
+        },
         {
           y: 0,
-          autoAlpha: 1,          ease: 'power2.out',
+          autoAlpha: 1,
+          ease: 'power2.out',
           duration: 0.14,
         },
-        startDelay + 0.44
+        startDelay + 0.40
       );
 
       /*
@@ -205,13 +184,15 @@ export default function ReceptionScene() {
           childrenNote,
           {
             y: 18,
-            autoAlpha: 0,          },
+            autoAlpha: 0,
+          },
           {
             y: 0,
-            autoAlpha: 1,            ease: 'power2.out',
+            autoAlpha: 1,
+            ease: 'power2.out',
             duration: 0.14,
           },
-          startDelay + 0.53
+          startDelay + 0.49
         );
       }
 
@@ -221,37 +202,37 @@ export default function ReceptionScene() {
       tl.fromTo(
         maps,
         {
-          y: 24,
+          y: 22,
           autoAlpha: 0,
-          scale: 0.94,
+          scale: 0.95,
         },
         {
           y: 0,
           autoAlpha: 1,
           scale: 1,
-          ease: 'back.out(1.4)',
+          ease: 'back.out(1.3)',
           duration: 0.15,
         },
-        startDelay + 0.63
+        startDelay + 0.59
       );
 
       /*
        * Scene Director stop: all Reception copy + map button revealed.
        */
-      tl.addLabel('complete', startDelay + 0.78);
+      tl.addLabel('complete', startDelay + 0.74);
 
       /*
-       * 8. Very short hold after the complete Reception
-       * scene before Date takes over.
-       *
-       * Keep this short so there is no unnecessary dead scroll.
+       * Gentle exit transition when advancing forward into DateSequence.
        */
       tl.to(
-        {},
+        copy,
         {
-          duration: 0.06,
+          y: -18,
+          autoAlpha: 0.22,
+          ease: 'power1.inOut',
+          duration: 0.10,
         },
-        startDelay + 0.77
+        startDelay + 0.76
       );
     }, sectionRef);
 

@@ -25,26 +25,26 @@ export default function DateSequence() {
     }
 
     const ctx = gsap.context(() => {
-      gsap.set('.ds-clock', { autoAlpha: 0, scale: 0.88 });
+      gsap.set('.ds-clock', { autoAlpha: 0, scale: 0.9 });
       gsap.set('.ds-clock-ticks', { rotation: -45, autoAlpha: 0 });
       gsap.set('.ds-clock-hands', { rotation: -360 });
       gsap.set('.ds-clock-hour', { rotation: -90 });
-      gsap.set('.ds-kicker', { autoAlpha: 0, y: 10 });
-      gsap.set('.ds-glyphs', { autoAlpha: 0, scale: 0.95 });
+      gsap.set('.ds-kicker', { autoAlpha: 0, y: 12 });
+      gsap.set('.ds-glyphs', { autoAlpha: 0, scale: 0.96 });
       gsap.set('.ds-unit--year', { autoAlpha: 0.45 });
       gsap.set('.ds-unit--month', { autoAlpha: 0.45 });
       gsap.set('.ds-unit--day', { autoAlpha: 0.45 });
       gsap.set('.ds-reel-track--year', { yPercent: 0 });
       gsap.set('.ds-reel-track--month', { yPercent: 0 });
       gsap.set('.ds-reel-track--day', { yPercent: 0 });
-      gsap.set('.ds-details', { autoAlpha: 0, y: 12 });
+      gsap.set('.ds-details', { autoAlpha: 0, y: 14 });
 
       const tl = gsap.timeline({
         scrollTrigger: {
           id: 'scene:date',
           trigger: sectionRef.current,
           start: 'top top',
-          end: '+=115%',
+          end: '+=120%',
           scrub: true,
           pin: true,
           anticipatePin: 1,
@@ -52,116 +52,120 @@ export default function DateSequence() {
         },
       });
 
-      // 1. Center Clock appears and spins first (0.00 -> 0.26)
+      // 1. Center Clock appears and spins first (0.00 -> 0.25)
       tl.to(
         '.ds-clock',
-        { autoAlpha: 1, scale: 1, duration: 0.14, ease: 'power2.out' },
-        0.0
+        { autoAlpha: 1, scale: 1, duration: 0.16, ease: 'power2.out' },
+        0.02
       );
       tl.to(
         '.ds-clock-ticks',
-        { rotation: 0, autoAlpha: 1, duration: 0.24, ease: 'power2.out' },
-        0.02
+        { rotation: 0, autoAlpha: 1, duration: 0.22, ease: 'power2.out' },
+        0.03
       );
       tl.to(
         '.ds-clock-hands',
-        { rotation: -30, duration: 0.26, ease: 'power2.inOut' },
-        0.02
+        { rotation: -30, duration: 0.24, ease: 'power2.inOut' },
+        0.03
       );
       tl.to(
         '.ds-clock-hour',
-        { rotation: 120, duration: 0.26, ease: 'power2.inOut' },
-        0.02
+        { rotation: 120, duration: 0.24, ease: 'power2.inOut' },
+        0.03
       );
       tl.to(
         '.ds-kicker',
-        { autoAlpha: 1, y: 0, duration: 0.12, ease: 'power2.out' },
-        0.10
+        { autoAlpha: 1, y: 0, duration: 0.13, ease: 'power2.out' },
+        0.11
       );
       tl.to(
         '.ds-glyphs',
-        { autoAlpha: 1, scale: 1, duration: 0.12, ease: 'power2.out' },
-        0.14
+        { autoAlpha: 1, scale: 1, duration: 0.13, ease: 'power2.out' },
+        0.15
       );
 
-      // 2. YEAR scrolls on its own to 2026 (0.26 -> 0.46)
+      // 2. YEAR scrolls on its own to 2026 (0.25 -> 0.45)
       tl.to(
         '.ds-unit--year',
-        { autoAlpha: 1, duration: 0.04, ease: 'none' },
-        0.26
+        { autoAlpha: 1, duration: 0.05, ease: 'none' },
+        0.25
       );
       tl.to(
         '.ds-reel-track--year',
         { yPercent: yearFinalY, duration: 0.20, ease: 'power2.inOut' },
-        0.26
+        0.25
       );
       tl.to(
         '.ds-clock-hands',
         { rotation: -18, duration: 0.20, ease: 'none' },
-        0.26
+        0.25
       );
 
-      // 3. MONTH scrolls on its own to 11 (0.46 -> 0.66)
+      // 3. MONTH scrolls on its own to 11 (0.45 -> 0.65)
       tl.to(
         '.ds-unit--month',
-        { autoAlpha: 1, duration: 0.04, ease: 'none' },
-        0.46
+        { autoAlpha: 1, duration: 0.05, ease: 'none' },
+        0.45
       );
       tl.to(
         '.ds-reel-track--month',
         { yPercent: monthFinalY, duration: 0.20, ease: 'power2.inOut' },
-        0.46
+        0.45
       );
       tl.to(
         '.ds-clock-hands',
         { rotation: -8, duration: 0.20, ease: 'none' },
-        0.46
+        0.45
       );
 
-      // 4. DAY scrolls on its own to 14 (0.66 -> 0.86)
+      // 4. DAY scrolls on its own to 14 (0.65 -> 0.85)
       tl.to(
         '.ds-unit--day',
-        { autoAlpha: 1, duration: 0.04, ease: 'none' },
-        0.66
+        { autoAlpha: 1, duration: 0.05, ease: 'none' },
+        0.65
       );
       tl.to(
         '.ds-reel-track--day',
         { yPercent: dayFinalY, duration: 0.20, ease: 'power2.inOut' },
-        0.66
+        0.65
       );
       tl.to(
         '.ds-clock-hands',
         { rotation: 0, duration: 0.20, ease: 'power2.out' },
-        0.66
+        0.65
       );
       tl.to(
         '.ds-clock-hour',
         { rotation: 150, duration: 0.20, ease: 'power2.out' },
-        0.66
+        0.65
       );
 
-      // 5. Subtle lock-in settle & "Saturday · 5:00 PM" centered inside clock (0.86 -> 0.95)
+      // 5. Subtle lock-in settle & "Saturday · 5:00 PM" centered inside clock (0.83 -> 0.92)
       tl.to(
         '.ds-glyphs',
-        { scale: 1.04, duration: 0.04, ease: 'power2.out' },
-        0.86
+        { scale: 1.035, duration: 0.04, ease: 'power2.out' },
+        0.84
       ).to(
         '.ds-glyphs',
         { scale: 1, duration: 0.05, ease: 'power2.inOut' },
-        0.90
+        0.88
       );
 
       tl.to(
         '.ds-details',
-        { autoAlpha: 1, y: 0, duration: 0.10, ease: 'power2.out' },
-        0.86
+        { autoAlpha: 1, y: 0, duration: 0.11, ease: 'power2.out' },
+        0.81
       );
 
       // Scene Director stop: date locked at 14 · 11 · 2026 and details visible.
-      tl.addLabel('complete', 0.96);
+      tl.addLabel('complete', 0.92);
 
-      // Short reading hold
-      tl.to({}, { duration: 0.05 }, 0.95);
+      // 6. Gentle exit transition before PhotoStory
+      tl.to(
+        '.ds-centerpiece',
+        { y: -16, scale: 0.98, autoAlpha: 0.3, duration: 0.07, ease: 'power1.inOut' },
+        0.93
+      );
     }, sectionRef);
 
     return () => ctx.revert();

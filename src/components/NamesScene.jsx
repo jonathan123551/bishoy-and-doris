@@ -38,7 +38,7 @@ export default function NamesScene() {
           id: 'scene:names',
           trigger: section,
           start: 'top top',
-          end: window.innerWidth <= 600 ? '+=780' : '+=1100',
+          end: window.innerWidth <= 600 ? '+=920' : '+=1200',
           scrub: true,
           pin: true,
           anticipatePin: 1,
@@ -47,8 +47,8 @@ export default function NamesScene() {
       });
 
       /*
-       * BACKGROUND
-       * Slow cinematic movement while scrolling.
+       * BACKGROUND & ATMOSPHERE
+       * Establish the scene before typography enters.
        */
       tl.fromTo(
         bg,
@@ -58,16 +58,13 @@ export default function NamesScene() {
         },
         {
           scale: 1,
-          yPercent: -2,
+          yPercent: -1,
           ease: 'none',
-          duration: 1,
+          duration: 0.85,
         },
         0
       );
 
-      /*
-       * Soft light movement.
-       */
       tl.fromTo(
         atmosphere,
         {
@@ -76,35 +73,35 @@ export default function NamesScene() {
         },
         {
           opacity: 0.75,
-          scale: 1.08,
+          scale: 1.06,
           ease: 'none',
-          duration: 0.9,
+          duration: 0.85,
         },
         0
       );
 
       /*
-       * TOP LABEL
+       * 1. TOP LABEL (0.12 -> 0.28)
        */
       tl.fromTo(
         overline,
         {
-          y: 30,
+          y: 26,
           autoAlpha: 0,
-          letterSpacing: '0.62em',
+          letterSpacing: '0.56em',
         },
         {
           y: 0,
           autoAlpha: 1,
           letterSpacing: '0.36em',
           ease: 'power2.out',
-          duration: 0.18,
+          duration: 0.16,
         },
-        0.10
+        0.12
       );
 
       /*
-       * GOLD LINE
+       * 2. GOLD LINE (0.23 -> 0.36)
        */
       tl.fromTo(
         topRule,
@@ -116,74 +113,74 @@ export default function NamesScene() {
           scaleX: 1,
           autoAlpha: 1,
           transformOrigin: 'center',
-          ease: 'none',
-          duration: 0.12,
+          ease: 'power1.inOut',
+          duration: 0.13,
         },
-        0.18
+        0.23
       );
 
       /*
-       * BISHOY
+       * 3. BISHOY (0.31 -> 0.48)
        */
       tl.fromTo(
         groom,
         {
-          xPercent: -12,
-          y: 25,
+          xPercent: -10,
+          y: 22,
           autoAlpha: 0,
         },
         {
           xPercent: 0,
           y: 0,
           autoAlpha: 1,
-          ease: 'power3.out',
-          duration: 0.20,
+          ease: 'power2.out',
+          duration: 0.17,
         },
-        0.25
+        0.31
       );
 
       /*
-       * AMPERSAND
+       * 4. AMPERSAND (0.43 -> 0.58)
        */
       tl.fromTo(
         amp,
         {
-          scale: 0.55,
-          y: 20,
+          scale: 0.65,
+          y: 16,
           autoAlpha: 0,
         },
         {
           scale: 1,
           y: 0,
           autoAlpha: 1,
-          ease: 'back.out(1.7)',
-          duration: 0.18,
+          ease: 'back.out(1.4)',
+          duration: 0.15,
         },
-        0.39
+        0.43
       );
 
       /*
-       * DORIS
+       * 5. DORIS (0.52 -> 0.69)
        */
       tl.fromTo(
         bride,
         {
-          xPercent: 12,
-          y: 25,
+          xPercent: 10,
+          y: 22,
           autoAlpha: 0,
         },
         {
           xPercent: 0,
           y: 0,
           autoAlpha: 1,
-          ease: 'power3.out',
-          duration: 0.20,
+          ease: 'power2.out',
+          duration: 0.17,
         },
-        0.45
+        0.52
       );
 
       /*
-       * GOLD BOTTOM LINE
+       * 6. GOLD BOTTOM LINE (0.64 -> 0.76)
        */
       tl.fromTo(
         bottomRule,
@@ -195,50 +192,58 @@ export default function NamesScene() {
           scaleX: 1,
           autoAlpha: 1,
           transformOrigin: 'center',
-          ease: 'none',
+          ease: 'power1.inOut',
           duration: 0.12,
-        },
-        0.58
-      );
-
-      /*
-       * LOVE STORY
-       */
-      tl.fromTo(
-        subline,
-        {
-          y: 25,
-          autoAlpha: 0,        },
-        {
-          y: 0,
-          autoAlpha: 1,          ease: 'power2.out',
-          duration: 0.20,
         },
         0.64
       );
 
       /*
-       * Scene Director stop: every name element is fully revealed here.
+       * 7. POETIC SUBLINE (0.70 -> 0.85)
+       */
+      tl.fromTo(
+        subline,
+        {
+          y: 22,
+          autoAlpha: 0,
+        },
+        {
+          y: 0,
+          autoAlpha: 1,
+          ease: 'power2.out',
+          duration: 0.15,
+        },
+        0.70
+      );
+
+      /*
+       * Scene Director stop: every name element is settled and complete.
        */
       tl.addLabel('complete', 0.86);
 
       /*
-       * Tiny cinematic hold.
+       * Gentle exit transition when advancing forward into Ceremony.
        */
       tl.to(
         '.ns-copy',
         {
-          yPercent: -2,
-          ease: 'none',
+          yPercent: -6,
+          autoAlpha: 0.25,
+          ease: 'power1.inOut',
           duration: 0.12,
         },
-        0.78
+        0.88
       );
-
-      /*
-       * Clean exit before Ceremony
-       */
-      
+      tl.to(
+        bg,
+        {
+          scale: 1.03,
+          yPercent: -3,
+          ease: 'power1.inOut',
+          duration: 0.12,
+        },
+        0.88
+      );
     }, sectionRef);
 
     return () => ctx.revert();

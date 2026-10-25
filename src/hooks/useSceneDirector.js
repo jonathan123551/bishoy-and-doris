@@ -8,26 +8,28 @@ gsap.registerPlugin(ScrollTrigger);
 /**
  * Scene Director
  * ==============
- * Drives the scroll-based wedding film as smooth, responsive cinematic scenes:
+ * Drives the scroll-based wedding film as smooth, intentional cinematic scenes:
  *
  * - Forward gesture:
- *   1. Brisk, silky handoff (`~0.48s`, `power2.inOut`) across the inter-section
- *      scroll gap until the next section is pinned full-screen (`scene.start`).
- *   2. Graceful in-scene timeline playback (`~2.35s - 2.75s`, `power1.out`)
- *      from `scene.start` to `scene.complete` so every element inside the
- *      section composes smoothly and sequentially.
+ *   1. Controlled, elegant scene transition (`~1.05s`, `sine.inOut`) where the
+ *      current section gently releases and the next section enters and settles
+ *      into the viewport (`scene.start`).
+ *   2. Unhurried, progressive in-scene reveal (`~3.3s - 4.2s`, `sine.inOut`)
+ *      from `scene.start` to `scene.complete` so the new section establishes
+ *      first and its internal elements reveal progressively with breathing room.
  *
  * - Backward gesture:
- *   Fast, feather-light glide (`~0.68s`, `power3.out`) directly back to the
- *   previous section's completed state, with instant swipe-chaining if the
- *   user swipes backward multiple times in a row on mobile.
+ *   Kept exactly as-is — fast, feather-light glide (`0.68s`, `power3.out`)
+ *   directly back to the previous section's completed state, with instant
+ *   swipe-chaining on mobile.
  */
 
 const SCENE_PREFIX = 'scene:';
 const STOP_EPSILON = 4; // px tolerance when comparing scroll to a stop
-const HANDOFF_DURATION = 0.48; // seconds to cross inter-section gap into next pin
-const SCENE_PLAY_DURATION = 2.35; // seconds to play a pinned scene's internal timeline
-const BACKWARD_DURATION = 0.68; // seconds for fast, silky reverse navigation
+const HANDOFF_DURATION = 1.05; // seconds for controlled, cinematic section-to-section transition
+const OVERLAP_HANDOFF_DURATION = 0.85; // seconds for Ceremony -> Reception cross-dissolve
+const SCENE_PLAY_DURATION = 3.5; // seconds for progressive in-section element reveal
+const BACKWARD_DURATION = 0.68; // seconds for fast, silky reverse navigation (UNCHANGED)
 const RELEASE_SETTLE = 0.04; // seconds settle buffer after tween completes
 const SWIPE_THRESHOLD = 16; // px of finger travel that triggers a mobile swipe
 const WHEEL_THRESHOLD = 5; // ignore micro wheel noise
@@ -82,9 +84,12 @@ function getScenes() {
 }
 
 function getSceneDuration(id) {
-  if (id === 'scene:date') return 2.8;
-  if (id === 'scene:final') return 2.75;
-  if (id === 'scene:photo') return 2.15;
+  if (id === 'scene:names') return 3.4;
+  if (id === 'scene:ceremony') return 3.7;
+  if (id === 'scene:reception') return 3.6;
+  if (id === 'scene:date') return 3.9;
+  if (id === 'scene:photo') return 3.35;
+  if (id === 'scene:final') return 4.2;
   return SCENE_PLAY_DURATION;
 }
 
@@ -180,31 +185,37 @@ export default function useSceneDirector(enabled) {
       const handoffDist = entryY - current;
       const playDist = target - entryY;
       const playDuration = customDuration || getSceneDuration(scene.id);
+      const handoffDuration =
+        scene.id === 'scene:reception'
+          ? OVERLAP_HANDOFF_DURATION
+          : HANDOFF_DURATION;
 
       const tl = gsap.timeline({
         onComplete: () => finishAnimation(target),
       });
 
       if (handoffDist > 24 && playDist > 24) {
-        // Phase 1: Brisk, smooth section-to-section handoff into the new pin
+        // Phase 1: Controlled, cinematic transition out of current section
+        // and smooth arrival into the next section's pinned stage.
         tl.to(proxy, {
           y: entryY,
-          duration: HANDOFF_DURATION,
-          ease: 'power2.inOut',
+          duration: handoffDuration,
+          ease: 'sine.inOut',
           onUpdate: () => setScroll(proxy.y),
         });
-        // Phase 2: Unhurried in-section animation while pinned
+        // Phase 2: Section establishes first, then internal elements reveal
+        // progressively at a steady, unhurried pace before settling.
         tl.to(proxy, {
           y: target,
           duration: playDuration,
-          ease: 'power1.out',
+          ease: 'sine.inOut',
           onUpdate: () => setScroll(proxy.y),
         });
       } else {
         tl.to(proxy, {
           y: target,
           duration: playDuration,
-          ease: 'power1.out',
+          ease: 'sine.inOut',
           onUpdate: () => setScroll(proxy.y),
         });
       }
@@ -239,9 +250,9 @@ export default function useSceneDirector(enabled) {
       // Always allow interrupting or chaining when scrolling backward, or
       // when reversing direction mid-flight.
       if (direction < 0 || direction !== activeDirection) return true;
-      // Allow chaining forward swipes when current scene is nearly complete (>80%).
+      // Allow chaining forward swipes only after current scene is nearly complete (>90%).
       if (activeTween && typeof activeTween.progress === 'function') {
-        return activeTween.progress() > 0.8;
+        return activeTween.progress() > 0.9;
       }
       return false;
     };
@@ -284,7 +295,7 @@ export default function useSceneDirector(enabled) {
       if (edge === 'start') {
         playBackward(scenes[0], 0.8);
       } else {
-        playForward(scenes[scenes.length - 1], 1.6);
+        playForward(scenes[scenes.length - 1], 2.2);
       }
     };
 
@@ -395,7 +406,7 @@ export default function useSceneDirector(enabled) {
     introTimer = window.setTimeout(() => {
       const scenes = getScenes();
       if (scenes.length > 0 && window.scrollY < scenes[0].complete - STOP_EPSILON) {
-        playForward(scenes[0], 2.5);
+        playForward(scenes[0], 3.4);
       }
     }, 60);
 

@@ -31,7 +31,7 @@ export default function PhotoStory() {
           id: 'scene:photo',
           trigger: sectionRef.current,
           start: 'top top',
-          end: '+=85%',
+          end: '+=110%',
           pin: true,
           scrub: true,
           anticipatePin: 1,
@@ -39,14 +39,56 @@ export default function PhotoStory() {
         },
       });
 
-      // Animate contents
-      tl.fromTo('.ps-photo--primary', { scale: 1.06 }, { scale: 1, ease: 'none', duration: 0.5 }, 0.0)
-        .fromTo('.ps-photo--secondary', { yPercent: 12, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, ease: 'power2.out', duration: 0.38 }, 0.12)
-        .fromTo('.ps-caption > *', { y: 18, autoAlpha: 0 }, { y: 0, autoAlpha: 1, stagger: 0.08, ease: 'power2.out', duration: 0.34 }, 0.24)
-        .to({}, { duration: 0.25 }, 0.75);
+      // 1. Primary full-bleed seaside portrait establishes and settles gracefully
+      tl.fromTo(
+        '.ps-photo--primary',
+        { scale: 1.08 },
+        { scale: 1, ease: 'none', duration: 0.85 },
+        0.0
+      );
+      tl.fromTo(
+        '.ps-side-type',
+        { autoAlpha: 0, y: 10 },
+        { autoAlpha: 1, y: 0, ease: 'power2.out', duration: 0.16 },
+        0.10
+      );
+
+      // 2. Secondary framed portrait glides into place after primary settles (0.24 -> 0.54)
+      tl.fromTo(
+        '.ps-photo--secondary',
+        { yPercent: 14, scale: 0.96, autoAlpha: 0 },
+        { yPercent: 0, scale: 1, autoAlpha: 1, ease: 'power2.out', duration: 0.30 },
+        0.24
+      );
+
+      // 3. Caption lines enter sequentially with breathing room (0.48 -> 0.84)
+      tl.fromTo(
+        '.ps-caption p:first-child',
+        { y: 16, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, ease: 'power2.out', duration: 0.18 },
+        0.48
+      );
+      tl.fromTo(
+        '.ps-caption p:last-child',
+        { y: 18, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, ease: 'power2.out', duration: 0.22 },
+        0.62
+      );
 
       // Scene Director stop: both portraits and caption fully composed.
-      tl.addLabel('complete', 0.72);
+      tl.addLabel('complete', 0.86);
+
+      // 4. Gentle exit transition before FinalInvitation
+      tl.to(
+        '.ps-photo--secondary, .ps-caption',
+        { y: -16, autoAlpha: 0.25, ease: 'power1.inOut', duration: 0.12 },
+        0.88
+      );
+      tl.to(
+        '.ps-photo--primary',
+        { scale: 1.03, ease: 'power1.inOut', duration: 0.12 },
+        0.88
+      );
     }, sectionRef);
 
     return () => ctx.revert();
