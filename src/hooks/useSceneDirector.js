@@ -11,12 +11,13 @@ gsap.registerPlugin(ScrollTrigger);
  * Drives the scroll-based wedding film as smooth, intentional cinematic scenes:
  *
  * - Forward gesture:
- *   1. Controlled, elegant scene transition (`~1.05s`, `sine.inOut`) where the
- *      current section gently releases and the next section enters and settles
- *      into the viewport (`scene.start`).
- *   2. Unhurried, progressive in-scene reveal (`~3.3s - 4.2s`, `sine.inOut`)
- *      from `scene.start` to `scene.complete` so the new section establishes
- *      first and its internal elements reveal progressively with breathing room.
+ *   1. Strictly one scene per deliberate gesture: a forward gesture is ONLY
+ *      accepted after the current scene has completely finished and settled
+ *      (never queued or auto-chained mid-animation).
+ *   2. Controlled, elegant scene transition (`~1.05s`, `sine.inOut`) into the
+ *      next section's pinned stage (`scene.start`).
+ *   3. Unhurried, progressive in-scene reveal (`~3.3s - 4.2s`, `sine.inOut`)
+ *      from `scene.start` to `scene.complete`.
  *
  * - Backward gesture:
  *   Kept exactly as-is — fast, feather-light glide (`0.68s`, `power3.out`)
@@ -30,10 +31,11 @@ const HANDOFF_DURATION = 1.05; // seconds for controlled, cinematic section-to-s
 const OVERLAP_HANDOFF_DURATION = 0.85; // seconds for Ceremony -> Reception cross-dissolve
 const SCENE_PLAY_DURATION = 3.5; // seconds for progressive in-section element reveal
 const BACKWARD_DURATION = 0.68; // seconds for fast, silky reverse navigation (UNCHANGED)
-const RELEASE_SETTLE = 0.04; // seconds settle buffer after tween completes
+const FORWARD_SETTLE = 0.32; // seconds pause after a forward scene completes before next forward scroll
+const BACKWARD_SETTLE = 0.04; // seconds settle buffer after backward tween completes
 const SWIPE_THRESHOLD = 16; // px of finger travel that triggers a mobile swipe
 const WHEEL_THRESHOLD = 5; // ignore micro wheel noise
-const WHEEL_IDLE_GAP = 140; // ms of wheel silence that starts a fresh gesture
+const WHEEL_IDLE_GAP = 180; // ms of wheel silence that starts a fresh gesture
 
 function getMaxScroll() {
   return Math.max(
@@ -136,6 +138,7 @@ export default function useSceneDirector(enabled) {
     // Touch bookkeeping.
     let touchStartY = null;
     let touchFired = false;
+    let touchStartedWhileAnimatingForward = false;
 
     const setScroll = (y) => {
       if (lenis) {
@@ -145,7 +148,7 @@ export default function useSceneDirector(enabled) {
       }
     };
 
-    const finishAnimation = (finalY) => {
+    const finishAnimation = (finalY, settleSeconds) => {
       setScroll(finalY);
       ScrollTrigger.update();
       activeTween = null;
@@ -154,8 +157,9 @@ export default function useSceneDirector(enabled) {
         animating = false;
         activeDirection = 0;
         activeTargetY = null;
+        wheelGestureConsumed = true;
         root.classList.remove('scene-director--playing');
-      }, RELEASE_SETTLE * 1000);
+      }, settleSeconds * 1000);
     };
 
     const killActive = () => {
@@ -191,7 +195,7 @@ export default function useSceneDirector(enabled) {
           : HANDOFF_DURATION;
 
       const tl = gsap.timeline({
-        onComplete: () => finishAnimation(target),
+        onComplete: () => finishAnimation(target, FORWARD_SETTLE),
       });
 
       if (handoffDist > 24 && playDist > 24) {
@@ -241,19 +245,16 @@ export default function useSceneDirector(enabled) {
         ease: 'power3.out',
         overwrite: true,
         onUpdate: () => setScroll(proxy.y),
-        onComplete: () => finishAnimation(target),
+        onComplete: () => finishAnimation(target, BACKWARD_SETTLE),
       });
     };
 
     const canInterrupt = (direction) => {
       if (!animating) return true;
-      // Always allow interrupting or chaining when scrolling backward, or
-      // when reversing direction mid-flight.
-      if (direction < 0 || direction !== activeDirection) return true;
-      // Allow chaining forward swipes only after current scene is nearly complete (>90%).
-      if (activeTween && typeof activeTween.progress === 'function') {
-        return activeTween.progress() > 0.9;
-      }
+      // Backward scrolling is always immediately interruptible / chainable.
+      if (direction < 0) return true;
+      // Forward scrolling NEVER interrupts or auto-chains while a scene is playing;
+      // the current scene must finish and settle completely first.
       return false;
     };
 
@@ -294,7 +295,7 @@ export default function useSceneDirector(enabled) {
       if (scenes.length === 0) return;
       if (edge === 'start') {
         playBackward(scenes[0], 0.8);
-      } else {
+      } else if (!animating) {
         playForward(scenes[scenes.length - 1], 2.2);
       }
     };
@@ -318,10 +319,13 @@ export default function useSceneDirector(enabled) {
       if (wheelGestureConsumed) return;
       if (magnitude < WHEEL_THRESHOLD) return;
 
+      // Consume this wheel gesture immediately so trackpad inertia cannot
+      // linger and trigger the next section when the current animation ends.
+      wheelGestureConsumed = true;
+
       const direction = event.deltaY > 0 ? 1 : -1;
       if (!canInterrupt(direction)) return;
 
-      wheelGestureConsumed = true;
       go(direction);
     };
 
@@ -333,6 +337,7 @@ export default function useSceneDirector(enabled) {
       }
       touchStartY = event.touches[0].clientY;
       touchFired = false;
+      touchStartedWhileAnimatingForward = animating && activeDirection > 0;
     };
 
     const onTouchMove = (event) => {
@@ -343,15 +348,20 @@ export default function useSceneDirector(enabled) {
       const dy = touchStartY - event.touches[0].clientY;
       if (Math.abs(dy) < SWIPE_THRESHOLD) return;
 
+      // Mark touch as fired immediately so holding/dragging a finger while a
+      // scene finishes can never auto-advance into the next scene.
+      touchFired = true;
+
       const direction = dy > 0 ? 1 : -1;
+      if (direction > 0 && touchStartedWhileAnimatingForward) return;
       if (!canInterrupt(direction)) return;
 
-      touchFired = true;
       go(direction);
     };
 
     const onTouchEnd = () => {
       touchStartY = null;
+      touchStartedWhileAnimatingForward = false;
     };
 
     /* ---------------- Keyboard ---------------- */
@@ -401,7 +411,8 @@ export default function useSceneDirector(enabled) {
     window.addEventListener('keydown', onKeyDown);
 
     // Refresh ScrollTrigger pins and immediately play Scene 01 (NamesScene)
-    // so it composes gracefully right after the envelope opens.
+    // so it composes gracefully right after the envelope opens, then STOPS
+    // and waits on Scene 01 until the user scrolls.
     ScrollTrigger.refresh();
     introTimer = window.setTimeout(() => {
       const scenes = getScenes();

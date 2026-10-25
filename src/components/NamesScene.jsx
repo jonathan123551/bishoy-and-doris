@@ -60,7 +60,7 @@ export default function NamesScene() {
           scale: 1,
           yPercent: -1,
           ease: 'none',
-          duration: 0.85,
+          duration: 1,
         },
         0
       );
@@ -75,7 +75,7 @@ export default function NamesScene() {
           opacity: 0.75,
           scale: 1.06,
           ease: 'none',
-          duration: 0.85,
+          duration: 0.95,
         },
         0
       );
@@ -199,7 +199,7 @@ export default function NamesScene() {
       );
 
       /*
-       * 7. POETIC SUBLINE (0.70 -> 0.85)
+       * 7. POETIC SUBLINE (0.70 -> 0.86)
        */
       tl.fromTo(
         subline,
@@ -211,39 +211,17 @@ export default function NamesScene() {
           y: 0,
           autoAlpha: 1,
           ease: 'power2.out',
-          duration: 0.15,
+          duration: 0.16,
         },
         0.70
       );
 
       /*
-       * Scene Director stop: every name element is settled and complete.
+       * Scene Director stop: every name element is settled and stays visible.
        */
-      tl.addLabel('complete', 0.86);
+      tl.addLabel('complete', 0.90);
 
-      /*
-       * Gentle exit transition when advancing forward into Ceremony.
-       */
-      tl.to(
-        '.ns-copy',
-        {
-          yPercent: -6,
-          autoAlpha: 0.25,
-          ease: 'power1.inOut',
-          duration: 0.12,
-        },
-        0.88
-      );
-      tl.to(
-        bg,
-        {
-          scale: 1.03,
-          yPercent: -3,
-          ease: 'power1.inOut',
-          duration: 0.12,
-        },
-        0.88
-      );
+      tl.to({}, { duration: 0.10 }, 0.90);
     }, sectionRef);
 
     return () => ctx.revert();

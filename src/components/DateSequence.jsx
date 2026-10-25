@@ -140,7 +140,7 @@ export default function DateSequence() {
         0.65
       );
 
-      // 5. Subtle lock-in settle & "Saturday · 5:00 PM" centered inside clock (0.83 -> 0.92)
+      // 5. Subtle lock-in settle & "Saturday · 5:00 PM" centered inside clock (0.83 -> 0.94)
       tl.to(
         '.ds-glyphs',
         { scale: 1.035, duration: 0.04, ease: 'power2.out' },
@@ -154,18 +154,13 @@ export default function DateSequence() {
       tl.to(
         '.ds-details',
         { autoAlpha: 1, y: 0, duration: 0.11, ease: 'power2.out' },
-        0.81
+        0.83
       );
 
       // Scene Director stop: date locked at 14 · 11 · 2026 and details visible.
-      tl.addLabel('complete', 0.92);
+      tl.addLabel('complete', 0.96);
 
-      // 6. Gentle exit transition before PhotoStory
-      tl.to(
-        '.ds-centerpiece',
-        { y: -16, scale: 0.98, autoAlpha: 0.3, duration: 0.07, ease: 'power1.inOut' },
-        0.93
-      );
+      tl.to({}, { duration: 0.04 }, 0.96);
     }, sectionRef);
 
     return () => ctx.revert();

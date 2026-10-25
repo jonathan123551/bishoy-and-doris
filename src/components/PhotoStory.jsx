@@ -43,7 +43,7 @@ export default function PhotoStory() {
       tl.fromTo(
         '.ps-photo--primary',
         { scale: 1.08 },
-        { scale: 1, ease: 'none', duration: 0.85 },
+        { scale: 1, ease: 'none', duration: 0.9 },
         0.0
       );
       tl.fromTo(
@@ -61,7 +61,7 @@ export default function PhotoStory() {
         0.24
       );
 
-      // 3. Caption lines enter sequentially with breathing room (0.48 -> 0.84)
+      // 3. Caption lines enter sequentially with breathing room (0.48 -> 0.86)
       tl.fromTo(
         '.ps-caption p:first-child',
         { y: 16, autoAlpha: 0 },
@@ -72,23 +72,13 @@ export default function PhotoStory() {
         '.ps-caption p:last-child',
         { y: 18, autoAlpha: 0 },
         { y: 0, autoAlpha: 1, ease: 'power2.out', duration: 0.22 },
-        0.62
+        0.64
       );
 
       // Scene Director stop: both portraits and caption fully composed.
-      tl.addLabel('complete', 0.86);
+      tl.addLabel('complete', 0.90);
 
-      // 4. Gentle exit transition before FinalInvitation
-      tl.to(
-        '.ps-photo--secondary, .ps-caption',
-        { y: -16, autoAlpha: 0.25, ease: 'power1.inOut', duration: 0.12 },
-        0.88
-      );
-      tl.to(
-        '.ps-photo--primary',
-        { scale: 1.03, ease: 'power1.inOut', duration: 0.12 },
-        0.88
-      );
+      tl.to({}, { duration: 0.10 }, 0.90);
     }, sectionRef);
 
     return () => ctx.revert();

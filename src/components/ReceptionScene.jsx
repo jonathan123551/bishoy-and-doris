@@ -24,7 +24,6 @@ export default function ReceptionScene() {
 
       const image = section.querySelector('.rec-cinematic-image');
       const shade = section.querySelector('.rec-image-shade');
-      const copy = section.querySelector('.rec-cinematic-copy');
 
       const label = section.querySelector('.rec-label');
       const rule = section.querySelector('.rec-rule-top');
@@ -34,12 +33,6 @@ export default function ReceptionScene() {
       const childrenNote = section.querySelector('.rec-children-note');
       const maps = section.querySelector('.rec-map-link');
 
-      /*
-       * IMPORTANT:
-       * The Reception image is visible from the beginning.
-       * This allows the image to sit underneath Ceremony while
-       * Ceremony is leaving the viewport.
-       */
       gsap.set(image, {
         opacity: 1,
         scale: 1,
@@ -63,10 +56,6 @@ export default function ReceptionScene() {
         },
       });
 
-      /*
-       * Image-only establishment period so the Reception venue settles
-       * full-screen before typography begins.
-       */
       const startDelay = 0.14;
 
       /*
@@ -219,21 +208,9 @@ export default function ReceptionScene() {
       /*
        * Scene Director stop: all Reception copy + map button revealed.
        */
-      tl.addLabel('complete', startDelay + 0.74);
+      tl.addLabel('complete', startDelay + 0.76);
 
-      /*
-       * Gentle exit transition when advancing forward into DateSequence.
-       */
-      tl.to(
-        copy,
-        {
-          y: -18,
-          autoAlpha: 0.22,
-          ease: 'power1.inOut',
-          duration: 0.10,
-        },
-        startDelay + 0.76
-      );
+      tl.to({}, { duration: 0.08 }, startDelay + 0.76);
     }, sectionRef);
 
     return () => ctx.revert();
