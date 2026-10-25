@@ -4010,9 +4010,445 @@ img {
   }
 }
 
+/* =========================================================
+   RESPONSIVE DESIGN SYSTEM: TABLET & DESKTOP ADAPTATION
+   =========================================================
+   NOTE: All rules are strictly scoped to min-width: 768px
+   and min-width: 1024px. The approved mobile design
+   (<= 600px) remains 100% UNTOUCHED and PRESERVED.
+   ========================================================= */
 
+/* ---------------------------------------------------------
+   TABLET & UP (>= 768px)
+   --------------------------------------------------------- */
+@media (min-width: 768px) {
+  /* 1. Envelope Intro */
+  .env-asset-wrapper {
+    width: min(85vw, 460px);
+  }
 
+  .env-top-text p,
+  .env-bottom-text p {
+    font-size: clamp(0.72rem, 1.2vw, 0.85rem);
+    letter-spacing: clamp(0.38em, 0.6vw, 0.5em);
+  }
 
+  /* 2. Names Scene */
+  .ns-cinematic .ns-copy {
+    width: min(85vw, 760px);
+  }
 
+  .ns-cinematic .ns-overline {
+    font-size: clamp(10px, 1.1vw, 13px);
+    letter-spacing: 0.38em;
+    margin-bottom: 16px;
+  }
 
+  .ns-cinematic .ns-rule {
+    width: clamp(180px, 25vw, 240px);
+  }
+
+  .ns-cinematic .ns-names {
+    margin: 28px 0 6px;
+  }
+
+  .ns-cinematic .ns-name-a,
+  .ns-cinematic .ns-name-b {
+    font-size: clamp(72px, 8.5vw, 120px);
+    line-height: 0.82;
+  }
+
+  .ns-cinematic .ns-amp-wrapper {
+    width: clamp(180px, 22vw, 260px);
+    margin: 24px 0;
+  }
+
+  .ns-cinematic .ns-amp {
+    font-size: clamp(34px, 4vw, 48px);
+    margin: 0 16px;
+  }
+
+  .ns-cinematic .ns-subline {
+    font-size: clamp(17px, 1.8vw, 22px);
+    max-width: 580px;
+    margin-top: 26px;
+  }
+
+  /* 3. Ceremony Scene */
+  .ceremony-cinematic .ceremony-content {
+    padding-top: clamp(80px, 13vh, 130px);
+  }
+
+  .ceremony-cinematic .ceremony-eyebrow {
+    font-size: clamp(10px, 1vw, 13px);
+    letter-spacing: 0.36em;
+    margin-bottom: 12px;
+  }
+
+  .ceremony-cinematic .ceremony-rule-top {
+    width: clamp(160px, 18vw, 240px);
+  }
+
+  .ceremony-cinematic .ceremony-title {
+    margin-top: 16px;
+  }
+
+  .ceremony-cinematic .ceremony-title-top {
+    font-size: clamp(34px, 3.8vw, 52px);
+    line-height: 0.94;
+  }
+
+  .ceremony-cinematic .ceremony-title-bottom {
+    font-size: clamp(38px, 4.2vw, 58px);
+    line-height: 0.94;
+    margin-top: 6px;
+  }
+
+  .ceremony-cinematic .ceremony-arabic {
+    font-size: clamp(18px, 2vw, 26px);
+    margin-top: 14px;
+  }
+
+  .ceremony-cinematic .ceremony-date {
+    font-size: clamp(18px, 1.8vw, 23px);
+    margin-top: 14px;
+  }
+
+  .ceremony-cinematic .ceremony-location {
+    font-size: clamp(10px, 1vw, 13px);
+    letter-spacing: 0.32em;
+    margin-top: 12px;
+  }
+
+  .ceremony-cinematic .ceremony-maps {
+    font-size: clamp(10px, 0.9vw, 12px);
+    letter-spacing: 0.22em;
+    padding: 13px 26px;
+    bottom: clamp(5%, 7vh, 8.5%);
+    min-width: 195px;
+  }
+
+  .ceremony-cinematic .ceremony-pin {
+    width: 17px;
+    height: 17px;
+    flex: 0 0 17px;
+  }
+
+  /* 4. Reception Scene */
+  .rec-scroll .rec-cinematic-copy {
+    width: min(85vw, 760px);
+  }
+
+  .rec-label {
+    font-size: clamp(1.35rem, 2.6vw, 1.9rem);
+  }
+
+  .rec-venue-name {
+    font-size: clamp(3.2rem, 6.2vw, 5.6rem);
+  }
+
+  .rec-venue-sub {
+    font-size: clamp(1.6rem, 2.8vw, 2.3rem);
+  }
+
+  .rec-note {
+    font-size: clamp(0.72rem, 0.9vw, 0.86rem);
+    letter-spacing: 0.36em;
+  }
+
+  .rec-children-note {
+    max-width: 460px;
+    font-size: clamp(0.82rem, 1vw, 0.98rem);
+  }
+
+  .rec-map-link {
+    font-size: clamp(0.7rem, 0.85vw, 0.82rem);
+    padding: 0.85rem 1.7rem;
+  }
+
+  .rec-map-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* 5. Date Sequence */
+  .ds-centerpiece {
+    width: clamp(400px, 36vw, 480px);
+    height: clamp(400px, 36vw, 480px);
+  }
+
+  .ds-kicker {
+    font-size: clamp(0.7rem, 0.95vw, 0.84rem);
+    letter-spacing: 0.44em;
+  }
+
+  .ds-reel-window {
+    font-size: clamp(2.8rem, 3.8vw, 3.8rem);
+  }
+
+  .ds-dot {
+    font-size: clamp(2rem, 2.8vw, 2.8rem);
+  }
+
+  .ds-details {
+    font-size: clamp(0.74rem, 0.95vw, 0.88rem);
+    letter-spacing: 0.34em;
+  }
+
+  /* 6. Photo Story */
+  .ps-photo--secondary {
+    left: clamp(2rem, 5vw, 5rem);
+    bottom: clamp(2.5rem, 6vh, 4.5rem);
+    width: clamp(230px, 22vw, 320px);
+    height: clamp(290px, 30vh, 410px);
+  }
+
+  .ps-caption {
+    left: clamp(calc(2rem + 250px), calc(5vw + 24vw), calc(5rem + 340px));
+    right: auto;
+    width: clamp(280px, 30vw, 420px);
+    bottom: clamp(2.5rem, 6vh, 4.8rem);
+    padding: 1rem 1.3rem;
+  }
+
+  .ps-caption p:first-child {
+    font-size: clamp(0.62rem, 0.78vw, 0.74rem);
+    letter-spacing: 0.32em;
+  }
+
+  .ps-caption p:last-child {
+    font-size: clamp(1.15rem, 1.5vw, 1.55rem);
+    max-width: 380px;
+  }
+
+  .ps-photo--primary::before {
+    right: 24px;
+    top: 24px;
+    font-size: 0.58rem;
+    letter-spacing: 0.30em;
+  }
+
+  /* 7. Final Invitation */
+  .fi-card {
+    width: min(85vw, 480px);
+    max-width: 480px;
+    padding: clamp(2rem, 4vh, 2.7rem) clamp(1.6rem, 3vw, 2.2rem);
+  }
+
+  .fi-names {
+    font-size: clamp(1.55rem, 2.2vw, 1.95rem);
+  }
+
+  .fi-message {
+    font-size: clamp(1.02rem, 1.3vw, 1.2rem);
+  }
+
+  .fi-date {
+    font-size: clamp(1.08rem, 1.4vw, 1.25rem);
+  }
+
+  .fi-recap-item {
+    font-size: clamp(0.7rem, 0.85vw, 0.82rem);
+  }
+
+  .fi-actions {
+    gap: 0.85rem;
+    margin-top: 1.3rem;
+  }
+
+  .fi-action-btn {
+    min-height: 44px;
+    padding: 0.65rem 1.3rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.22em;
+  }
+}
+
+/* ---------------------------------------------------------
+   DESKTOP & LARGE DISPLAYS (>= 1024px)
+   --------------------------------------------------------- */
+@media (min-width: 1024px) {
+  /* 1. Envelope Intro */
+  .env-asset-wrapper {
+    width: min(80vw, 480px);
+  }
+
+  /* 2. Names Scene */
+  .ns-cinematic .ns-copy {
+    width: min(85vw, 820px);
+  }
+
+  .ns-cinematic .ns-name-a,
+  .ns-cinematic .ns-name-b {
+    font-size: clamp(84px, 8vw, 124px);
+  }
+
+  .ns-cinematic .ns-subline {
+    font-size: clamp(18px, 1.6vw, 23px);
+    max-width: 640px;
+  }
+
+  /* 3. Ceremony Scene */
+  .ceremony-cinematic .ceremony-content {
+    padding-top: clamp(85px, 14vh, 145px);
+  }
+
+  .ceremony-cinematic .ceremony-title-top {
+    font-size: clamp(38px, 3.6vw, 56px);
+  }
+
+  .ceremony-cinematic .ceremony-title-bottom {
+    font-size: clamp(42px, 4vw, 62px);
+  }
+
+  .ceremony-cinematic .ceremony-arabic {
+    font-size: clamp(20px, 1.9vw, 28px);
+  }
+
+  .ceremony-cinematic .ceremony-date {
+    font-size: clamp(19px, 1.7vw, 25px);
+  }
+
+  /* 4. Reception Scene */
+  .rec-venue-name {
+    font-size: clamp(3.6rem, 5.8vw, 6rem);
+  }
+
+  .rec-venue-sub {
+    font-size: clamp(1.8rem, 2.6vw, 2.5rem);
+  }
+
+  /* 5. Date Sequence */
+  .ds-centerpiece {
+    width: clamp(440px, 32vw, 520px);
+    height: clamp(440px, 32vw, 520px);
+  }
+
+  /* 6. Photo Story */
+  .ps-photo--secondary {
+    left: clamp(3rem, 6vw, 7rem);
+    bottom: clamp(3rem, 7vh, 5.5rem);
+    width: clamp(260px, 20vw, 350px);
+    height: clamp(330px, 32vh, 450px);
+  }
+
+  .ps-caption {
+    left: clamp(calc(3rem + 280px), calc(6vw + 22vw), calc(7rem + 370px));
+    width: clamp(320px, 28vw, 460px);
+    bottom: clamp(3rem, 7vh, 5.8rem);
+    padding: 1.2rem 1.6rem;
+  }
+
+  .ps-caption p:last-child {
+    font-size: clamp(1.25rem, 1.4vw, 1.65rem);
+  }
+
+  /* 7. Final Invitation */
+  .fi-card {
+    width: min(80vw, 500px);
+    max-width: 500px;
+    padding: clamp(2.4rem, 4.5vh, 3.2rem) clamp(2rem, 3.2vw, 2.6rem);
+  }
+
+  .fi-names {
+    font-size: clamp(1.75rem, 2vw, 2.15rem);
+  }
+
+  .fi-message {
+    font-size: clamp(1.1rem, 1.2vw, 1.3rem);
+  }
+
+  .fi-date {
+    font-size: clamp(1.15rem, 1.3vw, 1.35rem);
+  }
+}
+
+/* ---------------------------------------------------------
+   SHORT DESKTOP / LAPTOPS (Height <= 750px)
+   --------------------------------------------------------- */
+@media (min-width: 768px) and (max-height: 750px) {
+  .ns-cinematic .ns-copy {
+    top: 50%;
+  }
+
+  .ns-cinematic .ns-names {
+    margin: 18px 0 4px;
+  }
+
+  .ns-cinematic .ns-name-a,
+  .ns-cinematic .ns-name-b {
+    font-size: clamp(64px, 7.5vw, 92px);
+  }
+
+  .ns-cinematic .ns-amp-wrapper {
+    margin: 16px 0;
+  }
+
+  .ns-cinematic .ns-subline {
+    margin-top: 18px;
+    font-size: 16px;
+  }
+
+  .ceremony-cinematic .ceremony-content {
+    padding-top: clamp(60px, 10vh, 85px);
+  }
+
+  .ceremony-cinematic .ceremony-title-top {
+    font-size: clamp(30px, 3.2vw, 42px);
+  }
+
+  .ceremony-cinematic .ceremony-title-bottom {
+    font-size: clamp(34px, 3.6vw, 48px);
+  }
+
+  .ceremony-cinematic .ceremony-arabic {
+    font-size: 17px;
+    margin-top: 8px;
+  }
+
+  .ceremony-cinematic .ceremony-date {
+    font-size: 16px;
+    margin-top: 8px;
+  }
+
+  .ceremony-cinematic .ceremony-maps {
+    bottom: 4.5%;
+    padding: 10px 22px;
+  }
+
+  .rec-venue-name {
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
+  }
+
+  .rec-venue-sub {
+    font-size: 1.5rem;
+    margin-top: 0.35rem;
+  }
+
+  .rec-rule-top {
+    margin: 0.5rem auto 0.8rem;
+  }
+
+  .ds-centerpiece {
+    width: clamp(340px, 45vh, 410px);
+    height: clamp(340px, 45vh, 410px);
+  }
+
+  .ds-reel-window {
+    font-size: 2.6rem;
+  }
+
+  .ps-photo--secondary {
+    height: clamp(240px, 38vh, 310px);
+    bottom: 2rem;
+  }
+
+  .ps-caption {
+    bottom: 2.2rem;
+  }
+
+  .fi-card {
+    padding: 1.6rem 1.8rem;
+  }
+}
 
