@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { execSync } from 'node:child_process';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.resolve(__dirname, '..', 'dist');
@@ -12,6 +13,17 @@ if (!fs.existsSync(distDir)) {
 
 const baseHtmlPath = path.join(distDir, 'index.html');
 const baseHtml = fs.readFileSync(baseHtmlPath, 'utf-8');
+
+// Detect branch (Cloudflare Pages sets CF_PAGES_BRANCH)
+let currentBranch = process.env.CF_PAGES_BRANCH || process.env.HEAD || process.env.BRANCH || '';
+if (!currentBranch) {
+  try {
+    currentBranch = execSync('git branch --show-current', { encoding: 'utf-8' }).trim();
+  } catch {
+    currentBranch = '';
+  }
+}
+console.log(`Building for branch: "${currentBranch || 'default'}"`);
 
 // Ensure directories exist
 const dirsToCreate = [
@@ -64,6 +76,15 @@ fs.writeFileSync(path.join(distDir, 'church', 'index.html'), churchHtml);
 fs.writeFileSync(path.join(distDir, 'bishoy-doris-church', 'index.html'), churchHtml);
 fs.writeFileSync(path.join(distDir, 'church.html'), churchHtml);
 fs.writeFileSync(path.join(distDir, 'bishoy-doris-church.html'), churchHtml);
+
+// If building specifically for the church branch or church variant, set root index.html to churchHtml
+if (currentBranch.toLowerCase().includes('church')) {
+  fs.writeFileSync(baseHtmlPath, churchHtml);
+  console.log('✓ Root index.html set to Church variant');
+} else {
+  fs.writeFileSync(baseHtmlPath, partyHtml);
+  console.log('✓ Root index.html set to Party variant');
+}
 
 // Cloudflare Pages _redirects file
 const redirectsContent = `
