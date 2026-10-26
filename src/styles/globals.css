@@ -4459,13 +4459,12 @@ img {
 
 /* ---------------------------------------------------------
    MOBILE PHOTO STORY BACKGROUND POSITIONING (Width <= 767px)
-   Shifts landscape background photo up so the couple sits
-   higher above the foreground frame, and fades bottom edge.
+   Fades bottom edge into deep background.
    --------------------------------------------------------- */
 @media (max-width: 767px) {
   .ps-photo--primary img {
-    height: 89%;
-    margin-top: -5%;
+    height: 100%;
+    margin-top: 0;
   }
 
   .ps-photo--primary::after {
