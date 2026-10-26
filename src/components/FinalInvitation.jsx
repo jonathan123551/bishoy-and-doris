@@ -330,7 +330,7 @@ export default function FinalInvitation() {
                 </div>
                 <span className="fi-event-label">CEREMONY</span>
                 <p className="fi-church-arabic">{eventConfig.church.arabicName}</p>
-                <p className="fi-church-area">بالشيراتون</p>
+                <p className="fi-church-area">شيراتون</p>
                 <span className="fi-event-sub">{eventConfig.church.area.toUpperCase()}, {eventConfig.church.city.toUpperCase()}</span>
               </div>
 
