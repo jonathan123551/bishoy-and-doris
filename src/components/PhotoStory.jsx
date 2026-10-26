@@ -5,13 +5,16 @@ import { eventConfig } from '../config/eventConfig';
 
 gsap.registerPlugin(ScrollTrigger);
 
-function PhotoImage({ src, alt, className, objectPosition }) {
+function PhotoImage({ src, alt, className, objectPositionMobile, objectPositionDesktop }) {
   return (
     <div className={`ps-photo ${className}`}>
       <img
         src={src}
         alt={alt}
-        style={objectPosition ? { objectPosition } : undefined}
+        style={{
+          '--obj-pos-mobile': objectPositionMobile || '50% 50%',
+          '--obj-pos-desktop': objectPositionDesktop || objectPositionMobile || '50% 50%',
+        }}
       />
     </div>
   );
@@ -95,13 +98,15 @@ export default function PhotoStory() {
             className="ps-photo--primary"
             src={primaryPhoto.src}
             alt="Bishoy and Doris portrait"
-            objectPosition={primaryPhoto.objectPositionMobile || '66% 42%'}
+            objectPositionMobile={primaryPhoto.objectPositionMobile}
+            objectPositionDesktop={primaryPhoto.objectPositionDesktop}
           />
           <PhotoImage
             className="ps-photo--secondary"
             src={secondaryPhoto.src}
             alt="Bishoy and Doris candid"
-            objectPosition={secondaryPhoto.objectPositionMobile || '50% 28%'}
+            objectPositionMobile={secondaryPhoto.objectPositionMobile}
+            objectPositionDesktop={secondaryPhoto.objectPositionDesktop}
           />
         </div>
 

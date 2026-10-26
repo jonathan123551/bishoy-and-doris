@@ -50,8 +50,8 @@ export const eventConfig = {
       src: photo01,
       alt: 'Bishoy and Doris',
       orientation: 'landscape',
-      objectPositionMobile: '46% 45%',
-      objectPositionDesktop: '46% 45%',
+      objectPositionMobile: '35% 42%',
+      objectPositionDesktop: '45% 48%',
     },
     {
       src: photo02,
