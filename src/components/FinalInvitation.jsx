@@ -103,7 +103,8 @@ const MapPinIcon = () => (
   </svg>
 );
 
-export default function FinalInvitation() {
+export default function FinalInvitation({ variant = 'party' }) {
+  const isChurch = variant === 'church';
   const sectionRef = useRef(null);
 
   useLayoutEffect(() => {
@@ -119,7 +120,9 @@ export default function FinalInvitation() {
       gsap.set('.fi-frame-message', { autoAlpha: 0, y: 10 });
       gsap.set('.fi-event-date', { autoAlpha: 0, y: 14, scale: 0.96 });
       gsap.set('.fi-event-ceremony', { autoAlpha: 0, y: 14, scale: 0.96 });
-      gsap.set('.fi-event-reception', { autoAlpha: 0, y: 14, scale: 0.96 });
+      if (!isChurch) {
+        gsap.set('.fi-event-reception', { autoAlpha: 0, y: 14, scale: 0.96 });
+      }
       gsap.set('.fi-col-divider', { scaleY: 0 });
       gsap.set('.fi-botanical-foliage', { autoAlpha: 0, scaleX: 0.9 });
       gsap.set('.fi-wax-seal', { autoAlpha: 0, scale: 1.22, y: -14 });
@@ -204,14 +207,16 @@ export default function FinalInvitation() {
         ease: 'power2.out',
       }, 0.57);
 
-      // 0.68 -> 0.82: FRAME 6 — Reception Column
-      tl.to('.fi-event-reception', {
-        autoAlpha: 1,
-        y: 0,
-        scale: 1,
-        duration: 0.14,
-        ease: 'power2.out',
-      }, 0.68);
+      if (!isChurch) {
+        // 0.68 -> 0.82: FRAME 6 — Reception Column
+        tl.to('.fi-event-reception', {
+          autoAlpha: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.14,
+          ease: 'power2.out',
+        }, 0.68);
+      }
 
       // 0.79 -> 0.91: FRAME 7 — Wax Seal & Botanical Foliage
       tl.to('.fi-botanical-foliage', {
@@ -249,7 +254,7 @@ export default function FinalInvitation() {
     }, section);
 
     return () => ctx.revert();
-  }, []);
+  }, [isChurch]);
 
   return (
     <section ref={sectionRef} className="fi-scene" aria-label="Wedding Invitation Card">
@@ -309,8 +314,8 @@ export default function FinalInvitation() {
               </p>
             </div>
 
-            {/* FRAMES 4, 5, 6: 3-Column Event Details Grid */}
-            <div className="fi-events-grid">
+            {/* FRAMES 4, 5, 6: Event Details Grid */}
+            <div className={`fi-events-grid ${isChurch ? 'fi-events-grid--church' : ''}`}>
               {/* FRAME 4: Date & Time */}
               <div className="fi-frame fi-event-col fi-event-date">
                 <div className="fi-event-icon-wrap">
@@ -334,17 +339,21 @@ export default function FinalInvitation() {
                 <span className="fi-event-sub">{eventConfig.church.area.toUpperCase()}, {eventConfig.church.city.toUpperCase()}</span>
               </div>
 
-              <div className="fi-col-divider" aria-hidden="true" />
+              {!isChurch && (
+                <>
+                  <div className="fi-col-divider" aria-hidden="true" />
 
-              {/* FRAME 6: Reception */}
-              <div className="fi-frame fi-event-col fi-event-reception">
-                <div className="fi-event-icon-wrap">
-                  <ReceptionIcon />
-                </div>
-                <span className="fi-event-label">RECEPTION</span>
-                <p className="fi-reception-name">{eventConfig.reception.name.toUpperCase()} &ndash; {eventConfig.reception.area.toUpperCase()}</p>
-                <span className="fi-event-sub">ALMAZAH, CAIRO</span>
-              </div>
+                  {/* FRAME 6: Reception */}
+                  <div className="fi-frame fi-event-col fi-event-reception">
+                    <div className="fi-event-icon-wrap">
+                      <ReceptionIcon />
+                    </div>
+                    <span className="fi-event-label">RECEPTION</span>
+                    <p className="fi-reception-name">{eventConfig.reception.name.toUpperCase()} &ndash; {eventConfig.reception.area.toUpperCase()}</p>
+                    <span className="fi-event-sub">ALMAZAH, CAIRO</span>
+                  </div>
+                </>
+              )}
             </div>
 
             {/* FRAME 7: Botanical Laurel Foliage & 3D Wax Seal */}
@@ -367,7 +376,7 @@ export default function FinalInvitation() {
                 <button
                   type="button"
                   className="fi-action-btn"
-                  onClick={() => generateICS(eventConfig)}
+                  onClick={() => generateICS(eventConfig, variant)}
                   aria-label="Add wedding to your calendar"
                 >
                   <CalendarBtnIcon />
@@ -375,11 +384,11 @@ export default function FinalInvitation() {
                 </button>
                 <span className="fi-btn-sep" aria-hidden="true" />
                 <a
-                  href={eventConfig.reception.mapUrl}
+                  href={isChurch ? eventConfig.church.mapUrl : eventConfig.reception.mapUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="fi-action-btn"
-                  aria-label="View reception on Google Maps"
+                  aria-label={isChurch ? 'View church on Google Maps' : 'View reception on Google Maps'}
                 >
                   <MapPinIcon />
                   <span>VIEW MAP</span>

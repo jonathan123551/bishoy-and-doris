@@ -10,7 +10,8 @@ gsap.registerPlugin(ScrollTrigger);
 const CHURCH_MAPS_URL =
   'https://www.google.com/maps/search/?api=1&query=Church+of+Archangel+Michael+Sheraton+Cairo';
 
-export default function CeremonyScene() {
+export default function CeremonyScene({ variant = 'party' }) {
+  const isChurch = variant === 'church';
   const sectionRef = useRef(null);
 
   useLayoutEffect(() => {
@@ -47,12 +48,13 @@ export default function CeremonyScene() {
           scrub: true,
 
           /*
-           * IMPORTANT:
-           * Ceremony owns its own scroll space.
-           * Reception will move underneath it.
+           * When in Party mode: Ceremony pins without spacing so Reception
+           * can slide underneath it.
+           * When in Church mode: Ceremony uses normal pinSpacing so DateSequence
+           * follows immediately with no overlap or dead space.
            */
           pin: true,
-pinSpacing: false,
+          pinSpacing: isChurch,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },
@@ -331,7 +333,7 @@ pinSpacing: false,
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [isChurch]);
 
   return (
     <section

@@ -9,13 +9,17 @@ import DateSequence from './components/DateSequence';
 import PhotoStory from './components/PhotoStory';
 import FinalInvitation from './components/FinalInvitation';
 import MusicPlayer from './components/MusicPlayer';
+import { getAppVariant } from './utils/variant';
 
 export default function App() {
+  const [variant] = useState(getAppVariant);
   const [experienceVisible, setExperienceVisible] = useState(false);
   const [introComplete, setIntroComplete] = useState(false);
   useLenis();
   // One intentional gesture = one cinematic scene (enabled after the envelope).
   useSceneDirector(introComplete);
+
+  const isChurch = variant === 'church';
 
   return (
     <>
@@ -39,11 +43,11 @@ export default function App() {
         }}
       >
         <NamesScene />
-        <CeremonyScene />
-        <ReceptionScene />
+        <CeremonyScene variant={variant} />
+        {!isChurch && <ReceptionScene />}
         <DateSequence />
         <PhotoStory />
-        <FinalInvitation />
+        <FinalInvitation variant={variant} />
       </main>
     </>
   );
